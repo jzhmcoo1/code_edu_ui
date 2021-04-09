@@ -1,89 +1,93 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <div class="text-center">
-        <logo />
-        <vuetify-logo />
-      </div>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to the Vuetify + Nuxt.js template
-        </v-card-title>
-        <v-card-text>
-          <p>Vuetify is a progressive Material Design component framework for Vue.js. It was designed to empower developers to create amazing applications.</p>
-          <p>
-            For more information on Vuetify, check out the <a
-              href="https://vuetifyjs.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              documentation
-            </a>.
-          </p>
-          <p>
-            If you have questions, please join the official <a
-              href="https://chat.vuetifyjs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="chat"
-            >
-              discord
-            </a>.
-          </p>
-          <p>
-            Find a bug? Report it on the github <a
-              href="https://github.com/vuetifyjs/vuetify/issues"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="contribute"
-            >
-              issue board
-            </a>.
-          </p>
-          <p>Thank you for developing with Vuetify and I look forward to bringing more exciting features in the future.</p>
-          <div class="text-xs-right">
-            <em><small>&mdash; John Leider</small></em>
-          </div>
-          <hr class="my-3">
-          <a
-            href="https://nuxtjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt Documentation
-          </a>
-          <br>
-          <a
-            href="https://github.com/nuxt/nuxt.js"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Nuxt GitHub
-          </a>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+  <v-container>
+    <!-- 轮播图 -->
+    <v-carousel
+      cycle
+      height="400"
+      hide-delimiter-background
+      show-arrows-on-hover
+    >
+      <v-carousel-item v-for="(slide, i) in slides" :key="i">
+        <v-sheet :color="colors[i]" height="100%">
+          <v-row class="fill-height" align="center" justify="center">
+            <div class="display-3">{{ slide }} Slide</div>
+          </v-row>
+        </v-sheet>
+      </v-carousel-item>
+    </v-carousel>
+    <v-divider></v-divider>
+
+    <!-- 课程列表 -->
+    <v-container grid-list-xs>
+      <h1 class="grey-darken-1--text font-weight-bold mb-2">课程列表</h1>
+      <v-layout row wrap>
+        <v-flex
+          class="pa-2"
+          xs12
+          sm6
+          md3
+          v-for="course in eduList"
+          :key="course.id"
+        >
+          <v-card rounded>
+            <v-responsive :aspect-ratio="16 / 9">
+              <v-img :src="course.cover" height="200px"></v-img>
+            </v-responsive>
+            <v-card-title> {{ course.title }} </v-card-title>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+    <v-divider></v-divider>
+    <!-- 讲师列表 -->
+    <v-container grid-list-xs>
+      <h1 class="grey-darken-1--text text-darken-4 font-weight-bold mb-4">
+        讲师列表
+      </h1>
+      <v-layout row wrap justify-space-between>
+        <v-flex xs12 sm6 md3 v-for="teacher in adminList" :key="teacher.id">
+          <v-card flat class="text-center">
+            <v-avatar rounded="circle" size="128"
+              ><v-img :src="teacher.avatar"></v-img
+            ></v-avatar>
+
+            <v-card-text>{{ teacher.name }}</v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-container>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuetifyLogo from '~/components/VuetifyLogo.vue'
-
+import indexApi from "@/api/index";
 export default {
-  components: {
-    Logo,
-    VuetifyLogo
-  }
-}
+  data() {
+    return {
+      adminList: [],
+      eduList: [],
+      colors: [
+        "indigo",
+        "warning",
+        "pink darken-2",
+        "red lighten-1",
+        "deep-purple accent-4",
+      ],
+      slides: ["First", "Second", "Third", "Fourth", "Fifth"],
+    };
+  },
+  created() {
+    this.getIndexData();
+  },
+  methods: {
+    getIndexData() {
+      indexApi.getIndexData().then((response) => {
+        this.adminList = response.adminList;
+        this.eduList = response.eduList;
+        console.log(this.adminList);
+        console.log(this.eduList);
+      });
+    },
+  },
+};
 </script>

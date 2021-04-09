@@ -13,7 +13,7 @@ service.interceptors.response.use(
     // Do something with response data
     if (response.data.success) {
       console.log("响应拦截器---返回数据成功");
-      return response.data
+      return response.data.data
     }
   },
   function (error) {

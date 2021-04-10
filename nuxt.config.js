@@ -20,6 +20,7 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    '@/assets/main.scss',
     'material-design-icons-iconfont/dist/material-design-icons.css'
   ],
 

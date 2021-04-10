@@ -4,7 +4,7 @@
 
     <v-main class="grey lighten-3">
       <v-container>
-        <v-sheet min-height="80vh" rounded="lg">
+        <v-sheet min-height="100vh" rounded="lg">
           <nuxt />
         </v-sheet>
       </v-container>
@@ -30,11 +30,13 @@
         </v-row>
       </v-container>
     </v-main>
+    <Footer />
   </v-app>
 </template>
 
 <script lang="ts">
 import Navbar from "@/components/Navbar.vue";
+import Footer from "@/components/Footer.vue";
 import Vue from "vue";
 export default Vue.extend({
   components: {

@@ -56,6 +56,19 @@
         </v-flex>
       </v-layout>
     </v-container>
+    <!-- 回到顶部按钮 -->
+    <v-btn
+      fab
+      fixed
+      dark
+      right
+      bottom
+      color="indigo"
+      @click="backTop"
+      v-show="backTopShow"
+    >
+      <v-icon> arrow_upward </v-icon>
+    </v-btn>
   </v-container>
 </template>
 
@@ -74,18 +87,42 @@ export default {
         "deep-purple accent-4",
       ],
       slides: ["First", "Second", "Third", "Fourth", "Fifth"],
+      backTopShow: false,
     };
   },
   created() {
     this.getIndexData();
   },
+  mounted() {
+    window.addEventListener("scroll", this.handleScroll);
+  },
   methods: {
+    // 获取首页数据
     getIndexData() {
       indexApi.getIndexData().then((response) => {
         this.adminList = response.adminList;
         this.eduList = response.eduList;
         console.log(this.adminList);
         console.log(this.eduList);
+      });
+    },
+    // 控制是否显示"回到顶部"按钮
+    handleScroll() {
+      if (document.documentElement.scrollTop + document.body.scrollTop > 100) {
+        this.backTopShow = true;
+      } else {
+        this.backTopShow = false;
+      }
+    },
+    // 处理点击"回到顶部"的回调
+    backTop() {
+      let back = setInterval(() => {
+        if (document.body.scrollTop || document.documentElement.scrollTop) {
+          document.body.scrollTop -= 20;
+          document.documentElement.scrollTop -= 20;
+        } else {
+          clearInterval(back);
+        }
       });
     },
   },

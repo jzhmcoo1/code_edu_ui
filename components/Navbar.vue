@@ -1,19 +1,22 @@
 <template>
   <v-app-bar app color="white" flat>
-    <v-avatar
-      :color="$vuetify.breakpoint.smAndDown ? 'grey darken-1' : 'transparent'"
+    <!-- <v-avatar
+      :color="
+        $vuetify.breakpoint.smAndDown ? 'primary darken-1' : 'transparent'
+      "
       size="32"
-    ></v-avatar>
+    ></v-avatar> -->
 
-    <v-tabs centered class="ml-n9" color="grey darken-1">
+    <v-tabs centered class="ml-n9" color="primary darken-1">
       <v-tab v-for="link in links" :key="link.title" router :to="link.route">
         {{ link.title }}
       </v-tab>
     </v-tabs>
 
+    <v-icon>person</v-icon>
     <v-avatar
       class="hidden-sm-and-down"
-      color="grey darken-1 shrink"
+      color="primary darken-1 shrink"
       size="32"
     ></v-avatar>
   </v-app-bar>
@@ -21,6 +24,7 @@
 
 <script lang="ts">
 import Vue from "vue";
+import cookie from "js-cookie";
 export default Vue.extend({
   data: () => ({
     links: [
@@ -31,5 +35,6 @@ export default Vue.extend({
       { title: "作者", route: "/qa" },
     ],
   }),
+  methods: {},
 });
 </script>

@@ -1,24 +1,37 @@
 <template>
-  <v-app-bar app color="white" flat>
-    <!-- <v-avatar
-      :color="
-        $vuetify.breakpoint.smAndDown ? 'primary darken-1' : 'transparent'
-      "
-      size="32"
-    ></v-avatar> -->
-
-    <v-tabs centered class="ml-n9" color="primary darken-1">
-      <v-tab v-for="link in links" :key="link.title" router :to="link.route">
-        {{ link.title }}
-      </v-tab>
-    </v-tabs>
-
-    <v-icon>person</v-icon>
-    <v-avatar
-      class="hidden-sm-and-down"
-      color="primary darken-1 shrink"
-      size="32"
-    ></v-avatar>
+  <v-app-bar app flat>
+    <v-layout row wrap>
+      <v-container class="py-0 fill-height">
+        <v-avatar class="mr-10" color="grey darken-1" size="32"></v-avatar>
+        <v-btn
+          v-for="link in links"
+          :key="link.title"
+          text
+          router
+          :to="link.route"
+        >
+          {{ link.title }}
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-switch
+          class="center"
+          :prepend-icon="$vuetify.theme.dark ? 'nightlight_round' : 'wb_sunny'"
+          inset
+          hide-details
+          v-model="$vuetify.theme.dark"
+        ></v-switch>
+        <v-responsive max-width="260">
+          <v-text-field
+            prepend-icon="search"
+            dense
+            flat
+            hide-details
+            rounded
+            solo-inverted
+          ></v-text-field>
+        </v-responsive>
+      </v-container>
+    </v-layout>
   </v-app-bar>
 </template>
 
@@ -31,10 +44,9 @@ export default Vue.extend({
       { title: "首页", route: "/" },
       { title: "课程", route: "/course" },
       { title: "名师", route: "/teacher" },
-      { title: "文章", route: "/articel" },
+      { title: "文章", route: "/article" },
       { title: "作者", route: "/qa" },
     ],
   }),
-  methods: {},
 });
 </script>

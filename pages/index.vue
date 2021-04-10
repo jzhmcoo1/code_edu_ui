@@ -2,6 +2,7 @@
   <v-container>
     <!-- 轮播图 -->
     <v-carousel
+      id="slider"
       cycle
       height="400"
       hide-delimiter-background
@@ -64,7 +65,7 @@
       right
       bottom
       color="indigo"
-      @click="backTop"
+      @click="$vuetify.goTo('#hero')"
       v-show="backTopShow"
     >
       <v-icon> arrow_upward </v-icon>

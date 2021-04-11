@@ -22,11 +22,13 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '@/assets/main.scss',
-    'material-design-icons-iconfont/dist/material-design-icons.css'
+    'material-design-icons-iconfont/dist/material-design-icons.css',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '@/plugins/ant-design-vue.js',
+    '@/plugins/notifier.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -48,7 +50,7 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     icons: {
-      iconfont: 'md',
+      iconfont: ['md', 'mdi']
     },
     theme: {
       dark: hour >= 7 && hour <= 17 ? false : true,
@@ -64,7 +66,7 @@ export default {
           info: colors.teal.lighten1,
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
-          success: colors.green.accent3,
+          success: colors.green.darken3,
           heading: colors.grey.lighten3
         }
       }
@@ -73,6 +75,15 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    transpile: ['ant-design-vue'],
+    babel: {
+      "plugins": [
+        [
+          "import",
+          { libraryName: "ant-design-vue", libraryDirectory: "es", style: 'css' }
+        ]
+      ]
+    }
   },
   env: {
     baseURL: 'http://106.15.109.151:8222'

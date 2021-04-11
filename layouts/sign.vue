@@ -24,7 +24,9 @@
                     </div>
 
                     <!-- //TODO: 插入登录注册表格 -->
-                    <nuxt />
+                    <v-layout justify-center column wrap>
+                      <nuxt />
+                    </v-layout>
                   </v-col>
                 </v-row>
               </v-sheet>

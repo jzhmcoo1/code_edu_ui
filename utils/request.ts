@@ -1,5 +1,6 @@
 import axios from 'axios'
 import cookie from 'js-cookie'
+import { message } from 'ant-design-vue'
 const service = axios.create({
   baseURL: process.env.baseURL,
   timeout: 3000
@@ -13,10 +14,10 @@ service.interceptors.response.use(
     console.log(response.data)
     if (response.data.success) {
       console.log("响应拦截器---返回数据成功");
-      return response.data
     } else {
       console.log("请求错误")
     }
+    return response.data
   },
   function (error) {
     console.log("响应拦截器---返回数据失败");

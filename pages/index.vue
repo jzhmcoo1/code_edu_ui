@@ -101,8 +101,8 @@ export default {
     // 获取首页数据
     getIndexData() {
       indexApi.getIndexData().then((response) => {
-        this.adminList = response.adminList;
-        this.eduList = response.eduList;
+        this.adminList = response.data.adminList;
+        this.eduList = response.data.eduList;
         console.log(this.adminList);
         console.log(this.eduList);
       });

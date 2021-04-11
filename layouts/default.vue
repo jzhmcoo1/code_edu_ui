@@ -50,7 +50,7 @@
         </v-img>
       </v-row>
     </section>
-    <v-main>
+    <v-main class="background">
       <v-container>
         <v-sheet min-height="80vh" rounded="lg">
           <nuxt />
@@ -91,27 +91,8 @@ export default Vue.extend({
     Navbar,
     Footer,
   },
-  data: () => ({
-    links: ["首页", "课程", "名师", "文章", "作者"],
-  }),
-  mounted() {
-    this.getTimeState();
-  },
-  methods: {
-    // 获取时间并自动换肤
-    getTimeState() {
-      // 获取当前时间
-      let timeNow = new Date();
-      // 获取当前小时
-      let hours = timeNow.getHours();
-      // 设置默认文字
-      // 判断当前时间段
-      if (hours >= 7 && hours <= 17) {
-        this.$vuetify.theme.dark = false;
-      } else {
-        this.$vuetify.theme.dark = true;
-      }
-    },
-  },
+  data: () => ({}),
+  created() {},
+  methods: {},
 });
 </script>

@@ -115,17 +115,6 @@ export default {
         this.backTopShow = false;
       }
     },
-    // 处理点击"回到顶部"的回调
-    backTop() {
-      let back = setInterval(() => {
-        if (document.body.scrollTop || document.documentElement.scrollTop) {
-          document.body.scrollTop -= 20;
-          document.documentElement.scrollTop -= 20;
-        } else {
-          clearInterval(back);
-        }
-      });
-    },
   },
 };
 </script>

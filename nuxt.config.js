@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+const hour = new Date().getHours()
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -50,10 +51,11 @@ export default {
       iconfont: 'md',
     },
     theme: {
-      dark: false,
+      dark: hour >= 7 && hour <= 17 ? false : true,
       themes: {
         light: {
-          background: colors.grey.lighten3
+          background: colors.grey.lighten3,
+          heading: colors.grey.darken2
         },
         dark: {
           primary: colors.blue.darken2,
@@ -63,6 +65,7 @@ export default {
           warning: colors.amber.base,
           error: colors.deepOrange.accent4,
           success: colors.green.accent3,
+          heading: colors.grey.lighten3
         }
       }
     }

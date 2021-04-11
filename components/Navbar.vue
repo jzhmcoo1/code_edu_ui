@@ -2,6 +2,7 @@
   <v-app-bar app flat>
     <v-layout row wrap>
       <v-container class="py-0 fill-height">
+        <h1 class="heading--text mr-10">Code Edu</h1>
         <v-avatar class="mr-10" color="grey darken-1" size="32"></v-avatar>
         <v-btn
           v-for="link in links"
@@ -10,7 +11,8 @@
           router
           :to="link.route"
         >
-          {{ link.title }}
+          <v-icon>{{ link.icon }}</v-icon>
+          <span>{{ link.title }}</span>
         </v-btn>
         <v-spacer></v-spacer>
         <v-switch
@@ -41,11 +43,11 @@ import cookie from "js-cookie";
 export default Vue.extend({
   data: () => ({
     links: [
-      { title: "首页", route: "/" },
-      { title: "课程", route: "/course" },
-      { title: "名师", route: "/teacher" },
-      { title: "文章", route: "/article" },
-      { title: "作者", route: "/qa" },
+      { title: "首页", route: "/", icon: "home" },
+      { title: "课程", route: "/course", icon: "school" },
+      { title: "名师", route: "/teacher", icon: "group" },
+      { title: "文章", route: "/article", icon: "library_books" },
+      { title: "作者", route: "/qa", icon: "person" },
     ],
   }),
 });

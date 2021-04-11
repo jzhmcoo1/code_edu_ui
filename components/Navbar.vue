@@ -1,19 +1,22 @@
 <template>
-  <v-app-bar app flat>
+  <v-app-bar app flat height="80">
     <v-layout row wrap>
       <v-container class="py-0 fill-height">
-        <h1 class="heading--text mr-10">Code Edu</h1>
-        <v-avatar class="mr-10" color="grey darken-1" size="32"></v-avatar>
-        <v-btn
-          v-for="link in links"
-          :key="link.title"
-          text
-          router
-          :to="link.route"
-        >
-          <v-icon>{{ link.icon }}</v-icon>
-          <span>{{ link.title }}</span>
-        </v-btn>
+        <h1 class="heading--text mr-10 d-none d-lg-flex">Code Edu</h1>
+        <!-- <v-avatar class="mx-2" color="grey darken-1" size="32"></v-avatar> -->
+        <div class="d-span">
+          <v-tabs background-color="transparent" slider-color="primary">
+            <v-tab
+              v-for="link in links"
+              :key="link.title"
+              router
+              :to="link.route"
+            >
+              <v-icon>{{ link.icon }}</v-icon>
+              <span class="d-none d-lg-flex">{{ link.title }}</span>
+            </v-tab>
+          </v-tabs>
+        </div>
         <v-spacer></v-spacer>
         <v-switch
           class="center"
@@ -22,7 +25,7 @@
           hide-details
           v-model="$vuetify.theme.dark"
         ></v-switch>
-        <v-responsive max-width="260">
+        <v-responsive max-width="260" class="mr-1">
           <v-text-field
             prepend-icon="search"
             dense
@@ -32,6 +35,8 @@
             solo-inverted
           ></v-text-field>
         </v-responsive>
+        <v-btn text router to="/login">登录</v-btn>
+        <v-btn text router to="/register">注册</v-btn>
       </v-container>
     </v-layout>
   </v-app-bar>

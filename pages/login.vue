@@ -88,12 +88,14 @@ export default {
       const password = this.password;
       const userInfo = { mobile, password };
       loginApi.submitLoginUser(userInfo).then((response) => {
-        if (response.success) {
-          this.$message.success({
-            content: "登录成功",
-          });
+        const { success, message } = response;
+        if (success) {
           this.$router.push("/");
         }
+        this.$message.open({
+          content: message,
+          type: success === true ? "success" : "error",
+        });
       });
     },
   },

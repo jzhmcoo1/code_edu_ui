@@ -9,9 +9,12 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "ant-design-vue": "^1.7.4",
     "axios": "^0.21.1",
     "core-js": "^3.9.1",
     "js-cookie": "^2.2.1",
+    "less": "^4.1.1",
+    "less-loader": "^8.1.0",
     "nuxt": "^2.15.3"
   },
   "devDependencies": {
@@ -19,6 +22,7 @@
     "@nuxt/typescript-build": "^2.1.0",
     "@nuxtjs/vuetify": "^1.11.3",
     "@types/js-cookie": "^2.2.6",
+    "babel-plugin-import": "^1.13.3",
     "material-design-icons-iconfont": "^6.1.0"
   }
 }

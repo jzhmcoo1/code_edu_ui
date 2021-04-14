@@ -20,7 +20,7 @@
 
     <!-- 课程列表 -->
     <v-container grid-list-xs>
-      <h1 class="grey-darken-1--text font-weight-bold mb-2">课程列表</h1>
+      <h1 class="heading--text font-weight-bold mb-2">课程列表</h1>
       <v-layout row wrap>
         <v-flex
           class="pa-2"
@@ -42,7 +42,7 @@
     <v-divider></v-divider>
     <!-- 讲师列表 -->
     <v-container grid-list-xs>
-      <h1 class="grey-darken-1--text text-darken-4 font-weight-bold mb-4">
+      <h1 class="heading--text text-darken-4 font-weight-bold mb-4">
         讲师列表
       </h1>
       <v-layout row wrap justify-space-between>

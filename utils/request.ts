@@ -6,6 +6,20 @@ const service = axios.create({
   timeout: 3000
 })
 
+// 请求拦截器
+service.interceptors.request.use(
+  config => {
+    if (cookie.get('dhu_token')) {
+      config.headers['token'] = cookie.get('dhu_token');
+    }
+    return config
+  },
+  err => {
+    console.error('请求拦截器错误')
+    return Promise.reject(err);
+  }
+)
+
 
 service.interceptors.response.use(
   function (response) {
@@ -15,7 +29,7 @@ service.interceptors.response.use(
     if (response.data.success) {
       console.log("响应拦截器---返回数据成功");
     } else {
-      console.log("请求错误")
+      console.error("请求错误")
     }
     return response.data
   },

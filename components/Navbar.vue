@@ -91,7 +91,6 @@ export default Vue.extend({
       const userInfo = cookie.getJSON("dhu_ucenter");
       console.log("userInfo=", userInfo);
       if (userInfo) {
-        console.log("执行了");
         this.loginInfo = userInfo;
       } else {
         this.loginInfo.id = "";

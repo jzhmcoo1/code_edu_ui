@@ -2,8 +2,9 @@
   <v-app-bar app flat height="80">
     <v-layout row wrap>
       <v-container class="py-0 fill-height">
+        <!-- 网站标题 -->
         <h1 class="heading--text mr-10 d-none d-lg-flex">Code Edu</h1>
-        <!-- <v-avatar class="mx-2" color="grey darken-1" size="32"></v-avatar> -->
+        <!-- 网站导航 -->
         <div class="d-span">
           <v-tabs background-color="transparent" slider-color="primary">
             <v-tab
@@ -18,6 +19,7 @@
           </v-tabs>
         </div>
         <v-spacer></v-spacer>
+        <!-- 明暗切换器 -->
         <v-switch
           class="center"
           :prepend-icon="$vuetify.theme.dark ? 'nightlight_round' : 'wb_sunny'"
@@ -35,8 +37,23 @@
             solo-inverted
           ></v-text-field>
         </v-responsive>
-        <v-btn text router to="/login">登录</v-btn>
-        <v-btn text router to="/register">注册</v-btn>
+        <client-only>
+          <!-- 未登录操作 -->
+          <div v-if="loginInfo.id === ''" id="no-login">
+            <v-btn text router to="/login">登录</v-btn>
+            <v-btn text router to="/register">注册</v-btn>
+          </div>
+          <!-- 已登录操作 -->
+          <div v-if="loginInfo.id !== ''" id="has-login">
+            <!-- 展示用户头像 -->
+            <v-avatar class="mx-2" color="grey darken-1" size="32">
+              <v-img :src="loginInfo.avatar"></v-img>
+            </v-avatar>
+            <v-btn @click="logout" icon plain color="primary">
+              <v-icon>logout</v-icon>
+            </v-btn>
+          </div>
+        </client-only>
       </v-container>
     </v-layout>
   </v-app-bar>
@@ -54,6 +71,44 @@ export default Vue.extend({
       { title: "文章", route: "/article", icon: "library_books" },
       { title: "作者", route: "/qa", icon: "person" },
     ],
+    // 用户登录信息
+    loginInfo: {
+      id: "",
+      age: "",
+      avatar: "",
+      mobile: "",
+      nickname: "",
+      sex: "",
+    },
   }),
+  created() {
+    this.showInfo();
+  },
+  methods: {
+    // 如果用户登录,则展示用户信息
+    showInfo() {
+      // TODO: 解决用户登录Navbar不刷新的问题
+      const userInfo = cookie.getJSON("dhu_ucenter");
+      console.log("userInfo=", userInfo);
+      if (userInfo) {
+        console.log("执行了");
+        this.loginInfo = userInfo;
+      } else {
+        this.loginInfo.id = "";
+      }
+    },
+    // 用户退出登录
+    logout() {
+      cookie.remove("dhu_token");
+      cookie.remove("dhu_ucenter");
+      this.loginInfo.id = "";
+      this.$message.success({
+        content: "成功退出登录",
+      });
+      if (this.$router.currentRoute.path !== "/") {
+        this.$router.replace("/");
+      }
+    },
+  },
 });
 </script>

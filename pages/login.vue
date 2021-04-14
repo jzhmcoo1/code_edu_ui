@@ -51,6 +51,7 @@
 
 <script>
 import loginApi from "@/api/login";
+import cookie from "js-cookie";
 export default {
   layout: "sign",
   data() {
@@ -64,6 +65,7 @@ export default {
         (v) => /^1[3-9]\d{9}$/.test(v) || "手机号码格式不正确",
       ],
       passwordRules: [(v) => !!v || "必须填写密码"],
+      loginInfo: {}, //存用户的信息
     };
   },
   methods: {
@@ -71,9 +73,11 @@ export default {
     validate() {
       return this.$refs.form.validate();
     },
+    // 重新填写表单
     reset() {
       this.$refs.form.reset();
     },
+    // 重置表单验证
     resetValidation() {
       this.$refs.formresetValidation();
     },
@@ -83,14 +87,24 @@ export default {
         this.login();
       }
     },
+    // 登录的回调
     login() {
       const mobile = this.mobile;
       const password = this.password;
       const userInfo = { mobile, password };
       loginApi.submitLoginUser(userInfo).then((response) => {
         const { success, message } = response;
+        // 如果登录成功,把返回的token存入cookie中
         if (success) {
-          this.$router.push("/");
+          cookie.set("dhu_token", response.data.token);
+          // 根据用户的token,获取用户的信息
+          loginApi.getLoginUserInfo().then((response) => {
+            this.loginInfo = response.data.userInfo;
+            // 将用户的信息存入cookie中
+            //! 此步骤需要放在此方法中,否则异步任务接受不到用户信息
+            cookie.set("dhu_ucenter", this.loginInfo);
+            this.$router.push("/");
+          });
         }
         this.$message.open({
           content: message,

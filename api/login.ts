@@ -1,9 +1,9 @@
-import request from '@/utils/request'
+import { service } from '@/utils/request'
 
 export default {
   //登录的方法
   submitLoginUser(userInfo: object) {
-    return request({
+    return service({
       url: `/educenter/member/login`,
       method: 'post',
       data: userInfo
@@ -12,7 +12,7 @@ export default {
 
   //根据token获取用户信息
   getLoginUserInfo() {
-    return request({
+    return service({
       url: `/educenter/member/getMemberInfo`,
       method: 'get'
     })
@@ -20,7 +20,7 @@ export default {
 
   //忘记密码
   forgetPassword(userPwd: string) {
-    return request({
+    return service({
       url: `/educenter/member/forgetPassword`,
       method: 'post',
       data: userPwd
@@ -29,7 +29,7 @@ export default {
 
   //修改密码
   changePassword(newPwd: string) {
-    return request({
+    return service({
       url: `/educenter/member/changePassword`,
       method: 'post',
       data: newPwd
@@ -38,14 +38,14 @@ export default {
 
   // 检查手机号码是否存在
   checkMobile(mobile: string) {
-    return request({
+    return service({
       url: `/educenter/member/checkMobile`,
       method: 'post',
       params: mobile
     })
   },
   updateUcenter(ucenter: string) {
-    return request({
+    return service({
       url: `/educenter/member/updateUcenter`,
       method: 'post',
       data: ucenter

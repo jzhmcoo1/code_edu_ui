@@ -1,8 +1,8 @@
-import request from '@/utils/request'
+import { service } from '@/utils/request'
 export default {
   // 查询首页
   getIndexData() {
-    return request({
+    return service({
       url: `/eduService/indexfront/index`,
       method: 'get'
     })

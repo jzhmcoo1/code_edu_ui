@@ -52,19 +52,27 @@
         <!-- <h1 class="heading--text font-weight-bold mb-2">课程列表</h1> -->
         <v-layout row wrap>
           <v-flex
+            align-self-center
             class="pa-2"
             xs12
             sm6
-            md3
+            lg3
             v-for="item in data.items"
             :key="item.id"
           >
-            <v-card rounded router :to="`/course/${item.id}`">
-              <v-responsive :aspect-ratio="16 / 9">
-                <v-img :src="item.cover" height="200px"></v-img>
-              </v-responsive>
-              <v-card-title> {{ item.title }} </v-card-title>
-            </v-card>
+            <v-hover v-slot="{ hover }">
+              <v-card
+                :elevation="hover ? 12 : 2"
+                rounded
+                router
+                :to="`/course/${item.id}`"
+              >
+                <v-responsive :aspect-ratio="16 / 9">
+                  <v-img :src="item.cover" height="200px"></v-img>
+                </v-responsive>
+                <v-card-title> {{ item.title }} </v-card-title>
+              </v-card>
+            </v-hover>
           </v-flex>
         </v-layout>
       </v-container>

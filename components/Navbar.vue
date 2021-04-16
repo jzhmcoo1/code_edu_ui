@@ -92,6 +92,7 @@ export default Vue.extend({
       console.log("userInfo=", userInfo);
       if (userInfo) {
         this.loginInfo = userInfo;
+        this.$store.commit("update", this.loginInfo);
       } else {
         this.loginInfo.id = "";
       }
@@ -101,6 +102,7 @@ export default Vue.extend({
       cookie.remove("dhu_token");
       cookie.remove("dhu_ucenter");
       this.loginInfo.id = "";
+      this.$store.commit("remove");
       this.$message.success({
         content: "成功退出登录",
       });

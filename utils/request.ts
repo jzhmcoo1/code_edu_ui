@@ -36,7 +36,7 @@ service.interceptors.response.use(
     if (response.data.success) {
       console.log("响应拦截器---返回数据成功");
     } else {
-      console.error("请求错误")
+      console.error(response.data.message)
     }
     return response.data
   },
@@ -44,6 +44,9 @@ service.interceptors.response.use(
     console.log("响应拦截器---返回数据失败");
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
+    message.error({
+      content: "response错误:" + error
+    })
     return Promise.reject(error);
   }
 );

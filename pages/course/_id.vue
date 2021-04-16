@@ -208,13 +208,7 @@
       <v-expand-transition>
         <div v-show="showComment">
           <v-divider></v-divider>
-          <v-card-text>
-            I'm a thing. But, like most politicians, he promised more than he
-            could deliver. You won't have time for sleeping, soldier, not with
-            all the bed making you'll be doing. Then we'll go with that data
-            file! Hey, you add a one and two zeros to that or we walk! You're
-            going to do his laundry? I've got to find a way to escape.
-          </v-card-text>
+          <Comment type="course" :id="courseId" />
         </div>
       </v-expand-transition>
     </v-card>
@@ -238,7 +232,11 @@
 import Vue from "vue";
 import courseApi from "@/api/course";
 import teacherApi from "@/api/teacher";
+import Comment from "@/components/Comments.vue";
 export default Vue.extend({
+  components: {
+    Comment,
+  },
   asyncData({ params }) {
     return { courseId: params.id };
   },

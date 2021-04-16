@@ -116,7 +116,7 @@ export default {
     },
     // 控制是否显示"回到顶部"按钮
     handleScroll() {
-      if (document.documentElement.scrollTop + document.body.scrollTop > 100) {
+      if (document.documentElement.scrollTop + document.body.scrollTop > 400) {
         this.backTopShow = true;
       } else {
         this.backTopShow = false;

@@ -30,12 +30,19 @@
           v-for="course in eduList"
           :key="course.id"
         >
-          <v-card rounded>
-            <v-responsive :aspect-ratio="16 / 9">
-              <v-img :src="course.cover" height="200px"></v-img>
-            </v-responsive>
-            <v-card-title> {{ course.title }} </v-card-title>
-          </v-card>
+          <v-hover v-slot="{ hover }">
+            <v-card
+              rounded
+              :elevation="hover ? 12 : 2"
+              router
+              :to="`/course/${course.id}`"
+            >
+              <v-responsive :aspect-ratio="16 / 9">
+                <v-img :src="course.cover" height="200px"></v-img>
+              </v-responsive>
+              <v-card-title> {{ course.title }} </v-card-title>
+            </v-card>
+          </v-hover>
         </v-flex>
       </v-layout>
     </v-container>

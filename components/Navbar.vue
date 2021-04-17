@@ -87,7 +87,6 @@ export default Vue.extend({
   methods: {
     // 如果用户登录,则展示用户信息
     showInfo() {
-      // TODO: 解决用户登录Navbar不刷新的问题
       const userInfo = cookie.getJSON("dhu_ucenter");
       console.log("userInfo=", userInfo);
       if (userInfo) {

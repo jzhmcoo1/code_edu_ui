@@ -22,8 +22,6 @@
                         <v-tab router to="/register"> 注册 </v-tab>
                       </v-tabs>
                     </div>
-
-                    <!-- //TODO: 插入登录注册表格 -->
                     <v-layout justify-center column wrap>
                       <nuxt />
                     </v-layout>

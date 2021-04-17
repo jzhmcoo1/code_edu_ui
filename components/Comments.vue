@@ -3,7 +3,7 @@
     <v-layout row wrap class="pa-2">
       <v-flex xs12 class="d-flex flex-row">
         <!-- 评论总数 -->
-        <div class="subtitle-1">{{ commentAndUserList.length }}条评论</div>
+        <div class="subtitle-1">{{ commentSum }}条评论</div>
         <!-- 评论排序选择 -->
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
@@ -24,91 +24,36 @@
       </v-flex>
       <v-divider></v-divider>
       <!-- 自己的评论 -->
-      <v-flex xs12>
-        <v-layout row wrap>
-          <v-flex xs2 sm1 class="d-flex justify-center align-center flex-wrap">
-            <client-only>
-              <div>
-                <v-avatar size="50">
-                  <v-img :src="userAvatar" />
-                </v-avatar>
-              </div>
-            </client-only>
-          </v-flex>
-          <v-flex>
-            <div>
-              <v-text-field
-                placeholder="发表宁的公开评论"
-                name="comment"
-                v-model="comment.content"
-                id="comment"
-                @click="showAddComment = true"
-              >
-              </v-text-field>
-            </div>
-            <v-expand-transition>
-              <div v-show="showAddComment">
-                <div flat v-show="showAddComment" class="d-flex justify-end">
-                  <v-btn
-                    @click="(showAddComment = false), (comment.content = '')"
-                    depressed
-                    class="mr-2"
-                    >取消</v-btn
-                  >
-                  <v-btn depressed class="primary">评论</v-btn>
-                </div>
-              </div>
-            </v-expand-transition>
-          </v-flex>
-        </v-layout>
-      </v-flex>
+      <AddNew @addNew="initComment" type="course" :id="id" />
       <!-- 评论列表 -->
       <v-flex xs12 v-for="comment in commentAndUserList" :key="comment.id">
-        <v-layout row wrap>
-          <v-flex xs2 sm1 class="d-flex justify-center align-center flex-wrap">
-            <client-only>
-              <div>
-                <v-avatar size="50">
-                  <v-img :src="comment.avatar" />
-                </v-avatar>
-              </div>
-            </client-only>
-          </v-flex>
-          <v-flex class="pt-2">
-            <p class="body-1">
-              <span class="mr-2">{{ comment.nickname }}</span>
-              <span>{{ comment.createTime }}</span>
-            </p>
-            <p class="body-2">
-              {{ comment.content }}
-            </p>
-            <v-btn icon text>
-              <v-icon>thumb_up_off_alt</v-icon>
-            </v-btn>
-            <v-btn icon text>
-              <v-icon>thumb_down_off_alt</v-icon>
-            </v-btn>
-            <v-btn text>
-              <span class="button">回复</span>
-            </v-btn>
-          </v-flex>
-        </v-layout>
+        <CommentItem
+          @replyNew="initComment"
+          type="course"
+          :id="id"
+          :item="comment"
+        />
       </v-flex>
-      <!-- 分页器 -->
+      <!--//TODO 分页器 -->
     </v-layout>
   </v-container>
 </template>
 
 <script>
 import commentApi from "@/api/comment";
+import AddNew from "@/components/Comments/AddNew";
+import CommentItem from "@/components/Comments/CommentItem";
 export default {
+  components: {
+    AddNew, //首部添加评论
+    CommentItem, //下面的评论列表
+  },
   props: {
     id: String, //保存courseId或者articleId
     type: String, //course或article
   },
   data() {
     return {
-      showAddComment: false, //是否显示自己的评论框
       commentAndUserList: [
         {
           articleId: "", //如果是文章评论,则显示文章id
@@ -148,13 +93,26 @@ export default {
   },
   created() {
     console.log("收到的参数为:", this.id, this.type);
-    if (this.type === "course") {
-      this.initCourseComment();
-    } else if (this.type === "article") {
-      this.initArticleComment();
-    }
+    this.initComment();
   },
   computed: {
+    // 计算总评论数
+    commentSum() {
+      // 直接评论数
+      let countComment = this.commentAndUserList.length;
+      // 一级评论数
+      this.commentAndUserList.map((value) => {
+        if (value.childList) {
+          value.childList.map((value) => {
+            if (value.childList) {
+              countComment += value.childList.length;
+            }
+          });
+          countComment += value.childList.length;
+        }
+      });
+      return countComment;
+    },
     userAvatar() {
       const { id } = this.$store.state.userInfo.loginInfo;
       if (id) {
@@ -164,10 +122,17 @@ export default {
       }
     },
     hasLogin() {
-      this.$store.state.userInfo.loginInfo.id ? true : false;
+      return this.$store.state.userInfo.loginInfo.id ? true : false;
     },
   },
   methods: {
+    initComment() {
+      if (this.type === "course") {
+        this.initCourseComment();
+      } else if (this.type === "article") {
+        this.initArticleComment();
+      }
+    },
     // 课程评论
     initCourseComment() {
       commentApi.getPageList(this.id).then((response) => {

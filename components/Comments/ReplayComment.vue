@@ -81,11 +81,11 @@ export default {
       this.$emit("hide");
     },
     replyComment() {
-      // if (!this.$store.state.userInfo.loginInfo.id) {
-      //   this.$message.error("请先登录再进行评论!");
-      //   this.$router.push("/login");
-      //   return;
-      // }
+      if (!this.$store.state.userInfo.loginInfo.id) {
+        this.$message.error("请先登录再进行评论!");
+        this.$router.push("/login");
+        return;
+      }
       if (this.type === "course") {
         this.replyCourseComment();
       } else {

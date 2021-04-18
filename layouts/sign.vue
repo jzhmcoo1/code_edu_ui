@@ -22,7 +22,7 @@
                         <v-tab router to="/register"> 注册 </v-tab>
                       </v-tabs>
                     </div>
-                    <v-layout justify-center column wrap>
+                    <v-layout justify-space-around column wrap>
                       <nuxt />
                     </v-layout>
                   </v-col>

@@ -26,7 +26,7 @@
     <v-btn class="mt-2" block color="success" @click="submit">登录</v-btn>
     <v-divider></v-divider>
     <v-btn block text color="warning">忘记密码?</v-btn>
-    <v-layout column wrap>
+    <v-layout column wrap justify-space-around>
       <v-row class="justify-center align-center">
         <v-col cols="4">
           <v-divider></v-divider>
@@ -37,13 +37,14 @@
         <v-col cols="4">
           <v-divider></v-divider>
         </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12"
-          ><v-btn block text color="green">
-            <v-icon>mdi-wechat</v-icon></v-btn
-          ></v-col
-        >
+        <v-col cols="12" class="d-flex justify-center">
+          <v-btn icon text color="green">
+            <v-icon>mdi-wechat</v-icon>
+          </v-btn>
+          <v-btn icon text color="info">
+            <v-icon>mdi-qqchat</v-icon>
+          </v-btn>
+        </v-col>
       </v-row>
     </v-layout>
   </v-form>

@@ -16,19 +16,20 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    ],
   },
-
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     '@/assets/main.scss',
     'material-design-icons-iconfont/dist/material-design-icons.css',
+    // 'video.js/dist/video-js.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '@/plugins/ant-design-vue.js',
-    '@/plugins/notifier.js'
+    '@/plugins/notifier.js',
+    // { src: '@/plugins/nuxt-video-player-plugin.js', ssr: false }, //vue-video-player 
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

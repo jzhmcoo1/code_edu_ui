@@ -97,6 +97,15 @@
                       v-for="child in chapter.children"
                       :key="child.id"
                       link
+                      :to="{
+                        name: 'player-vid',
+                        params: {
+                          vid: child.videoSourceId,
+                        },
+                        query: {
+                          courseId,
+                        },
+                      }"
                     >
                       <v-list-item-icon>
                         <v-icon>mdi-school-outline</v-icon>
@@ -307,7 +316,7 @@ export default Vue.extend({
     // 获取当前id的课程信息
     initCourseInfo() {
       courseApi.getCourseInfo(this.courseId).then((response) => {
-        console.log(response.data);
+        console.log("initCourseInfo", response);
         this.courseWebVo = response.data.courseWebVo;
         this.chapterVideoList = response.data.chapterVideoList;
         this.isChoice = response.data.isChoice;

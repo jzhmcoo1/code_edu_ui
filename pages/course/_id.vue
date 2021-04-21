@@ -70,7 +70,13 @@
               </div>
             </v-expand-transition>
 
-            <v-card-title primary-title>
+            <!-- 课程大纲 -->
+            <CourseMenu
+              :chapterVideoList="chapterVideoList"
+              :courseId="courseId"
+              :dense="false"
+            />
+            <!-- <v-card-title primary-title>
               <v-icon>menu_book</v-icon>
               课程大纲
               <v-btn icon @click="showChapter = !showChapter">
@@ -78,8 +84,8 @@
                   showChapter ? "mdi-chevron-up" : "mdi-chevron-down"
                 }}</v-icon>
               </v-btn>
-            </v-card-title>
-            <v-expand-transition>
+            </v-card-title> -->
+            <!-- <v-expand-transition>
               <div v-show="showChapter">
                 <v-divider></v-divider>
                 <v-list shaped class="mx-1">
@@ -98,7 +104,7 @@
                       :key="child.id"
                       link
                       :to="{
-                        name: 'player-vid',
+                        name: 'course-player-vid',
                         params: {
                           vid: child.videoSourceId,
                         },
@@ -121,13 +127,14 @@
                   </v-list-group>
                 </v-list>
               </div>
-            </v-expand-transition>
+            </v-expand-transition> -->
           </v-layout>
         </v-card>
       </v-flex>
       <v-spacer></v-spacer>
       <v-flex xs12 md4>
         <!-- 讲师详情和相关课程 -->
+        <!-- 讲师详情 -->
         <v-card>
           <v-layout column wrap>
             <v-card-title primary-title>
@@ -161,6 +168,7 @@
             </v-expand-transition>
           </v-layout>
         </v-card>
+        <!-- 相关课程 -->
         <v-card class="mt-3">
           <v-card-title primary-title>
             <v-icon>school</v-icon>
@@ -242,9 +250,11 @@ import Vue from "vue";
 import courseApi from "@/api/course";
 import teacherApi from "@/api/teacher";
 import Comment from "@/components/Comments.vue";
+import CourseMenu from "@/components/Course/CourseMenu.vue";
 export default Vue.extend({
   components: {
     Comment,
+    CourseMenu,
   },
   asyncData({ params }) {
     return { courseId: params.id };
@@ -255,7 +265,7 @@ export default Vue.extend({
       showDesciption: true,
       showRelated: true,
       showTeacher: true,
-      showChapter: true,
+      // showChapter: true,
       showComment: true,
       backTopShow: false, //返回顶部显示
       // 面包屑信息
@@ -316,7 +326,7 @@ export default Vue.extend({
     // 获取当前id的课程信息
     initCourseInfo() {
       courseApi.getCourseInfo(this.courseId).then((response) => {
-        console.log("initCourseInfo", response);
+        // TODO: 登录token过期导致无法请求无数据
         this.courseWebVo = response.data.courseWebVo;
         this.chapterVideoList = response.data.chapterVideoList;
         this.isChoice = response.data.isChoice;
@@ -330,7 +340,6 @@ export default Vue.extend({
     initRelateCourse() {
       teacherApi.getTeacherInfo(this.courseWebVo.teacherId).then((response) => {
         this.relatedCourse = response.data.courseList;
-        // console.log("相关课程:", this.relatedCourse);
       });
     },
   },

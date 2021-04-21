@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import Player from "./components/Player.vue";
+import Player from "@/components/Video/Player.vue";
 export default {
   head() {
     return {};

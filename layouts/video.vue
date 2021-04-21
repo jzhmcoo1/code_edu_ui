@@ -1,44 +1,31 @@
 <template>
   <v-app id="video">
     <Navbar />
+    <!-- 笔记组件 -->
+    <DrawerEditor />
     <v-main class="background">
       <v-container grid-list-xs>
         <v-row>
           <v-col>
             <v-sheet class="transparent" min-height="100vh" rounded="lg">
+              <!-- 课程标题 -->
               <v-card flat>
                 <v-card-title primary-title>
-                  <v-icon>school</v-icon>
-                  课程标题
+                  <v-icon left>school</v-icon>
+                  {{ courseWebVo.title }}
                 </v-card-title>
               </v-card>
               <!-- 课程视频区 -->
               <v-row>
                 <v-col>
+                  <!-- 嵌入_id.vue -->
                   <nuxt />
                 </v-col>
               </v-row>
               <!-- 课程功能区 -->
               <v-row>
                 <v-col>
-                  <v-card flat>
-                    <v-container grid-list-xs>
-                      <v-card-title primary-title>
-                        <v-btn text>
-                          <v-icon>thumb_up</v-icon>
-                          点赞
-                        </v-btn>
-                        <v-btn text>
-                          <v-icon>monetization_on</v-icon>
-                          投币
-                        </v-btn>
-                        <v-btn text>
-                          <v-icon>star</v-icon>
-                          收藏
-                        </v-btn>
-                      </v-card-title>
-                    </v-container>
-                  </v-card>
+                  <VideoBar />
                 </v-col>
               </v-row>
               <v-row>
@@ -46,7 +33,7 @@
                   <!-- 课程评论 -->
                   <v-card>
                     <v-card-title primary-title>
-                      <v-icon>comment</v-icon>
+                      <v-icon left>comment</v-icon>
                       课程评论
                       <v-btn icon @click="showComment = !showComment">
                         <v-icon>{{
@@ -70,48 +57,19 @@
               <v-col>
                 <!-- 课程视频菜单 -->
                 <v-sheet rounded="lg">
-                  <v-list color="transparent">
-                    <v-list-item v-for="n in 5" :key="n" link>
-                      <v-list-item-content>
-                        <v-list-item-title>
-                          List Item {{ n }}
-                        </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-
-                    <v-divider class="my-2"></v-divider>
-
-                    <v-list-item link color="grey lighten-4">
-                      <v-list-item-content>
-                        <v-list-item-title> Refresh </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list>
+                  <!-- 课程大纲组件 -->
+                  <CourseMenu
+                    :chapterVideoList="chapterVideoList"
+                    :courseId="courseId"
+                    :dense="true"
+                  />
                 </v-sheet>
               </v-col>
             </v-row>
             <v-row>
               <v-col>
-                <!-- 课程相关视频 -->
-                <v-sheet rounded="lg">
-                  <v-list color="transparent">
-                    <v-list-item v-for="n in 5" :key="n" link>
-                      <v-list-item-content>
-                        <v-list-item-title>
-                          List Item {{ n }}
-                        </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-
-                    <v-divider class="my-2"></v-divider>
-
-                    <v-list-item link color="grey lighten-4">
-                      <v-list-item-content>
-                        <v-list-item-title> Refresh </v-list-item-title>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list>
-                </v-sheet>
+                <!-- //TODO:课程相关视频 -->
+                <v-sheet rounded="lg"> </v-sheet>
               </v-col>
             </v-row>
           </v-col>
@@ -124,16 +82,53 @@
 <script>
 import Navbar from "@/components/Navbar";
 import Comment from "@/components/Comments";
+import VideoBar from "@/components/Video/VideoBar";
+import DrawerEditor from "@/components/DrawerEditor";
+import CourseMenu from "@/components/Course/CourseMenu";
+import courseApi from "@/api/course";
 export default {
   components: {
     Navbar,
     Comment,
+    VideoBar,
+    DrawerEditor,
+    CourseMenu,
   },
   data() {
     return {
       showComment: true,
       courseId: this.$route.query.courseId,
+      chapterVideoList: [], //课程的视频列表
+      courseWebVo: {
+        title: "", //课程标题
+        cover: "", //课程封面
+        teacherId: "", //讲师id
+        teacherName: "", //教师名称
+        avatar: "", //教师头像
+        intro: "", //讲师信息
+        subjectLevelOne: "", //课程一级分类标题
+        subjectLevelOneId: "", //课程一级分类ID
+        subjectLevelTwo: "", //课程二级分类标题
+        subjectLevelTwoId: "", //课程二级分类ID
+        choiceCount: 0, //选课人数
+        viewCount: 0, //访问人数
+        description: "", //课程信息描述
+        lessonNum: 0, //课程章节数
+      },
     };
+  },
+  created() {
+    this.initCourseInfo();
+  },
+  methods: {
+    // 获取当前id的课程信息
+    initCourseInfo() {
+      courseApi.getCourseInfo(this.courseId).then((response) => {
+        // TODO: 登录token过期导致无法请求无数据
+        this.chapterVideoList = response.data.chapterVideoList;
+        this.courseWebVo = response.data.courseWebVo;
+      });
+    },
   },
 };
 </script>

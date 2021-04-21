@@ -45,10 +45,34 @@
           </div>
           <!-- 已登录操作 -->
           <div v-if="loginInfo.id !== ''" id="has-login">
-            <!-- 展示用户头像 -->
-            <v-avatar class="mx-2" color="grey darken-1" size="32">
-              <v-img :src="loginInfo.avatar"></v-img>
-            </v-avatar>
+            <!-- 下拉菜单 -->
+            <v-menu open-on-hover bottom offset-y>
+              <template v-slot:activator="{ on, attrs }">
+                <!-- 展示用户头像 -->
+                <v-avatar
+                  class="mx-2"
+                  color="grey darken-1"
+                  size="32"
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-img :src="loginInfo.avatar"></v-img>
+                </v-avatar>
+              </template>
+              <v-list dense>
+                <v-list-item
+                  router
+                  :to="item.route"
+                  v-for="(item, index) in menus"
+                  :key="index"
+                >
+                  <v-list-item-title>
+                    <v-icon left>home</v-icon>
+                    {{ item.title }}
+                  </v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
             <v-btn @click="logout" icon plain color="primary">
               <v-icon>logout</v-icon>
             </v-btn>
@@ -80,6 +104,7 @@ export default Vue.extend({
       nickname: "",
       sex: "",
     },
+    menus: [{ title: "个人中心", icon: "home", route: "/ucenter" }],
   }),
   created() {
     this.showInfo();

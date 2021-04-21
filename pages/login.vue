@@ -104,7 +104,8 @@ export default {
             // 将用户的信息存入cookie中
             //! 此步骤需要放在此方法中,否则异步任务接受不到用户信息
             cookie.set("dhu_ucenter", this.loginInfo);
-            this.$router.push("/");
+            // 登录完成后回到刚才的页面
+            this.$router.back();
           });
         }
         this.$message.open({

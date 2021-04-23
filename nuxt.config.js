@@ -29,6 +29,7 @@ export default {
   plugins: [
     '@/plugins/ant-design-vue.js',
     '@/plugins/notifier.js',
+    { src: '@/plugins/vue-editor.js', mode: "client" },
     // { src: '@/plugins/nuxt-video-player-plugin.js', ssr: false }, //vue-video-player 
   ],
 

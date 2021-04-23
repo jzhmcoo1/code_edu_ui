@@ -9,6 +9,8 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@toast-ui/editor": "^2.5.2",
+    "@toast-ui/vue-editor": "^2.5.2",
     "ant-design-vue": "^1.7.4",
     "axios": "^0.21.1",
     "core-js": "^3.9.1",
@@ -18,7 +20,9 @@
     "less-loader": "^8.1.0",
     "moment": "^2.29.1",
     "nuxt": "^2.15.3",
-    "pubsub-js": "^1.9.3"
+    "pubsub-js": "^1.9.3",
+    "vue-image-crop-upload": "^3.0.3",
+    "wangeditor": "^4.6.16"
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.3",

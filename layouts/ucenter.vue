@@ -73,7 +73,9 @@
     <v-main class="background">
       <!--  -->
       <v-container grid-list-xs>
-        <nuxt />
+        <v-sheet min-height="90vh" class="transparent">
+          <nuxt />
+        </v-sheet>
       </v-container>
     </v-main>
   </v-app>
@@ -81,6 +83,7 @@
 
 <script>
 import cookie from "js-cookie";
+import PubSub from "pubsub-js";
 export default {
   components: {},
 
@@ -92,6 +95,9 @@ export default {
     } else {
       this.loginInfo = cookie.getJSON("dhu_ucenter");
     }
+    PubSub.subscribe("updateLoginInfo", () => {
+      this.loginInfo = cookie.getJSON("dhu_ucenter");
+    });
   },
   data: () => ({
     drawer: null,

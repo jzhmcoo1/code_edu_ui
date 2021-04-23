@@ -104,7 +104,7 @@ export default Vue.extend({
       nickname: "",
       sex: "",
     },
-    menus: [{ title: "个人中心", icon: "home", route: "/ucenter" }],
+    menus: [{ title: "个人中心", icon: "home", route: "/ucenter/info" }],
   }),
   created() {
     this.showInfo();

@@ -29,6 +29,7 @@ export default {
   plugins: [
     '@/plugins/ant-design-vue.js',
     '@/plugins/notifier.js',
+    '@/plugins/element-ui.js',
     { src: '@/plugins/vue-editor.js', mode: "client" },
     // { src: '@/plugins/nuxt-video-player-plugin.js', ssr: false }, //vue-video-player 
   ],
@@ -80,9 +81,18 @@ export default {
     transpile: ['ant-design-vue'],
     babel: {
       "plugins": [
+        // 按需引入ant-design-vue
         [
           "import",
           { libraryName: "ant-design-vue", libraryDirectory: "es", style: 'css' }
+        ],
+        // 按需引入elementUi
+        [
+          "component",
+          {
+            libraryName: "element-ui",
+            styleLibraryName: "theme-chalk"
+          }
         ]
       ]
     }

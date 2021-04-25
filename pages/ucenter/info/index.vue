@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card flat>
     <v-breadcrumbs divider="/" :items="breadList"> </v-breadcrumbs>
     <v-card-title primary-title> 查看个人资料 </v-card-title>
     <v-card class="mx-auto">

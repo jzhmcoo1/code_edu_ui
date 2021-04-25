@@ -133,6 +133,7 @@
 import articleApi from "@/api/article";
 import Markdown from "vue-meditor";
 import { MarkdownPreview } from "vue-meditor";
+import cookie from "js-cookie";
 export default {
   layout: "ucenter",
   components: { Markdown, MarkdownPreview },
@@ -141,6 +142,8 @@ export default {
     if (this.$route.query.articleId) {
       this.articleId = this.$route.query.articleId;
     }
+    // 从cookie中获取作者id
+    this.articleInfo.authorId = cookie.getJSON("dhu_ucenter").id;
     //查询所有标签
     this.initAllTag();
     //初始化封面

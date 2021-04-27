@@ -24,12 +24,12 @@
       </v-flex>
       <v-divider></v-divider>
       <!-- 自己的评论 -->
-      <AddNew @addNew="initComment" type="course" :id="id" />
+      <AddNew @addNew="initComment" :type="type" :id="id" />
       <!-- 评论列表 -->
       <v-flex xs12 v-for="comment in commentAndUserList" :key="comment.id">
         <CommentItem
           @replyNew="initComment"
-          type="course"
+          :type="type"
           :id="id"
           :item="comment"
         />
@@ -88,6 +88,7 @@ export default {
         content: "",
         courseId: "",
         parentId: "0",
+        relatedId: "",
       },
     };
   },
@@ -141,7 +142,13 @@ export default {
       });
     },
     // 文章评论
-    initArticleComment() {},
+    initArticleComment() {
+      commentApi.getArticlePageList(this.id).then((response) => {
+        console.log("初始化文章评论", response.data);
+        this.commentAndUserList = response.data.list;
+        console.log(this.commentAndUserList);
+      });
+    },
   },
 };
 </script>

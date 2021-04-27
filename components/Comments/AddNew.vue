@@ -59,7 +59,7 @@ export default {
     if (this.type === "course") {
       this.comment.courseId = this.id;
     } else {
-      this.comment.courseId = this.id;
+      this.comment.articleId = this.id;
     }
     this.comment.parentId = "0";
   },
@@ -87,6 +87,9 @@ export default {
       }
       if (this.type === "course") {
         this.addCourseComment();
+      } else if (this.type === "article") {
+        this.addArticleComment();
+        console.log("文章评论");
       }
     },
     addCourseComment() {
@@ -95,6 +98,17 @@ export default {
           this.$message.success("评论成功!");
           this.comment.content = ""; //清空评论内容
           this.$emit("addNew"); //通知父组件刷新
+          this.showAddComment = false; //收起评论组件
+        }
+      });
+    },
+    addArticleComment() {
+      commentApi.addArticleComment(this.comment).then((response) => {
+        if (response.success) {
+          this.$message.success("评论成功!");
+          this.comment.content = ""; //清空评论内容
+          this.$emit("addNew"); //通知父组件刷新
+          this.showAddComment = false; //收起评论组件
         }
       });
     },

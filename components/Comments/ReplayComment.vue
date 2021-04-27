@@ -49,6 +49,7 @@ export default {
         content: "",
         courseId: "",
         parentId: "0",
+        articleId: "",
       },
     };
   },
@@ -97,11 +98,19 @@ export default {
         if (response.success) {
           this.$message.success("回复评论成功");
           this.$emit("replyNew");
-          this.comment.content = "";
+          this.hideReplayBox();
         }
       });
     },
-    replyArticleComment() {},
+    replyArticleComment() {
+      commentApi.addArticleComment(this.comment).then((response) => {
+        if (response.success) {
+          this.$message.success("回复评论成功");
+          this.$emit("replyNew");
+          this.hideReplayBox();
+        }
+      });
+    },
   },
 };
 </script>

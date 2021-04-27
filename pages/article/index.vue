@@ -68,13 +68,12 @@
     <FloatBtn />
   </v-container>
 </template>
-<script lang="ts">
-import Vue from "vue";
+<script>
 import FloatBtn from "@/components/FloatBtn.vue";
 import articleApi from "@/api/article";
 import monent, { MomentInput } from "moment";
 monent.locale("zh-CN");
-export default Vue.extend({
+export default {
   components: { FloatBtn },
   layout: "article",
   data() {
@@ -135,11 +134,11 @@ export default Vue.extend({
         });
     },
     // moment格式化时间
-    getTime(value: MomentInput) {
+    getTime(value) {
       return monent(value).fromNow();
     },
   },
-});
+};
 </script>
 <style lang="scss">
 .v-card--reveal {

@@ -182,7 +182,7 @@ export default {
           // href: string,
           link: true,
           text: "文章编辑",
-          to: "/ucenter/article",
+          to: "/ucenter/article/add",
         },
       ],
     };

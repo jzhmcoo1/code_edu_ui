@@ -1,70 +1,106 @@
 <template>
   <v-container grid-list-xs>
-    <!-- 标题区 -->
-    <v-container grid-list-xs>
-      <h1 class="headline heading--text">全部文章</h1>
-    </v-container>
-    <!-- 列表展示区 -->
-    <v-container grid-list-xs>
-      <v-row class="mx-auto">
-        <v-col
-          v-for="(item, index) in responseData.items"
-          :key="item.id"
-          :cols="12"
-          :lg="index % 3 === 0 ? 12 : 6"
-        >
-          <v-hover v-slot="{ hover }" close-delay="200" open-delay="100">
-            <v-card rounded="lg">
-              <div style="overflow: hidden">
-                <v-img :src="item.cover" :height="height" class="zoom-img">
-                  <v-fade-transition>
-                    <v-overlay v-if="hover" absolute>
-                      <v-btn router :to="`/article/${item.id}`">开始阅读</v-btn>
-                    </v-overlay>
-                  </v-fade-transition>
-                </v-img>
+    <v-row>
+      <!-- 左边栏 -->
+      <v-col cols="12" sm="9">
+        <v-sheet min-height="70vh" rounded="lg">
+          <v-container grid-list-xs>
+            <!-- 标题区 -->
+            <v-container grid-list-xs>
+              <h1 class="headline heading--text">全部文章</h1>
+            </v-container>
+            <!-- 列表展示区 -->
+            <v-container grid-list-xs>
+              <v-row class="mx-auto">
+                <v-col
+                  v-for="(item, index) in responseData.items"
+                  :key="item.id"
+                  :cols="12"
+                  :lg="index % 3 === 0 ? 12 : 6"
+                >
+                  <v-hover
+                    v-slot="{ hover }"
+                    close-delay="200"
+                    open-delay="100"
+                  >
+                    <v-card rounded="lg">
+                      <div style="overflow: hidden">
+                        <v-img
+                          :src="item.cover"
+                          :height="height"
+                          class="zoom-img"
+                        >
+                          <v-fade-transition>
+                            <v-overlay v-if="hover" absolute>
+                              <v-btn router :to="`/article/${item.id}`"
+                                >开始阅读</v-btn
+                              >
+                            </v-overlay>
+                          </v-fade-transition>
+                        </v-img>
+                      </div>
+                      <span>
+                        <v-card-title v-text="item.title"></v-card-title>
+                        <v-card-text
+                          class="mt-n3"
+                          v-text="getTime(item.createTime)"
+                        >
+                        </v-card-text>
+                      </span>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn text color="error">
+                          <v-icon>mdi-heart</v-icon>
+                          <span>{{ item.likeCount }}</span>
+                        </v-btn>
+
+                        <v-btn text color="info">
+                          <v-icon>mdi-comment-outline</v-icon>
+                          <span>{{ item.commentCount }}</span>
+                        </v-btn>
+
+                        <v-btn text color="primary">
+                          <v-icon>mdi-eye</v-icon>
+                          <span>{{ item.viewCount }}</span>
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-hover>
+                </v-col>
+              </v-row>
+            </v-container>
+            <!-- 分页 -->
+            <v-container grid-list-xs>
+              <div class="text-center">
+                <v-pagination
+                  v-model="page"
+                  :length="responseData.pages"
+                  :total-visible="7"
+                  @input="getArticleList"
+                  @next="getArticleList"
+                  @previous="getArticleList"
+                ></v-pagination>
               </div>
-              <span>
-                <v-card-title v-text="item.title"></v-card-title>
-                <v-card-text class="mt-n3" v-text="getTime(item.createTime)">
-                </v-card-text>
-              </span>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-
-                <v-btn text color="error">
-                  <v-icon>mdi-heart</v-icon>
-                  <span>{{ item.likeCount }}</span>
-                </v-btn>
-
-                <v-btn text color="info">
-                  <v-icon>mdi-comment-outline</v-icon>
-                  <span>{{ item.commentCount }}</span>
-                </v-btn>
-
-                <v-btn text color="primary">
-                  <v-icon>mdi-eye</v-icon>
-                  <span>{{ item.viewCount }}</span>
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-hover>
-        </v-col>
-      </v-row>
-    </v-container>
-    <!-- 分页 -->
-    <v-container grid-list-xs>
-      <div class="text-center">
-        <v-pagination
-          v-model="page"
-          :length="responseData.pages"
-          :total-visible="7"
-          @input="getArticleList"
-          @next="getArticleList"
-          @previous="getArticleList"
-        ></v-pagination>
-      </div>
-    </v-container>
+            </v-container>
+          </v-container>
+          <!-- 嵌入文章和列表 -->
+        </v-sheet>
+      </v-col>
+      <!-- 右边栏 -->
+      <v-col cols="12" sm="3">
+        <v-row>
+          <v-col>
+            <v-sheet rounded="lg" min-height="268"> 热门文章 </v-sheet>
+          </v-col>
+        </v-row>
+        <v-row style="position: sticky; top: 80px">
+          <v-col>
+            <v-sheet rounded="lg" min-height="268"> 文章分类 </v-sheet>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
     <FloatBtn />
   </v-container>
 </template>

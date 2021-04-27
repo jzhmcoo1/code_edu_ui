@@ -51,7 +51,11 @@
                 :transition="hover ? 'scale-transition' : ''"
                 :aspect-ratio="16 / 9"
               >
-                <v-img :src="course.cover" height="200px"></v-img>
+                <v-img
+                  class="zoom-img"
+                  :src="course.cover"
+                  height="200px"
+                ></v-img>
               </v-responsive>
               <v-card-title> {{ course.title }} </v-card-title>
             </v-card>
@@ -76,7 +80,7 @@
       <v-layout row wrap justify-space-between>
         <v-flex xs12 sm6 md3 v-for="teacher in adminList" :key="teacher.id">
           <v-card flat class="text-center">
-            <v-avatar rounded="circle" size="128"
+            <v-avatar class="avatar-rotate" rounded="circle" size="128"
               ><v-img :src="teacher.avatar"></v-img
             ></v-avatar>
 

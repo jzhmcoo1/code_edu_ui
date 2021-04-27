@@ -3,6 +3,7 @@ const hour = new Date().getHours()
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
+  ssr: false,
   head: {
     titleTemplate: '%s - CodeEdu在线教育',
     title: 'CodeEdu在线教育',
@@ -22,7 +23,6 @@ export default {
   css: [
     '@/assets/main.scss',
     'material-design-icons-iconfont/dist/material-design-icons.css',
-    // 'video.js/dist/video-js.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -52,6 +52,7 @@ export default {
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
+    treeShake: true,
     icons: {
       iconfont: ['md', 'mdi']
     },

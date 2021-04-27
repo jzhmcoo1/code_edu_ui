@@ -3,7 +3,53 @@
 .page-leave-active {
   transition: opacity 0.5s;
 }
+
 .page-enter,
 .page-leave-active {
   opacity: 0;
+}
+
+// 头像旋转效果
+.avatar-rotate {
+  transition: all 0.5s;
+
+  &:hover {
+    transform: rotate(360deg);
+    transition: all 0.6s;
+  }
+}
+
+// 图片缩放效果
+.zoom-img {
+  &:hover {
+    transform: scale(1.1);
+    transition: all 0.6s;
+  }
+
+  transition: all 0.6s;
+}
+
+// 重写vuetify的code背景
+pre {
+  code {
+    background-color: transparent !important;
+  }
+}
+
+
+// 配置代码块的明暗主题背景色
+.theme {
+  &--dark {
+    pre {
+      padding: 20px;
+      background-color: #22252B;
+    }
+  }
+
+  &--light {
+    pre {
+      padding: 20px;
+      background-color: #F6F8FA;
+    }
+  }
 }

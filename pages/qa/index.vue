@@ -10,19 +10,17 @@
         v-for="author in authorList"
         :key="author.name"
       >
-        <v-hover v-slot="{ hover }">
-          <v-card :elevation="hover ? 3 : 0" class="text-center pa-3">
-            <v-avatar rounded="circle" size="128"
-              ><v-img class="avatar" :src="author.avatar"></v-img
-            ></v-avatar>
-            <v-card-subtitle>{{ author.name }}</v-card-subtitle>
-            <v-card-actions>
-              <v-btn :href="author.url" text color="info">
-                <v-icon>mdi-github</v-icon>
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-hover>
+        <v-card flat class="text-center pa-3">
+          <v-avatar rounded="circle" size="128" class="avatar-rotate"
+            ><v-img class="avatar" :src="author.avatar"></v-img
+          ></v-avatar>
+          <v-card-subtitle>{{ author.name }}</v-card-subtitle>
+          <v-card-actions>
+            <v-btn :href="author.url" text color="info">
+              <v-icon>mdi-github</v-icon>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
       </v-flex>
     </v-layout>
     <v-divider></v-divider>

@@ -22,8 +22,7 @@ export default {
         {
           rel: "stylesheet",
           href: this.$vuetify.theme.dark
-            ? // FIXME:修复css引入bug
-              "https://highlightjs.org/static/demo/styles/monokai-sublime.css"
+            ? "https://highlightjs.org/static/demo/styles/monokai-sublime.css"
             : "https://highlightjs.org/static/demo/styles/atom-one-light.css",
         },
       ],

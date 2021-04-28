@@ -9,7 +9,6 @@
 
 <script>
 import Navbar from "@/components/Navbar";
-import articleApi from "@/api/article";
 export default {
   components: { Navbar },
   data: () => ({

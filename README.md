@@ -4,6 +4,8 @@
 
 CodeBar(Code Edu)在线教育平台前台项目
 
+[github地址](https://github.com/jzhmcoo1/code_edu_ui) | [gitee地址](https://gitee.com/jzhmcoo1/code_edu_ui_new)
+
 ✨喜欢请点个Star哦✨
 
 ## ⌨️ 所用技术和开源项目

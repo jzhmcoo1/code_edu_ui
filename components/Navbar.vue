@@ -50,7 +50,7 @@
               <template v-slot:activator="{ on, attrs }">
                 <!-- 展示用户头像 -->
                 <v-avatar
-                  class="mx-2"
+                  class="mx-2 avatar-rotate"
                   color="grey darken-1"
                   size="32"
                   v-bind="attrs"

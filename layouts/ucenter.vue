@@ -8,7 +8,7 @@
         <client-only>
           <v-list-item class="d-flex justify-center">
             <v-list-item-avatar size="100">
-              <v-img :src="loginInfo.avatar"></v-img>
+              <v-img :src="loginInfo.avatar" class="avatar-rotate"></v-img>
             </v-list-item-avatar>
           </v-list-item>
         </client-only>

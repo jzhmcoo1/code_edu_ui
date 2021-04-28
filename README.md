@@ -8,15 +8,15 @@ CodeBar(Code Edu)在线教育平台前台项目
 
 ## ⌨️ 所用技术和开源项目
 
-- Nuxt搭建项目
-- UI界面主要使用Material Design风格的组件库Vuetify，额外按需引入了一小部分Ant Design Vue和ElementUI
-- 封装Axios，进行Request和Response的拦截和自定义
-- js-cookie，Vuex管理登录用户信息
-- Pub-Sub库兄弟组件交互信息
-- marked+highlight.js对markdown格式的文章进行渲染
-- Moment.js时间的格式化
-- vue-meditor基于VueMarkdown编辑器
-- vue-side-catalog生成文章目录，支持跟随滚动、高亮和跳转
+- [Nuxt](https://www.nuxtjs.cn/)搭建项目
+- UI界面主要使用[Material Design](https://material.io/design)风格的组件库[Vuetify](https://vuetifyjs.com/en/)，额外按需引入了一小部分[Ant Design Vue](https://www.antdv.com/docs/vue/introduce-cn/)和[ElementUI](https://element.eleme.cn/#/zh-CN)
+- 封装[Axios](https://github.com/axios/axios)，进行Request和Response的拦截和自定义
+- [js-cookie](https://github.com/js-cookie/js-cookie)，[Vuex](https://vuex.vuejs.org/zh/guide/state.html)管理登录用户信息
+- [Pub-Sub](https://github.com/mroderick/PubSubJS#readme)进行兄弟组件交互信息
+- [marked](https://github.com/markedjs/marked)+[highlight.js](https://highlightjs.org/)对markdown格式的文章进行渲染
+- [Moment.js](http://momentjs.cn/)时间的格式化
+- [vue-meditor](https://github.com/zhaoxuhui1122/vue-markdown)基于VueMarkdown编辑器
+- [vue-side-catalog](https://github.com/yaowei9363/vue-side-catalog)生成文章目录，支持跟随滚动、高亮和跳转
 - （一小部分使用typescript写的，只是稍微感受一下，不太熟悉）
 
 ## 💻 实现功能
@@ -56,7 +56,7 @@ $ yarn generate
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
 
-建议配合后端一起食用
+建议配合后端一起食用[CodeEdu后端](https://gitee.com/paradox_hyw/code_edu-vue)
 
 ## 👁 项目预览
 

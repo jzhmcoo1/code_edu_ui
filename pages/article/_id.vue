@@ -5,7 +5,9 @@
       <v-sheet rounded="lg" min-height="100vh" class="transparent">
         <v-card flat class="transparent">
           <v-card-title primary-title>
-            <v-icon left>toc</v-icon>
+            <v-btn text fab @click="drawer = !drawer">
+              <v-icon>toc</v-icon>
+            </v-btn>
             文章目录
           </v-card-title>
           <v-divider></v-divider>

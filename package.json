@@ -26,7 +26,8 @@
     "nuxt": "^2.15.3",
     "pubsub-js": "^1.9.3",
     "vue-image-crop-upload": "^3.0.3",
-    "vue-meditor": "^2.1.1"
+    "vue-meditor": "^2.1.1",
+    "vue-side-catalog": "^2.0.0"
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.3",

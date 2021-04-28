@@ -3,10 +3,10 @@
     <v-breadcrumbs id="bread" divider="/" :items="breadList"> </v-breadcrumbs>
     <!-- 课程信息 -->
     <v-card shaped :elevation="2">
-      <v-layout row wrap justify-space-between>
+      <v-layout row wrap justify-space-between align-center>
         <v-flex xs12 md7>
-          <v-responsive :aspect-ratio="16 / 9">
-            <v-img :src="courseWebVo.cover"></v-img>
+          <v-responsive :aspect-ratio="16 / 9" class="d-flex align-center">
+            <v-img contain :src="courseWebVo.cover"></v-img>
           </v-responsive>
         </v-flex>
         <v-flex xs12 md5 align-self-center>

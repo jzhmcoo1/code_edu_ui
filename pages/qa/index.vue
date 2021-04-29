@@ -16,7 +16,7 @@
           ></v-avatar>
           <v-card-subtitle>{{ author.name }}</v-card-subtitle>
           <v-card-actions>
-            <v-btn :href="author.url" text color="info">
+            <v-btn :href="author.url" text block color="info">
               <v-icon>mdi-github</v-icon>
             </v-btn>
           </v-card-actions>
@@ -35,7 +35,7 @@
           icon="edit"
         >
           <template v-slot:icon>
-            <v-avatar>
+            <v-avatar class="avatar-rotate">
               <img :src="commit.committer.avatar_url" />
             </v-avatar>
           </template>
@@ -111,7 +111,7 @@ export default Vue.extend({
         },
       ],
       page: 1,
-      per_page: 10,
+      per_page: 20,
       commitArray: [],
     };
   },

@@ -118,9 +118,12 @@
                   <v-icon left>person</v-icon>
                   作者信息
                 </v-card-title>
-                <v-responsive :aspect-ratio="1 / 1">
+                <v-responsive
+                  :aspect-ratio="1 / 1"
+                  class="d-flex justify-center align-center"
+                >
                   <v-avatar size="150" class="avatar-rotate">
-                    <img :src="articleInfo.avatar" />
+                    <v-img :src="articleInfo.avatar" />
                   </v-avatar>
                   <v-card-text>
                     {{ articleInfo.authorName }}
@@ -196,7 +199,10 @@ export default {
   methods: {
     // 统计浏览量
     lookArticle() {
-      const id = cookie.getJSON("dhu_ucenter").id;
+      let id = "";
+      if (cookie.getJSON("dhu_ucenter")) {
+        id = cookie.getJSON("dhu_ucenter").id;
+      }
       const uid = id ? id : "visitor";
       articleApi.calViewCount(this.articleId, uid).then(() => {
         console.log("增加浏览量");

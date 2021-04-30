@@ -6,7 +6,7 @@
       <v-layout row wrap justify-space-between align-center>
         <v-flex xs12 md7>
           <v-responsive :aspect-ratio="16 / 9" class="d-flex align-center">
-            <v-img contain :src="courseWebVo.cover"></v-img>
+            <v-img class="zoom-img" contain :src="courseWebVo.cover"></v-img>
           </v-responsive>
         </v-flex>
         <v-flex xs12 md5 align-self-center>
@@ -151,9 +151,15 @@
                 <v-divider></v-divider>
                 <v-layout row class="pa-3" align-center justify-space-between>
                   <v-flex xs3 class="mr-2" justify-center>
-                    <v-avatar size="100">
-                      <img :src="courseWebVo.avatar" />
-                    </v-avatar>
+                    <v-card
+                      flat
+                      router
+                      :to="`/teacher/${courseWebVo.teacherId}`"
+                    >
+                      <v-avatar size="100">
+                        <v-img class="zoom-img" :src="courseWebVo.avatar" />
+                      </v-avatar>
+                    </v-card>
                   </v-flex>
                   <v-flex>
                     <v-card-text class="subtitle-2">
@@ -199,7 +205,11 @@
                       :to="`/course/${item.id}`"
                     >
                       <v-responsive :aspect-ratio="16 / 9">
-                        <v-img :src="item.cover" height="200px"></v-img>
+                        <v-img
+                          class="zoom-img"
+                          :src="item.cover"
+                          height="200px"
+                        ></v-img>
                       </v-responsive>
                       <v-card-title> {{ item.title }} </v-card-title>
                     </v-card>

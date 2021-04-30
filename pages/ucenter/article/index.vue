@@ -2,73 +2,111 @@
   <div>
     <v-card>
       <v-breadcrumbs divider="/" :items="breadList"> </v-breadcrumbs>
-      <v-card-title primary-title> 文章管理 </v-card-title>
-      <v-divider></v-divider>
-      <v-container grid-list-xs>
-        <v-row v-for="item in items" :key="item.id">
-          <v-col>
-            <v-responsive :aspect-ratio="16 / 9">
-              <v-img width="300px" :src="item.cover"></v-img>
-            </v-responsive>
-          </v-col>
-          <v-col>
-            <v-card-text> 文章标题:{{ item.title }} </v-card-text>
-            <v-card-text> 文章类别:{{ item.typeId }} </v-card-text>
-          </v-col>
-          <v-col>
-            <v-card-text> 创建时间:{{ item.createTime }} </v-card-text>
-            <v-card-text> 修改时间:{{ item.modifiedTime }} </v-card-text>
-          </v-col>
-          <v-col>
-            <v-card-text> 点赞数:{{ item.likeCount }} </v-card-text>
-            <v-card-text> 评论数:{{ item.commentCount }} </v-card-text>
-          </v-col>
-          <v-col> 文章操作 </v-col>
-        </v-row>
-      </v-container>
-    </v-card>
-    <v-card>
-      <v-toolbar color="indigo" dark>
-        <v-toolbar-title>Discover</v-toolbar-title>
-
-        <v-spacer></v-spacer>
-
-        <v-btn icon>
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-      </v-toolbar>
-
-      <v-container fluid>
-        <v-row dense>
-          <v-col v-for="card in cards" :key="card.title" :cols="card.flex">
+      <v-data-table
+        :headers="headers"
+        :items="items"
+        sort-by="createTime"
+        class="elevation-0"
+        :page.sync="page"
+        hide-default-footer
+        :loading="loading"
+        loading-text="正在加载..."
+        locale="zh-CN"
+      >
+        <template v-slot:top>
+          <v-toolbar flat>
+            <v-toolbar-title class="font-weight-bold">文章管理</v-toolbar-title>
+            <v-divider class="mx-4" inset vertical></v-divider>
+            <v-spacer></v-spacer>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn router to="/ucenter/article/add" text color="info" icon>
+                  <v-icon v-bind="attrs" v-on="on">add_circle</v-icon>
+                </v-btn>
+              </template>
+              <span>新建文章</span>
+            </v-tooltip>
+          </v-toolbar>
+          <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
-              <v-img
-                :src="card.src"
-                class="white--text align-end"
-                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                height="200px"
-              >
-                <v-card-title v-text="card.title"></v-card-title>
-              </v-img>
-
+              <v-card-title>确认要删除吗?此操作不可恢复</v-card-title>
               <v-card-actions>
                 <v-spacer></v-spacer>
-
-                <v-btn icon>
-                  <v-icon>mdi-heart</v-icon>
-                </v-btn>
-
-                <v-btn icon>
-                  <v-icon>mdi-bookmark</v-icon>
-                </v-btn>
-
-                <v-btn icon>
-                  <v-icon>mdi-share-variant</v-icon>
-                </v-btn>
+                <v-btn color="success" text @click="dialogDelete = false"
+                  >取消</v-btn
+                >
+                <v-btn color="error" text @click="deleteItem">确认</v-btn>
+                <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
-          </v-col>
-        </v-row>
+          </v-dialog>
+        </template>
+        <!-- 封面 -->
+        <template v-slot:[`item.cover`]="{ item }">
+          <v-img class="zoom-img" :aspect-ratio="16 / 9" :src="item.cover" />
+        </template>
+        <!-- 操作 -->
+        <template v-slot:[`item.actions`]="{ item }">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon
+                v-bind="attrs"
+                v-on="on"
+                small
+                class="mr-2"
+                color="info"
+                @click="checkItem(item)"
+                >mdi-eye</v-icon
+              >
+            </template>
+            <span>查看文章</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon
+                color="primary"
+                v-on="on"
+                v-bind="attrs"
+                small
+                class="mr-2"
+                @click="editItem(item)"
+              >
+                mdi-pencil
+              </v-icon>
+            </template>
+            <span>编辑文章</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon
+                color="error"
+                v-bind="attrs"
+                v-on="on"
+                small
+                @click="openDeleteDialog(item)"
+              >
+                mdi-delete
+              </v-icon>
+            </template>
+            <span>删除文章</span>
+          </v-tooltip>
+        </template>
+        <template v-slot:no-data>
+          <a-empty />
+        </template>
+      </v-data-table>
+      <!-- 分页 -->
+      <v-container grid-list-xs>
+        <div class="text-center">
+          <v-pagination
+            @previous="getArticleMemberList"
+            @next="getArticleMemberList"
+            @input="getArticleMemberList"
+            v-model="page"
+            :length="pages"
+            circle
+          ></v-pagination>
+        </div>
       </v-container>
     </v-card>
   </div>
@@ -80,26 +118,27 @@ import cookie from "js-cookie";
 export default {
   layout: "ucenter",
   data: () => ({
+    toDeleteItem: null, //保存待删除的item
+    dialogDelete: false, //确认删除的对话框
+    loading: false, //控制表格是否正在加载
+    headers: [
+      {
+        text: "文章封面",
+        align: "center",
+        sortable: false,
+        value: "cover",
+      },
+      { text: "文章标题", value: "title", align: "center" },
+      { text: "创建时间", value: "createTime", align: "center" },
+      { text: "文章浏览数", value: "viewCount", align: "center" },
+      { text: "文章点赞数", value: "likeCount", align: "center" },
+      { text: "文章评论数", value: "commentCount", align: "center" },
+      { text: "操作", value: "actions", sortable: false, align: "center" },
+    ], //表格标题行
     searchObj: {}, // 查询表单对象
-    cards: [
-      {
-        title: "Pre-fab homes",
-        src: "https://cdn.vuetifyjs.com/images/cards/house.jpg",
-        flex: 12,
-      },
-      {
-        title: "Favorite road trips",
-        src: "https://cdn.vuetifyjs.com/images/cards/road.jpg",
-        flex: 6,
-      },
-      {
-        title: "Best airlines",
-        src: "https://cdn.vuetifyjs.com/images/cards/plane.jpg",
-        flex: 6,
-      },
-    ],
     memberId: "", //作者id
     page: 1, //当前页
+    pages: 1, //总共页
     limit: 8, //每页个数
     items: [
       {
@@ -121,15 +160,11 @@ export default {
     breadList: [
       {
         disabled: false,
-        // exact: boolean,
-        // href: string,
         link: true,
         text: "个人中心",
       },
       {
         disabled: false,
-        // exact: boolean,
-        // href: string,
         link: true,
         text: "文章管理",
         to: "/ucenter/article",
@@ -143,13 +178,42 @@ export default {
   },
 
   methods: {
+    // 打开对话框,确认是否删除
+    openDeleteDialog(item) {
+      this.toDeleteItem = item;
+      this.dialogDelete = true;
+    },
+    // 获取登录用户的文章列表
     getArticleMemberList() {
       articleApi
         .getArticleMemberList(this.page, this.limit, this.memberId)
         .then((response) => {
           console.log(response);
           this.items = response.data.items;
+          this.pages = response.data.pages;
         });
+    },
+    // 删除文章
+    deleteItem() {
+      articleApi.delArticleInfo(this.toDeleteItem.id).then((response) => {
+        if (response.success) {
+          this.$message.success("删除成功");
+          this.getArticleMemberList();
+          this.toDeleteItem = null;
+          this.dialogDelete = false;
+        }
+      });
+    },
+    // 编辑文章
+    editItem(item) {
+      this.$router.push({
+        path: "/ucenter/article/add",
+        query: { articleId: item.id },
+      });
+    },
+    // 去前台查看文章
+    checkItem(item) {
+      this.$router.push(`/article/${item.id}`);
     },
   },
 };

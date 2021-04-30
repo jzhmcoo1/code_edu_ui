@@ -1,7 +1,9 @@
 <template>
   <v-card flat>
     <v-breadcrumbs divider="/" :items="breadList"> </v-breadcrumbs>
-    <v-card-title primary-title> 新增文章 </v-card-title>
+    <v-card-title primary-title>
+      {{ articleId !== "" ? "更新" : "新增" }}文章
+    </v-card-title>
     <v-stepper v-model="e1" class="transparent">
       <!-- 步骤条标题 -->
       <v-stepper-header>
@@ -56,11 +58,12 @@
                         :before-upload="beforeUpload"
                         :action="BASE_API + '/eduoss/fileoss'"
                         class="avatar-uploader"
+                        :on-progress="handleProgress"
                       >
                         <v-card v-bind="attrs" v-on="on">
                           <v-responsive :aspect-ratio="16 / 9">
                             <v-img
-                              width="400px"
+                              :width="300"
                               class="avatar"
                               v-show="articleInfo.cover"
                               :src="articleInfo.cover"
@@ -110,7 +113,7 @@
 
         <v-stepper-content step="3">
           <v-btn text @click="e1 = 2"> 上一步 </v-btn>
-          <v-btn color="primary" @click="addArticle">
+          <v-btn color="primary" @click="addOrUpdateArticle">
             确认并发布
             <v-icon right>check_circle</v-icon>
           </v-btn>
@@ -138,6 +141,7 @@ export default {
   layout: "ucenter",
   components: { Markdown, MarkdownPreview },
   created() {
+    this.initAllTag();
     //从router中获取要更新的文章ID
     if (this.$route.query.articleId) {
       this.articleId = this.$route.query.articleId;
@@ -145,10 +149,12 @@ export default {
     // 从cookie中获取作者id
     this.articleInfo.authorId = cookie.getJSON("dhu_ucenter").id;
     //查询所有标签
-    this.initAllTag();
     //初始化封面
     this.articleInfo.cover =
       "https://edu-guli-0313.oss-cn-beijing.aliyuncs.com/2021/03/05/d1d36db7eb4045009edaead44224cdf7u=1572376661,3890953672&fm=26&gp=0.jpg";
+    if (this.articleId) {
+      this.initArticle();
+    }
   },
   data() {
     return {
@@ -164,6 +170,7 @@ export default {
         cover: "", //封面
         content: "", //文章内容
       },
+      articleId: "",
       tagList: [], // 分类列表
       titleRules: [(v) => !!v || "文章标题不能为空"], //标题验证规则
       tagRules: [(v) => !!v || "必须选择文章标签"],
@@ -188,9 +195,40 @@ export default {
     };
   },
   methods: {
+    addOrUpdateArticle() {
+      if (this.articleId !== "") {
+        console.log("更新文章");
+        this.updateArticle();
+      } else {
+        console.log("新增文章");
+        this.addArticle();
+      }
+    },
+    //更新文章
+    updateArticle() {
+      articleApi.updateArticleInfo(this.articleInfo).then((response) => {
+        if (response.success) {
+          this.$message.success("更新文章成功");
+          //跳转我的文章页面
+          this.$router.push("/ucenter/article");
+        }
+      });
+    },
+    //初始化文章(更新)
+    initArticle() {
+      articleApi.getArticleInfo(this.articleId).then((response) => {
+        this.articleInfo = response.data.article;
+      });
+    },
+    //封面上传中
+    handleProgress() {
+      this.loading = true;
+    },
     //上传封面成功调用的方法
     handleAvatarSuccess(res, file) {
       this.articleInfo.cover = res.data.url;
+      this.$message.success("封面上传成功");
+      this.loading = false;
     },
     // 上传前检查文件是否符合规范
     beforeUpload(file) {

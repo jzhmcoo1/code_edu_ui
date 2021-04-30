@@ -68,7 +68,11 @@
                 :to="`/course/${item.id}`"
               >
                 <v-responsive :aspect-ratio="16 / 9">
-                  <v-img :src="item.cover" height="200px"></v-img>
+                  <v-img
+                    class="zoom-img"
+                    :src="item.cover"
+                    height="200px"
+                  ></v-img>
                 </v-responsive>
                 <v-card-title> {{ item.title }} </v-card-title>
               </v-card>

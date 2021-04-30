@@ -232,7 +232,7 @@ export default {
         this.subSubjectList = []; //清空二级子标签
         this.secondLevelIndex = undefined;
       }
-      console.log("得到的二级分类为", this.subSubjectList);
+      this.page = 1; //把页数重新写回1
       this.getArticleList(); //重新查询
     },
     searchTwo(secondLevelIndex) {
@@ -247,6 +247,7 @@ export default {
           this.firstLevelIndex
         ].children;
       }
+      this.page = 1; //把页数重新写回1
       this.getArticleList(); //重新查询
     },
     // 查询文章一级分类

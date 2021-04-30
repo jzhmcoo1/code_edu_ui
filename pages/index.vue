@@ -47,10 +47,7 @@
               router
               :to="`/course/${course.id}`"
             >
-              <v-responsive
-                :transition="hover ? 'scale-transition' : ''"
-                :aspect-ratio="16 / 9"
-              >
+              <v-responsive :aspect-ratio="16 / 9">
                 <v-img
                   class="zoom-img"
                   :src="course.cover"

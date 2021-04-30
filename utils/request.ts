@@ -12,6 +12,11 @@ const gitService = axios.create({
   timeout: 3000,
   method: 'GET'
 })
+const gitBackService = axios.create({
+  baseURL: process.env.BackendGiteeURL,
+  timeout: 3000,
+  method: 'GET'
+})
 
 // 请求拦截器
 service.interceptors.request.use(
@@ -51,4 +56,4 @@ service.interceptors.response.use(
 );
 
 
-export { service, gitService }
+export { service, gitService, gitBackService }

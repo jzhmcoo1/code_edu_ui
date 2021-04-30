@@ -1,75 +1,51 @@
 <template>
-  <div>
-    <v-card>
-      <v-toolbar flat color="primary" dark>
-        <v-toolbar-title>全部讲师</v-toolbar-title>
-      </v-toolbar>
-      <v-tabs vertical>
-        <v-tab>
-          <v-icon left> view_list </v-icon>
-          列表视图
-        </v-tab>
-        <v-tab>
-          <v-icon left> apps </v-icon>
-          网格视图
-        </v-tab>
-
-        <!-- 列表视图 -->
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-              <p>
-                Sed aliquam ultrices mauris. Donec posuere vulputate arcu. Morbi
-                ac felis. Etiam feugiat lorem non metus. Sed a libero.
-              </p>
-
-              <p>
-                Nam ipsum risus, rutrum vitae, vestibulum eu, molestie vel,
-                lacus. Aenean tellus metus, bibendum sed, posuere ac, mattis
-                non, nunc. Aliquam lobortis. Aliquam lobortis. Suspendisse non
-                nisl sit amet velit hendrerit rutrum.
-              </p>
-
-              <p class="mb-0">
-                Phasellus dolor. Fusce neque. Fusce fermentum odio nec arcu.
-                Pellentesque libero tortor, tincidunt et, tincidunt eget, semper
-                nec, quam. Phasellus blandit leo ut odio.
-              </p>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-        <!-- 网格视图 -->
-        <v-tab-item>
-          <v-container grid-list-xs>
-            <v-card flat>
-              <v-layout row wrap>
-                <v-flex
-                  class="pa-2"
-                  xs6
-                  md4
-                  v-for="teacher in teacherList"
-                  :key="teacher.id"
+  <v-container grid-list-xs>
+    <v-container grid-list-xs>
+      <h1 class="headline heading--text">讲师列表</h1>
+      <!-- 讲师列表 -->
+      <v-row>
+        <v-col
+          cols="12"
+          sm="6"
+          md="3"
+          v-for="teacher in teacherList"
+          :key="teacher.id"
+        >
+          <v-hover v-slot="{ hover }" open-delay="100" close-delay="100">
+            <v-card
+              class="text-center mt-14"
+              :elevation="hover ? 12 : 2"
+              router
+              :to="`/teacher/${teacher.id}`"
+            >
+              <v-sheet rounded="lg">
+                <v-avatar
+                  size="128"
+                  :aspect-ratio="1 / 1"
+                  :class="`mt-n14 elevation-12`"
                 >
-                  <v-hover v-slot="{ hover }">
-                    <v-card
-                      :elevation="hover ? 12 : 2"
-                      rounded
-                      router
-                      :to="`/teacher/${teacher.id}`"
-                    >
-                      <v-img height="100" width="100" :src="teacher.avatar">
-                      </v-img>
-                      <v-card-title>{{ teacher.name }}</v-card-title>
-                    </v-card>
-                  </v-hover>
-                </v-flex>
-              </v-layout>
+                  <v-img
+                    :aspect-ratio="1 / 1"
+                    class="zoom-img rounded-circle"
+                    :src="teacher.avatar"
+                  ></v-img>
+                </v-avatar>
+
+                <v-card-text class="text-center text--secondary">
+                  <p class="text-h6">{{ teacher.name }}</p>
+                  <p class="text-h5">{{ teacher.intro }}</p>
+                </v-card-text>
+              </v-sheet>
             </v-card>
-          </v-container>
-        </v-tab-item>
-      </v-tabs>
-    </v-card>
-  </div>
+          </v-hover>
+        </v-col>
+      </v-row>
+      <!-- 分页 -->
+      <v-container class="text-center mt-2">
+        <v-pagination v-model="page" :length="pages"></v-pagination>
+      </v-container>
+    </v-container>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -80,7 +56,8 @@ export default Vue.extend({
     return {
       tabs: null,
       page: 1, //传递参数
-      limit: 8, //传递参数
+      pages: 1, //总页数
+      limit: 10, //传递参数
       current: 1, //当前页数
       total: 8, //总记录数
       hasPrevious: false,
@@ -108,6 +85,7 @@ export default Vue.extend({
       teacherApi.getTeacherList(this.page, this.limit).then((response) => {
         console.log(response.data);
         this.teacherList = response.data.items;
+        this.pages = response.data.pages;
       });
     },
   },

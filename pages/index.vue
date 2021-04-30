@@ -79,7 +79,12 @@
       </h1>
       <v-layout row wrap justify-space-between>
         <v-flex xs12 sm6 md3 v-for="teacher in adminList" :key="teacher.id">
-          <v-card flat class="text-center">
+          <v-card
+            router
+            :to="`/teacher/${teacher.id}`"
+            flat
+            class="text-center"
+          >
             <v-avatar class="avatar-rotate" rounded="circle" size="128"
               ><v-img :src="teacher.avatar"></v-img
             ></v-avatar>

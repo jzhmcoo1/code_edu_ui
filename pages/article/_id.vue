@@ -255,10 +255,8 @@ export default {
     handlePraise() {
       if (this.likeState === false) {
         this.praise();
-        this.likeState = true;
       } else {
         this.cancelPraise();
-        this.likeState = false;
       }
     },
     // 文章点赞
@@ -266,6 +264,7 @@ export default {
       articleApi.chooseLike(this.articleId).then((response) => {
         if (response.success) {
           this.$message.success("👍点赞成功");
+          this.likeState = true;
           this.articleInfo.likeCount++;
         }
       });
@@ -275,6 +274,7 @@ export default {
       article.cancelLike(this.articleId).then((response) => {
         if (response.success) {
           this.$message.success("👌取消成功");
+          this.likeState = false;
           this.articleInfo.likeCount--;
         }
       });

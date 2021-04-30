@@ -19,7 +19,7 @@
         </v-card>
       </v-sheet>
     </v-navigation-drawer>
-    <!-- 按钮组 -->
+    <!-- 右下角按钮组 -->
     <v-speed-dial
       absolute
       fixed
@@ -55,8 +55,10 @@
                 {{ articleInfo.title }}
               </h1>
               <v-card flat>
-                <v-btn text>
-                  <v-icon left>mdi-heart</v-icon>
+                <v-btn @click="handlePraise" text>
+                  <v-icon :color="likeState ? 'red ligten-1' : ''" left
+                    >mdi-heart</v-icon
+                  >
                   {{ articleInfo.likeCount }}
                 </v-btn>
                 <v-btn text @click="$vuetify.goTo('#comment')">
@@ -141,6 +143,8 @@ import Comment from "@/components/Comments";
 import moment from "moment";
 import SideCatalog from "vue-side-catalog";
 import "vue-side-catalog/lib/vue-side-catalog.css";
+import article from "@/api/article";
+import cookie from "js-cookie";
 moment.locale("zh-cn");
 export default {
   components: { Comment, SideCatalog },
@@ -164,6 +168,8 @@ export default {
     };
   },
   created() {
+    this.lookArticle();
+    this.getLikeState();
     this.initArticle();
   },
   mounted() {},
@@ -178,14 +184,25 @@ export default {
       },
       html: "",
       showComment: true,
+      // 设置目录信息
       catalogProps: {
         container: "#html",
         levelList: ["h1", "h2", "h3", "h4", "h5"],
         watch: true,
       },
+      likeState: false, //点赞状态
     };
   },
   methods: {
+    // 统计浏览量
+    lookArticle() {
+      const id = cookie.getJSON("dhu_ucenter").id;
+      const uid = id ? id : "visitor";
+      articleApi.calViewCount(this.articleId, uid).then(() => {
+        console.log("增加浏览量");
+      });
+    },
+    // 格式化时间
     formateTime(time) {
       return moment(time).fromNow();
     },
@@ -194,7 +211,9 @@ export default {
       articleApi.getArticleInfo(this.articleId).then((response) => {
         this.articleInfo = response.data.article;
         console.log(this.articleInfo);
+        // 配置marked
         const renderer = {
+          // 重写heading渲染方法
           heading(text, level) {
             const escapedText = text.toLowerCase().replace(/[^\w]+/g, "-");
             return `
@@ -207,6 +226,7 @@ export default {
               ${text}
             </h${level}>`;
           },
+          // 重写<p>标签渲染方法
           paragraph(text) {
             return `
             <p class="body-1">${text}</p>
@@ -228,7 +248,43 @@ export default {
           smartypants: false,
           xhtml: false,
         });
-        this.html = marked(this.articleInfo.content);
+        this.html = marked(this.articleInfo.content); //渲染
+      });
+    },
+    // 点爱心时的处理
+    handlePraise() {
+      if (this.likeState === false) {
+        this.praise();
+        this.likeState = true;
+      } else {
+        this.cancelPraise();
+        this.likeState = false;
+      }
+    },
+    // 文章点赞
+    praise() {
+      articleApi.chooseLike(this.articleId).then((response) => {
+        if (response.success) {
+          this.$message.success("👍点赞成功");
+          this.articleInfo.likeCount++;
+        }
+      });
+    },
+    //取消点赞
+    cancelPraise() {
+      article.cancelLike(this.articleId).then((response) => {
+        if (response.success) {
+          this.$message.success("👌取消成功");
+          this.articleInfo.likeCount--;
+        }
+      });
+    },
+    // 获取点赞状态
+    getLikeState() {
+      articleApi.getLikeState(this.articleId).then((response) => {
+        if (response.success) {
+          this.likeState = response.data.state;
+        }
       });
     },
   },

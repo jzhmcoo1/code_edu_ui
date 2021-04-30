@@ -96,6 +96,11 @@ For detailed explanation on how things work, check out [Nuxt.js docs](https://nu
 
 ![](https://jzhmcoo1-1258918430.cos.ap-shanghai.myqcloud.com/code_edu_ui_pic/ucenter-info.png)
 
+### 文章管理
+
+![](https://jzhmcoo1-1258918430.cos.ap-shanghai.myqcloud.com/markdown/20210430130745-ucenter-article.png)
+
 ### 黑夜模式
 
 ![](https://jzhmcoo1-1258918430.cos.ap-shanghai.myqcloud.com/code_edu_ui_pic/dark-mode.png)
+

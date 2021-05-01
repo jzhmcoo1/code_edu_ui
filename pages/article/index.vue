@@ -229,6 +229,8 @@ export default {
     // firstLevelIndex为传来的数组下标
     searchOne(firstLevelIndex) {
       console.log("选择的firstLevelIndex为", firstLevelIndex);
+      // 点击一个一级标签,将选中的二级标签清空
+      this.secondLevelIndex = undefined;
       // 如果一级分类不为空
       if (firstLevelIndex !== undefined) {
         console.log("一级分类不为空");
@@ -239,7 +241,6 @@ export default {
         console.log("一级分类为空");
         this.searchObj = {}; //请求searchObj
         this.subSubjectList = []; //清空二级子标签
-        this.secondLevelIndex = undefined;
       }
       this.page = 1; //把页数重新写回1
       this.getArticleList(); //重新查询

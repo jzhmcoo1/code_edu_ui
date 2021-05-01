@@ -1,115 +1,116 @@
 <template>
-  <div>
-    <v-card>
-      <v-breadcrumbs divider="/" :items="breadList"> </v-breadcrumbs>
-      <v-data-table
-        :headers="headers"
-        :items="items"
-        sort-by="createTime"
-        class="elevation-0"
-        :page.sync="page"
-        hide-default-footer
-        :loading="loading"
-        loading-text="正在加载..."
-        locale="zh-CN"
-      >
-        <template v-slot:top>
-          <v-toolbar flat>
-            <v-toolbar-title class="font-weight-bold">文章管理</v-toolbar-title>
-            <v-divider class="mx-4" inset vertical></v-divider>
-            <v-spacer></v-spacer>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn router to="/ucenter/article/add" text color="info" icon>
-                  <v-icon v-bind="attrs" v-on="on">add_circle</v-icon>
-                </v-btn>
-              </template>
-              <span>新建文章</span>
-            </v-tooltip>
-          </v-toolbar>
-          <v-dialog v-model="dialogDelete" max-width="500px">
-            <v-card>
-              <v-card-title>确认要删除吗?此操作不可恢复</v-card-title>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="success" text @click="dialogDelete = false"
-                  >取消</v-btn
-                >
-                <v-btn color="error" text @click="deleteItem">确认</v-btn>
-                <v-spacer></v-spacer>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </template>
-        <!-- 封面 -->
-        <template v-slot:[`item.cover`]="{ item }">
+  <v-card>
+    <v-breadcrumbs divider="/" :items="breadList"> </v-breadcrumbs>
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      sort-by="createTime"
+      class="elevation-0"
+      :page.sync="page"
+      hide-default-footer
+      :loading="loading"
+      loading-text="正在加载..."
+      locale="zh-CN"
+    >
+      <template v-slot:top>
+        <v-toolbar flat>
+          <v-toolbar-title class="font-weight-bold">文章管理</v-toolbar-title>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-spacer></v-spacer>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn router to="/ucenter/article/add" text color="info" icon>
+                <v-icon v-bind="attrs" v-on="on">add_circle</v-icon>
+              </v-btn>
+            </template>
+            <span>新建文章</span>
+          </v-tooltip>
+        </v-toolbar>
+        <v-dialog v-model="dialogDelete" max-width="500px">
+          <v-card>
+            <v-card-title>确认要删除吗?此操作不可恢复</v-card-title>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="success" text @click="dialogDelete = false"
+                >取消</v-btn
+              >
+              <v-btn color="error" text @click="deleteItem">确认</v-btn>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </template>
+      <!-- 封面 -->
+      <template v-slot:[`item.cover`]="{ item }">
+        <div style="overflow: hidden">
           <v-img class="zoom-img" :aspect-ratio="16 / 9" :src="item.cover" />
-        </template>
-        <!-- 操作 -->
-        <template v-slot:[`item.actions`]="{ item }">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon
-                v-bind="attrs"
-                v-on="on"
-                small
-                class="mr-2"
-                color="info"
-                @click="checkItem(item)"
-                >mdi-eye</v-icon
-              >
-            </template>
-            <span>查看文章</span>
-          </v-tooltip>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon
-                color="primary"
-                v-on="on"
-                v-bind="attrs"
-                small
-                class="mr-2"
-                @click="editItem(item)"
-              >
-                mdi-pencil
-              </v-icon>
-            </template>
-            <span>编辑文章</span>
-          </v-tooltip>
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on, attrs }">
-              <v-icon
-                color="error"
-                v-bind="attrs"
-                v-on="on"
-                small
-                @click="openDeleteDialog(item)"
-              >
-                mdi-delete
-              </v-icon>
-            </template>
-            <span>删除文章</span>
-          </v-tooltip>
-        </template>
-        <template v-slot:no-data>
-          <a-empty />
-        </template>
-      </v-data-table>
-      <!-- 分页 -->
-      <v-container grid-list-xs>
-        <div class="text-center">
-          <v-pagination
-            @previous="getArticleMemberList"
-            @next="getArticleMemberList"
-            @input="getArticleMemberList"
-            v-model="page"
-            :length="pages"
-            circle
-          ></v-pagination>
         </div>
-      </v-container>
-    </v-card>
-  </div>
+      </template>
+      <!-- 操作 -->
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              v-bind="attrs"
+              v-on="on"
+              small
+              class="mr-2"
+              color="info"
+              @click="checkItem(item)"
+              >mdi-eye</v-icon
+            >
+          </template>
+          <span>查看文章</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              color="primary"
+              v-on="on"
+              v-bind="attrs"
+              small
+              class="mr-2"
+              @click="editItem(item)"
+            >
+              mdi-pencil
+            </v-icon>
+          </template>
+          <span>编辑文章</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              color="error"
+              v-bind="attrs"
+              v-on="on"
+              small
+              @click="openDeleteDialog(item)"
+            >
+              mdi-delete
+            </v-icon>
+          </template>
+          <span>删除文章</span>
+        </v-tooltip>
+      </template>
+      <!-- 无数据提示 -->
+      <template v-slot:no-data>
+        <a-empty />
+      </template>
+    </v-data-table>
+    <!-- 分页 -->
+    <v-container grid-list-xs>
+      <div class="text-center">
+        <v-pagination
+          @previous="getArticleMemberList"
+          @next="getArticleMemberList"
+          @input="getArticleMemberList"
+          v-model="page"
+          :length="pages"
+          circle
+        ></v-pagination>
+      </div>
+    </v-container>
+  </v-card>
 </template>
 
 <script>
@@ -153,7 +154,6 @@ export default {
         modifiedTime: "2021-04-25 23:22:39", //修改时间
         commentCount: 0, //评论数
         likeCount: 0, //点赞数
-        content: null, //
       },
     ],
     // 面包屑信息

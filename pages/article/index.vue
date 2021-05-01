@@ -182,18 +182,17 @@ export default {
         hasNext: true, //是否有后页
         items: [
           {
-            id: "1367122387191066625", //文章id
-            authorId: "1361284523983220738", //作者id
-            typeId: "1178214681181483010", //分类id
-            title: "博客1", //文章名
-            cover:
-              "https://edu-guli-0313.oss-cn-beijing.aliyuncs.com/2021/03/05/d1d36db7eb4045009edaead44224cdf7u=1572376661,3890953672&fm=26&gp=0.jpg", //封面
-            viewCount: 94, //浏览数
+            id: "", //文章id
+            authorId: "", //作者id
+            typeId: "", //分类id
+            title: "", //文章名
+            cover: "", //封面
+            viewCount: 0, //浏览数
             isDeleted: 0,
-            createTime: "2021-03-03 22:39:12", //创建时间
-            modifiedTime: "2021-04-21 13:09:49", //修改时间
-            commentCount: 164, //评论数量
-            likeCount: 16, //点赞数量
+            createTime: "", //创建时间
+            modifiedTime: "", //修改时间
+            commentCount: 0, //评论数量
+            likeCount: 0, //点赞数量
             content: null,
           },
         ],

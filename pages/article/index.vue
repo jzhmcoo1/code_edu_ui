@@ -126,7 +126,7 @@
                 <v-card-text class="caption"> 二级分类 </v-card-text>
                 <v-card-actions>
                   <!-- 如果二级标签为空则不显示 -->
-                  <div class="px-4 pb-2">
+                  <div class="px-4 pb-2" v-if="subSubjectList.length !== 0">
                     <v-chip-group
                       v-model="secondLevelIndex"
                       active-class="primary--text"
@@ -141,6 +141,15 @@
                         {{ tag.title }}
                       </v-chip>
                     </v-chip-group>
+                  </div>
+                  <div class="px-4 pb-2" v-else>
+                    <a-empty
+                      :description="
+                        firstLevelIndex === undefined
+                          ? '请选择一级分类'
+                          : '二级分类为空'
+                      "
+                    />
                   </div>
                 </v-card-actions>
               </v-card>

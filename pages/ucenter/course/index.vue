@@ -9,16 +9,25 @@
       :page.sync="page"
       hide-default-footer
       :loading="loading"
+      :search="search"
     >
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title class="font-weight-bold">课程管理</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="搜索课程"
+            single-line
+            hide-details
+          ></v-text-field>
           <v-spacer></v-spacer>
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
-              <v-btn router to="/course" text color="info" icon>
-                <v-icon v-bind="attrs" v-on="on">travel_explore</v-icon>
+              <v-btn router to="/course" text color="info">
+                <v-icon v-bind="attrs" v-on="on">search</v-icon>
+                发现新课程
               </v-btn>
             </template>
             <span>发现新课程</span>
@@ -150,6 +159,7 @@ export default {
       toDeleteItem: null, //保存待删除的item
       dialogDelete: false, //确认删除的对话框
       loading: false, //控制表格是否正在加载
+      search: "", //搜索内容
     };
   },
   created() {

@@ -2,12 +2,14 @@
   <v-container grid-list-xs>
     <v-breadcrumbs id="bread" divider="/" :items="breadList"> </v-breadcrumbs>
     <!-- 课程信息 -->
-    <v-card shaped :elevation="2">
+    <v-card rounded="lg" :elevation="2" style="overflow: hidden">
       <v-layout row wrap justify-space-between align-center>
         <v-flex xs12 md7>
-          <v-responsive :aspect-ratio="16 / 9" class="d-flex align-center">
-            <v-img class="zoom-img" contain :src="courseWebVo.cover"></v-img>
-          </v-responsive>
+          <v-card rounded="lg" flat>
+            <v-responsive :aspect-ratio="16 / 9" class="d-flex align-center">
+              <v-img class="zoom-img" contain :src="courseWebVo.cover"></v-img>
+            </v-responsive>
+          </v-card>
         </v-flex>
         <v-flex xs12 md5 align-self-center>
           <v-card flat>
@@ -37,8 +39,23 @@
             <v-card-text>
               <v-icon>people</v-icon> 主讲人:{{ courseWebVo.teacherName }}
             </v-card-text>
-            <v-card-actions>
-              <v-btn text color="info">立即学习</v-btn>
+            <v-card-actions v-if="!isChoice">
+              <v-btn
+                :disabled="disabled"
+                :loading="loading"
+                block
+                color="info"
+                @click="addMyCourse"
+              >
+                <v-icon left>shopping_cart</v-icon>
+                选课
+              </v-btn>
+            </v-card-actions>
+            <v-card-actions v-else>
+              <v-btn block text disabled>
+                <v-icon left>done</v-icon>
+                已选课
+              </v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -76,58 +93,6 @@
               :courseId="courseId"
               :dense="false"
             />
-            <!-- <v-card-title primary-title>
-              <v-icon>menu_book</v-icon>
-              课程大纲
-              <v-btn icon @click="showChapter = !showChapter">
-                <v-icon>{{
-                  showChapter ? "mdi-chevron-up" : "mdi-chevron-down"
-                }}</v-icon>
-              </v-btn>
-            </v-card-title> -->
-            <!-- <v-expand-transition>
-              <div v-show="showChapter">
-                <v-divider></v-divider>
-                <v-list shaped class="mx-1">
-                  <v-list-group
-                    no-action
-                    v-for="chapter in chapterVideoList"
-                    :key="chapter.id"
-                    :value="true"
-                    prepend-icon="school"
-                  >
-                    <template v-slot:activator>
-                      <v-list-item-title>{{ chapter.title }}</v-list-item-title>
-                    </template>
-                    <v-list-item
-                      v-for="child in chapter.children"
-                      :key="child.id"
-                      link
-                      :to="{
-                        name: 'course-player-vid',
-                        params: {
-                          vid: child.videoSourceId,
-                        },
-                        query: {
-                          courseId,
-                        },
-                      }"
-                    >
-                      <v-list-item-icon>
-                        <v-icon>mdi-school-outline</v-icon>
-                      </v-list-item-icon>
-                      <v-list-item-title
-                        v-text="child.title"
-                      ></v-list-item-title>
-
-                      <v-list-item-icon>
-                        <v-icon>visibility</v-icon>
-                      </v-list-item-icon>
-                    </v-list-item>
-                  </v-list-group>
-                </v-list>
-              </div>
-            </v-expand-transition> -->
           </v-layout>
         </v-card>
       </v-flex>
@@ -192,8 +157,7 @@
                 <v-flex
                   align-self-center
                   class="pa-md-2"
-                  xs6
-                  md12
+                  xs12
                   v-for="item in relatedCourse"
                   :key="item.id"
                 >
@@ -259,6 +223,7 @@
 import Vue from "vue";
 import courseApi from "@/api/course";
 import teacherApi from "@/api/teacher";
+import myCourseApi from "@/api/ucenter";
 import Comment from "@/components/Comments.vue";
 import CourseMenu from "@/components/Course/CourseMenu.vue";
 export default Vue.extend({
@@ -277,6 +242,8 @@ export default Vue.extend({
       showTeacher: true,
       // showChapter: true,
       showComment: true,
+      loading: false, //选课按钮的加载
+      disabled: false, //选课按钮的是否禁用
       backTopShow: false, //返回顶部显示
       // 面包屑信息
       breadList: [
@@ -325,6 +292,22 @@ export default Vue.extend({
     window.addEventListener("scroll", this.handleScroll);
   },
   methods: {
+    // 选课
+    addMyCourse() {
+      this.loading = true;
+      myCourseApi
+        .addMyCourse({ courseId: this.courseId })
+        .then((response: any) => {
+          if (response.success) {
+            this.$message.success("选课成功");
+            this.loading = false;
+            this.initCourseInfo();
+          } else {
+            this.disabled = true;
+            this.loading = false;
+          }
+        });
+    },
     // 控制是否显示"回到顶部"按钮
     handleScroll() {
       if (document.documentElement.scrollTop + document.body.scrollTop > 400) {

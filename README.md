@@ -58,7 +58,7 @@ $ yarn generate
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
 
-建议配合后端一起食用[CodeEdu后端](https://gitee.com/paradox_hyw/code_edu-vue)
+建议配合后端一起食用[CodeEdu后端](https://gitee.com/paradox_hyw/code_edu)
 
 ## 👁 项目预览
 

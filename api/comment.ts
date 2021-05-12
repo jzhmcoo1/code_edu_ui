@@ -1,32 +1,33 @@
 import { service } from '@/utils/request'
-
+import { Comment } from './schema/comment'
+const api_prefix = '/service/comment'
 export default {
-  getPageList(courseId: string) {
+  /**
+   * 添加评论
+   *
+   * @param {Comment} commentObj
+   * @param {string} type (course/article/video)
+   * @return {*} 
+   */
+  addComment(commentObj: Comment, type: string) {
     return service({
-      url: `/eduService/comment-course/pageComment`,
-      method: 'get',
-      params: { courseId }
-    })
-  },
-  addComment(comment: object) {
-    return service({
-      url: `/eduService/comment-course/auth/save`,
+      url: `${api_prefix}/${type}`,
       method: 'post',
-      data: comment
+      data: commentObj
     })
   },
-  getArticlePageList(articleId: string) {
+  /**
+   *
+   * 查询评论
+   * @param {string} relatedId 有关的ID
+   * @param {string} type (course/article/video)
+   * @return {*} 
+   */
+  commentList(relatedId: string, type: string) {
     return service({
-      url: `/eduService/comment-article/pageComment`,
+      url: `${api_prefix}/list`,
       method: 'get',
-      params: { articleId }
-    })
-  },
-  addArticleComment(comment: object) {
-    return service({
-      url: `/eduService/comment-article/auth/save`,
-      method: 'post',
-      data: comment
+      params: { relatedId, type }
     })
   }
 }

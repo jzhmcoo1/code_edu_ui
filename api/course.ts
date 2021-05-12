@@ -1,46 +1,27 @@
 import { service } from "@/utils/request";
+import { Course, CourseQuery } from "./schema/course";
+const api_prefix = '/service/course'
 export default {
-  // 条件分页课程查询的方法
-  getCourseList(page: number, limit: number, searchObj: object) {
+  // 条件查询课程列表
+  conditionList(page: number, limit: number, searchObj: CourseQuery) {
     return service({
-      url: `/eduService/coursefront/getFrontCourseList/${page}/${limit}`,
+      url: `${api_prefix}/conditionList/${page}/${limit}`,
       method: 'post',
       data: searchObj
     })
   },
-  // 查询所有分类的方法
-  getAllSubject() {
+  // 根据课程ID查询详情(前台接口)
+  courseDetail(courseId: Course["courseId"]) {
     return service({
-      url: `/eduService/edu_subject/getAllSubject`,
-      method: 'get'
-    })
-  },
-  // 课程详情方法
-  getCourseInfo(courseId: string) {
-    return service({
-      url: `/eduService/coursefront/getFrontCourseInfo/${courseId}`,
-      method: 'get'
-    })
-  },
-
-  //统计浏览量
-  calViewCount(courseId: string, Id: string) {
-    return service({
-      url: `/eduService/course/addViewCount/${courseId}/${Id}`,
-      method: 'post',
-    })
-  },
-
-  suggestSuggest(name: string) {
-    return service({
-      url: `/eduService/search/suggest/${name}`,
+      url: `${api_prefix}/front-detail/${courseId}`,
       method: 'get',
     })
   },
-  searchCourse(name: string) {
+  // 根据ID获取课程发布信息
+  coursePublishInfo(courseId: Course["courseId"]) {
     return service({
-      url: `/eduService/search/keyword/${name}`,
+      url: `${api_prefix}/publishInfo/${courseId}`,
       method: 'get',
     })
-  }
+  },
 }

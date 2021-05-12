@@ -1,25 +1,25 @@
 /**
  * 讲师查询对象封装
  * @export
- * @interface SearchTeacher
+ * @interface TeacherQuery
  */
-export interface SearchTeacher {
+export interface TeacherQuery {
   /**
    * 查询开始时间
    * @type {string}
-   * @memberof SearchTeacher
+   * @memberof TeacherQuery
    */
   begin?: string;
   /**
    * 查询结束时间
    * @type {string}
-   * @memberof SearchTeacher
+   * @memberof TeacherQuery
    */
   end?: string;
   /**
    * 管理员名称,模糊查询
    * @type {string}
-   * @memberof SearchTeacher
+   * @memberof TeacherQuery
    */
   name?: string;
 }

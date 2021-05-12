@@ -47,3 +47,27 @@ export interface EduNote {
    */
   videoId?: number;
 }
+
+export interface NoteQuery {
+  /**
+   *
+   * 笔记名称,模糊查询
+   * @type {string}
+   * @memberof NoteQuery
+   */
+  titel?: string,
+  /**
+   * 查询开始时间
+   *
+   * @type {string}
+   * @memberof NoteQuery
+   */
+  begin?: string,
+  /**
+   * 查询结束时间
+   *
+   * @type {string}
+   * @memberof NoteQuery
+   */
+  end?: string,
+}

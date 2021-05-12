@@ -4,7 +4,7 @@
  * @interface Article
  * 
  */
-interface Article {
+export interface Article {
   /**
      * 作者ID
      * @type {number}
@@ -89,7 +89,7 @@ interface Article {
  *
  * @interface SearchArticle
  */
-interface SearchArticle {
+export interface SearchArticle {
   /**
      * 作者姓名
      * @type {string}
@@ -146,5 +146,3 @@ interface SearchArticle {
   viewAndCommentSort?: boolean;
 }
 
-
-export { Article, SearchArticle }

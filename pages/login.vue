@@ -1,12 +1,12 @@
 <template>
   <v-form ref="form" lazy-validation v-model="valid">
     <v-text-field
-      v-model="mobile"
-      name="mobile"
-      label="手机号"
-      :rules="mobileRules"
+      v-model="username"
+      name="username"
+      label="用户名"
+      :rules="usernameRules"
       prepend-icon="person"
-      id="mobile"
+      id="username"
       required
     >
     </v-text-field>
@@ -23,6 +23,26 @@
       @click:append="show = !show"
     >
     </v-text-field>
+
+    <v-text-field
+      type="password"
+      name="code"
+      id="code"
+      label="验证码"
+      required
+      v-model="code"
+      prepend-icon="code"
+    ></v-text-field>
+
+    <div class="text-center">
+      <img
+        :src="imageCode"
+        alt="codeImage"
+        class="code-image"
+        @click="getCodeImage"
+      />
+    </div>
+
     <v-btn class="mt-2" block color="success" @click="submit">登录</v-btn>
     <v-divider></v-divider>
     <v-btn block text color="warning">忘记密码?</v-btn>
@@ -53,21 +73,28 @@
 <script>
 import loginApi from "@/api/login";
 import cookie from "js-cookie";
+import { randomNum } from "@/utils";
 export default {
   layout: "sign",
   data() {
     return {
       valid: true,
       show: false,
-      mobile: "",
+      username: "",
       password: "",
-      mobileRules: [
-        (v) => !!v || "必须填写手机号",
-        (v) => /^1[3-9]\d{9}$/.test(v) || "手机号码格式不正确",
+      usernameRules: [
+        (v) => !!v || "必须填写用户名",
+        // (v) => /^1[3-9]\d{9}$/.test(v) || "手机号码格式不正确",
       ],
       passwordRules: [(v) => !!v || "必须填写密码"],
       loginInfo: {}, //存用户的信息
+      randomId: randomNum(24, 16),
+      imageCode: "", //图像验证码
+      code: "",
     };
+  },
+  mounted() {
+    this.getCodeImage();
   },
   methods: {
     // 验证表单有效性
@@ -88,30 +115,83 @@ export default {
         this.login();
       }
     },
+    // 获取图像验证码
+    getCodeImage() {
+      console.log(this.randomId);
+      loginApi
+        .getCodeImage(this.randomId)
+        .then((res) => {
+          return (
+            "data:image/png;base64," +
+            btoa(
+              new Uint8Array(res).reduce(
+                (data, byte) => data + String.fromCharCode(byte),
+                ""
+              )
+            )
+          );
+        })
+        .then((res) => {
+          this.imageCode = res;
+        })
+        .catch((e) => {
+          if (e.toString().indexOf("429") !== -1) {
+            this.$message.open({
+              message: "请求次数过多",
+              type: "error",
+            });
+          } else {
+            this.$message.open({
+              message: "获取验证码失败",
+              type: "error",
+            });
+          }
+        });
+    },
     // 登录的回调
     login() {
-      const mobile = this.mobile;
+      const username = this.username;
       const password = this.password;
-      const userInfo = { mobile, password };
-      loginApi.submitLoginUser(userInfo).then((response) => {
-        const { success, message } = response;
-        // 如果登录成功,把返回的token存入cookie中
-        if (success) {
-          cookie.set("dhu_token", response.data.token);
-          // 根据用户的token,获取用户的信息
-          loginApi.getLoginUserInfo().then((response) => {
-            this.loginInfo = response.data.userInfo;
-            // 将用户的信息存入cookie中
-            //! 此步骤需要放在此方法中,否则异步任务接受不到用户信息
-            cookie.set("dhu_ucenter", this.loginInfo);
-            // 登录完成后回到刚才的页面
-            this.$router.back();
-          });
-        }
+      const code = this.code;
+      const userInfo = { username, password, code };
+      console.log(userInfo.code);
+      console.log(this.randomId);
+      this.$login("auth/oauth/token", {
+        ...userInfo,
+        key: this.randomId,
+      }).then((response) => {
+        const data = response;
+        console.log("data", data);
+        this.saveLoginData(data);
+        console.log("保存信息成功");
+        this.getUserDetailInfo();
+        console.log("获取用户信息成功");
+        this.loginSuccessCallback();
+        console.log("登录成功");
+      });
+    },
+    // 保存登录信息
+    saveLoginData(data) {
+      this.$store.commit("account/setAccessToken", data.access_token);
+      this.$store.commit("account/setRefreshToken", data.refresh_token);
+      const current = new Date();
+      const expireTime = current.setTime(
+        current.getTime() + 1000 * data.expires_in
+      );
+      this.$store.commit("account/setExpireTime", expireTime);
+    },
+    getUserDetailInfo() {
+      this.$get("auth/user").then((response) => {
+        this.$store.commit("account/setUser", response.principal);
         this.$message.open({
-          content: message,
-          type: success === true ? "success" : "error",
+          content: "登录成功",
+          type: "success",
         });
+      });
+    },
+    loginSuccessCallback() {
+      this.$get(`system/user/success/${this.username}`).catch((e) => {
+        console.log(e);
       });
     },
   },

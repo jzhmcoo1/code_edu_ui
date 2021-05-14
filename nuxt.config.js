@@ -30,6 +30,7 @@ export default {
     '@/plugins/ant-design-vue.js',
     '@/plugins/notifier.js',
     '@/plugins/element-ui.js',
+    '@/plugins/request.js',
     { src: '@/plugins/vue-editor.js', mode: "client" },
     // { src: '@/plugins/nuxt-video-player-plugin.js', ssr: false }, //vue-video-player 
   ],
@@ -99,7 +100,9 @@ export default {
     }
   },
   env: {
-    baseURL: 'http://106.15.109.151:8222', //后端服务器
+    baseURL: 'http://106.15.109.151:8301', //后端服务器
+    // baseURL: 'http://127.0.0.1:4523/mock/386240', //mock--后端服务器
+    // baseURL: 'http://test.utools.club:45931', //mock--后端服务器
     giteeURL: 'https://gitee.com/api/v5/repos/jzhmcoo1/code_edu_ui_new',//gitee的openAPI
     BackendGiteeURL: "https://gitee.com/api/v5/repos/paradox_hyw/code_edu",//后端项目
   }

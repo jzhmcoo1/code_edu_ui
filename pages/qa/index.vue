@@ -113,12 +113,12 @@
               >
                 <template v-slot:icon>
                   <v-avatar class="avatar-rotate">
-                    <img :src="commit.committer.avatar_url" />
+                    <img :src="commit.author.avatar_url" />
                   </v-avatar>
                 </template>
                 <template v-slot:opposite>
                   <span class="subtitle-1 font-weight-bold info--text">{{
-                    commit.committer.name
+                    commit.author.name
                   }}</span>
                 </template>
                 <v-card>
@@ -196,7 +196,7 @@ export default Vue.extend({
         },
       ],
       page: 1,
-      per_page: 20,
+      per_page: 10,
       commitArray: [],
       commitBackArray: [],
     };

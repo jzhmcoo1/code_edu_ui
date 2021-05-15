@@ -19,15 +19,15 @@ export default {
   /**
    *
    * 查询评论
-   * @param {string} relatedId 有关的ID
+   * @param {string} id 有关的ID
    * @param {string} type (course/article/video)
    * @return {*} 
    */
-  commentList(relatedId: string, type: string) {
+  commentList(id: string, type: string) {
     return service({
       url: `${api_prefix}/list`,
       method: 'get',
-      params: { relatedId, type }
+      params: { id, type }
     })
   }
 }

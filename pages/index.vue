@@ -108,7 +108,8 @@
 </template>
 
 <script>
-import indexApi from "@/api/index";
+import courseApi from "@/api/course";
+import teacherApi from "@/api/teacher";
 export default {
   data() {
     return {
@@ -134,11 +135,12 @@ export default {
   methods: {
     // 获取首页数据
     getIndexData() {
-      indexApi.getIndexData().then((response) => {
-        this.adminList = response.data.adminList;
-        this.eduList = response.data.eduList;
-        console.log(this.adminList);
-        console.log(this.eduList);
+      // 获取前8门课程
+      courseApi.conditionList(1, 8).then((response) => {
+        this.eduList = response.data.items;
+      });
+      teacherApi.getTeacherList(1, 8).then((response) => {
+        this.adminList = response.data.records;
       });
     },
     // 控制是否显示"回到顶部"按钮

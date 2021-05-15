@@ -81,7 +81,7 @@
                 <v-divider></v-divider>
                 <v-card-text
                   v-html="courseWebVo.description"
-                  class="courseDescription"
+                  class="courseDescription body-1"
                 >
                 </v-card-text>
               </div>
@@ -222,7 +222,6 @@
 <script lang="ts">
 import Vue from "vue";
 import courseApi from "@/api/course";
-import teacherApi from "@/api/teacher";
 import myCourseApi from "@/api/ucenter";
 import Comment from "@/components/Comments.vue";
 import CourseMenu from "@/components/Course/CourseMenu.vue";
@@ -318,11 +317,12 @@ export default Vue.extend({
     },
     // 获取当前id的课程信息
     initCourseInfo() {
-      courseApi.getCourseInfo(this.courseId).then((response) => {
+      courseApi.courseDetail(this.courseId).then((response) => {
         // FIXME: 登录token过期导致无法请求无数据
+        console.log(response.data);
         this.courseWebVo = response.data.courseWebVo;
-        this.chapterVideoList = response.data.chapterVideoList;
-        this.isChoice = response.data.isChoice;
+        this.chapterVideoList = response.data.allChapterVideo;
+        // this.isChoice = response.data.isChoice;
         // 填写面包屑
         this.breadList[1].text = this.courseWebVo.subjectLevelOne;
         this.breadList[2].text = this.courseWebVo.subjectLevelTwo;
@@ -331,9 +331,11 @@ export default Vue.extend({
       });
     },
     initRelateCourse() {
-      teacherApi.getTeacherInfo(this.courseWebVo.teacherId).then((response) => {
-        this.relatedCourse = response.data.courseList;
-      });
+      courseApi
+        .conditionList(1, 8, { teacherId: this.courseWebVo.teacherId })
+        .then((response) => {
+          this.relatedCourse = response.data.items;
+        });
     },
   },
 });

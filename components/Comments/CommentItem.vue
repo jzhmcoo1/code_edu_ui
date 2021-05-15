@@ -12,19 +12,20 @@
     <v-flex class="pt-2">
       <div class="d-flex flex-column justify-center">
         <p>
-          <span class="mr-2">{{ item.nickname }}</span>
-          <span>{{ item.createTime }}</span>
+          <span class="mr-2 font-weight-medium">{{ item.nickname }}</span>
+          <span class="caption">{{ formatDate(item.createTime) }}</span>
         </p>
-        <p>
+        <p class="body-1">
           {{ item.content }}
         </p>
         <div>
-          <v-btn icon text>
+          <v-btn rounded text>
             <v-icon>thumb_up_off_alt</v-icon>
+            {{ item.likeCount }}
           </v-btn>
-          <v-btn icon text>
+          <!-- <v-btn icon text>
             <v-icon>thumb_down_off_alt</v-icon>
-          </v-btn>
+          </v-btn> -->
           <v-btn @click="showReplayBox = true" text>
             <span class="button">回复</span>
           </v-btn>
@@ -84,6 +85,8 @@
 <script>
 import ReplayComment from "@/components/Comments/ReplayComment";
 import CommentItemSon from "@/components/Comments/CommentItemSon";
+import moment from "moment";
+moment.locale("zh-CN");
 export default {
   components: {
     ReplayComment,
@@ -117,6 +120,7 @@ export default {
       nickname: "", //评论者昵称
       parentId: "", //父评论id
       replyTo: "", //被回复者昵称
+      likeCount: 0, //点赞数量
     }, //接收的信息评论
   },
   data() {
@@ -138,15 +142,16 @@ export default {
       return countComment;
     },
   },
-  created() {
-    console.log("收到的参数为:", this.id, this.type, this.item);
-  },
+  created() {},
   methods: {
     hideReplayBox() {
       this.showReplayBox = false;
     },
     notifyUpdate() {
       this.$emit("replyNew"); //通知父组件更新
+    },
+    formatDate(date) {
+      return moment(date).fromNow();
     },
   },
 };

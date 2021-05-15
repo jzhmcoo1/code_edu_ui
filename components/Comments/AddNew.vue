@@ -15,9 +15,7 @@
         <div>
           <v-text-field
             placeholder="发表宁的公开评论"
-            name="comment"
             v-model="comment.content"
-            id="new-comment"
             required
             @click="showAddComment = true"
           >
@@ -50,62 +48,36 @@ export default {
       showAddComment: false,
       comment: {
         content: "",
-        courseId: "",
+        relatedId: "",
         parentId: "0",
       },
     };
   },
   created() {
-    if (this.type === "course") {
-      this.comment.courseId = this.id;
-    } else {
-      this.comment.articleId = this.id;
-    }
-    this.comment.parentId = "0";
+    this.comment.relatedId = this.id;
   },
   computed: {
     userAvatar() {
       // 获取用户ID
-      const { id } = this.$store.state.userInfo.loginInfo;
-      if (id) {
-        return this.$store.state.userInfo.loginInfo.avatar;
+      const { userId } = this.$store.state.account.user;
+      if (userId) {
+        return this.$store.state.account.user.avatar;
       } else {
-        return "";
+        return "/default.jpg"; //默认头像
       }
-    },
-    hasLogin() {
-      return this.$store.state.userInfo.loginInfo.id ? true : false;
     },
   },
   methods: {
     // 添加新评论
     addComment() {
-      if (!this.$store.state.userInfo.loginInfo.id) {
+      if (!this.$store.state.account.accessToken) {
         this.$message.error("请先登录再进行评论!");
         this.$router.push("/login");
         return;
       }
-      if (this.type === "course") {
-        this.addCourseComment();
-      } else if (this.type === "article") {
-        this.addArticleComment();
-        console.log("文章评论");
-      }
-    },
-    addCourseComment() {
-      commentApi.addComment(this.comment).then((response) => {
-        if (response.success) {
-          this.$message.success("评论成功!");
-          this.comment.content = ""; //清空评论内容
-          this.$emit("addNew"); //通知父组件刷新
-          this.showAddComment = false; //收起评论组件
-        }
-      });
-    },
-    addArticleComment() {
-      commentApi.addArticleComment(this.comment).then((response) => {
-        if (response.success) {
-          this.$message.success("评论成功!");
+      commentApi.addComment(this.comment, this.type).then((response) => {
+        if (response.code === 200) {
+          this.$message.success("评论成功");
           this.comment.content = ""; //清空评论内容
           this.$emit("addNew"); //通知父组件刷新
           this.showAddComment = false; //收起评论组件

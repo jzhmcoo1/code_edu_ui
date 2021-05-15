@@ -49,30 +49,22 @@ export default {
         content: "",
         courseId: "",
         parentId: "0",
-        articleId: "",
       },
     };
   },
   created() {
-    if (this.type === "course") {
-      this.comment.courseId = this.id;
-    } else {
-      this.comment.articleId = this.id;
-    }
+    this.comment.relatedId = this.id;
     this.comment.parentId = this.parentId;
   },
   computed: {
     userAvatar() {
       // 获取用户ID
-      const { id } = this.$store.state.userInfo.loginInfo;
-      if (id) {
-        return this.$store.state.userInfo.loginInfo.avatar;
+      const { userId } = this.$store.state.account.user;
+      if (userId) {
+        return this.$store.state.account.user.avatar;
       } else {
-        return "";
+        return "/default.jpg"; //默认头像
       }
-    },
-    hasLogin() {
-      return this.$store.state.userInfo.loginInfo.id ? true : false;
     },
   },
   methods: {
@@ -82,30 +74,14 @@ export default {
       this.$emit("hide");
     },
     replyComment() {
-      if (!this.$store.state.userInfo.loginInfo.id) {
+      if (!this.$store.state.account.accessToken) {
         this.$message.error("请先登录再进行评论!");
         this.$router.push("/login");
         return;
       }
-      if (this.type === "course") {
-        this.replyCourseComment();
-      } else {
-        this.replyArticleComment();
-      }
-    },
-    replyCourseComment() {
-      commentApi.addComment(this.comment).then((response) => {
-        if (response.success) {
-          this.$message.success("回复评论成功");
-          this.$emit("replyNew");
-          this.hideReplayBox();
-        }
-      });
-    },
-    replyArticleComment() {
-      commentApi.addArticleComment(this.comment).then((response) => {
-        if (response.success) {
-          this.$message.success("回复评论成功");
+      commentApi.addComment(this.comment, this.type).then((response) => {
+        if (response.code === 200) {
+          this.$message.success("回复成功");
           this.$emit("replyNew");
           this.hideReplayBox();
         }

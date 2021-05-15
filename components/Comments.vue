@@ -24,11 +24,11 @@
       </v-flex>
       <v-divider></v-divider>
       <!-- 自己的评论 -->
-      <AddNew @addNew="initComment" :type="type" :id="id" />
+      <AddNew @addNew="getCommentList" :type="type" :id="id" />
       <!-- 评论列表 -->
-      <v-flex xs12 v-for="comment in commentAndUserList" :key="comment.id">
+      <v-flex xs12 v-for="comment in items" :key="comment.id">
         <CommentItem
-          @replyNew="initComment"
+          @replyNew="getCommentList"
           :type="type"
           :id="id"
           :item="comment"
@@ -54,7 +54,7 @@ export default {
   },
   data() {
     return {
-      commentAndUserList: [
+      items: [
         {
           articleId: "", //如果是文章评论,则显示文章id
           avatar: "", //回复者头像
@@ -80,6 +80,7 @@ export default {
           nickname: "", //评论者昵称
           parentId: "", //父评论id
           replyTo: "", //被回复者昵称
+          likeCount: 0, //评论点赞数
         },
       ],
       currentPageData: [], //当前页显示内容
@@ -93,16 +94,15 @@ export default {
     };
   },
   created() {
-    console.log("收到的参数为:", this.id, this.type);
-    this.initComment();
+    this.getCommentList();
   },
   computed: {
     // 计算总评论数
     commentSum() {
       // 直接评论数
-      let countComment = this.commentAndUserList.length;
+      let countComment = this.items.length;
       // 一级评论数
-      this.commentAndUserList.map((value) => {
+      this.items.map((value) => {
         if (value.childList) {
           value.childList.map((value) => {
             if (value.childList) {
@@ -115,38 +115,19 @@ export default {
       return countComment;
     },
     userAvatar() {
-      const { id } = this.$store.state.userInfo.loginInfo;
-      if (id) {
-        return this.$store.state.userInfo.loginInfo.avatar;
+      // 获取用户ID
+      const { userId } = this.$store.state.account.user;
+      if (userId) {
+        return this.$store.state.account.user.avatar;
       } else {
-        return "";
+        return "/default.jpg"; //默认头像
       }
-    },
-    hasLogin() {
-      return this.$store.state.userInfo.loginInfo.id ? true : false;
     },
   },
   methods: {
-    initComment() {
-      if (this.type === "course") {
-        this.initCourseComment();
-      } else if (this.type === "article") {
-        this.initArticleComment();
-      }
-    },
-    // 课程评论
-    initCourseComment() {
-      commentApi.getPageList(this.id).then((response) => {
-        this.commentAndUserList = response.data.list;
-        console.log("commentAndUserList:", this.commentAndUserList);
-      });
-    },
-    // 文章评论
-    initArticleComment() {
-      commentApi.getArticlePageList(this.id).then((response) => {
-        console.log("初始化文章评论", response.data);
-        this.commentAndUserList = response.data.list;
-        console.log(this.commentAndUserList);
+    getCommentList() {
+      commentApi.commentList(this.id, this.type).then((response) => {
+        this.items = response.data.items;
       });
     },
   },

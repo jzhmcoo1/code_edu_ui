@@ -12,24 +12,25 @@
     <v-flex class="pt-2">
       <div class="d-flex flex-column justify-center">
         <p>
-          <span class="mr-2">{{ item.nickname }}</span>
-          <span>{{ item.createTime }}</span>
+          <span class="mr-2 font-weight-medium">{{ item.nickname }}</span>
+          <span class="caption">{{ formatDate(item.createTime) }}</span>
         </p>
         <p>
-          <span class="info--text">
-            {{ `@` + item.replyTo }}
+          <span class="info--text body-1">
+            {{ `@ ` + item.replyTo }}
           </span>
-          <span>
+          <span class="body-1">
             {{ item.content }}
           </span>
         </p>
         <div>
-          <v-btn icon text>
+          <v-btn rounded text>
             <v-icon>thumb_up_off_alt</v-icon>
+            {{ item.likeCount }}
           </v-btn>
-          <v-btn icon text>
+          <!-- <v-btn rounded="circle" text>
             <v-icon>thumb_down_off_alt</v-icon>
-          </v-btn>
+          </v-btn> -->
           <v-btn @click="showReplayBox = true" text>
             <span class="button">回复</span>
           </v-btn>
@@ -54,6 +55,8 @@
 
 <script>
 import ReplayComment from "@/components/Comments/ReplayComment";
+import moment from "moment";
+moment.locale("zh-CN");
 export default {
   components: {
     ReplayComment,
@@ -87,6 +90,9 @@ export default {
     },
     notifyUpdate() {
       this.$emit("replyNew");
+    },
+    formatDate(date) {
+      return moment(date).fromNow();
     },
   },
 };

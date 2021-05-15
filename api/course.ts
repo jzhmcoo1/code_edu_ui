@@ -3,7 +3,7 @@ import { Course, CourseQuery } from "./schema/course";
 const api_prefix = '/service/course'
 export default {
   // 条件查询课程列表
-  conditionList(page: number, limit: number, searchObj: CourseQuery) {
+  conditionList(page: number = 1, limit: number = 8, searchObj: CourseQuery = {}) {
     return service({
       url: `${api_prefix}/conditionList/${page}/${limit}`,
       method: 'post',

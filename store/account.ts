@@ -12,6 +12,10 @@ export default {
     routes: db.get('USER_ROUTER') || []
   },
   mutations: {
+    removeAll(state: any) {
+      db.clear()
+      state = {}
+    },
     setAccessToken(state: any, val: any) {
       db.save('ACCESS_TOKEN', val)
       state.accessToken = val

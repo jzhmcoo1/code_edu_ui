@@ -39,12 +39,12 @@
         </v-responsive>
         <client-only>
           <!-- 未登录操作 -->
-          <div v-if="loginInfo.id === ''" id="no-login">
+          <div v-if="loginInfo.userId === ''" id="no-login">
             <v-btn text router to="/login">登录</v-btn>
             <v-btn text router to="/register">注册</v-btn>
           </div>
           <!-- 已登录操作 -->
-          <div v-if="loginInfo.id !== ''" id="has-login">
+          <div v-if="loginInfo.userId !== ''" id="has-login">
             <!-- 下拉菜单 -->
             <v-menu open-on-hover bottom offset-y>
               <template v-slot:activator="{ on, attrs }">
@@ -85,7 +85,6 @@
 
 <script lang="ts">
 import Vue from "vue";
-import cookie from "js-cookie";
 export default Vue.extend({
   data: () => ({
     links: [
@@ -97,11 +96,11 @@ export default Vue.extend({
     ],
     // 用户登录信息
     loginInfo: {
-      id: "",
+      userId: "",
       age: "",
       avatar: "",
       mobile: "",
-      nickname: "",
+      username: "",
       sex: "",
     },
     menus: [{ title: "个人中心", icon: "home", route: "/ucenter/info" }],
@@ -112,21 +111,18 @@ export default Vue.extend({
   methods: {
     // 如果用户登录,则展示用户信息
     showInfo() {
-      const userInfo = cookie.getJSON("dhu_ucenter");
-      console.log("userInfo=", userInfo);
-      if (userInfo) {
+      const userInfo = this.$store.state.account.user;
+      console.log("userInfo=", userInfo.userId);
+      if (userInfo.userId !== undefined) {
         this.loginInfo = userInfo;
-        this.$store.commit("update", this.loginInfo);
       } else {
-        this.loginInfo.id = "";
+        this.loginInfo.userId = "";
       }
     },
     // 用户退出登录
     logout() {
-      cookie.remove("dhu_token");
-      cookie.remove("dhu_ucenter");
-      this.loginInfo.id = "";
-      this.$store.commit("remove");
+      this.loginInfo.userId = "";
+      this.$store.commit("account/removeAll");
       this.$message.success({
         content: "成功退出登录",
       });

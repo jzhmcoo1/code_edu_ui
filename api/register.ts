@@ -10,7 +10,7 @@ export default {
   // 注册
   registerMember(memberInfo: object) {
     return service({
-      url: `/educenter/member/register`,
+      url: `/system/user/register`,
       method: 'post',
       data: memberInfo
     })

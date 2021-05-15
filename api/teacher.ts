@@ -1,6 +1,6 @@
 import { service } from '@/utils/request'
 import { TeacherQuery } from './schema/teacher'
-const api_prefix = '/teacher'
+const api_prefix = '/service/teacher'
 export default {
   // 获取讲师的列表
   getTeacherList(page: number, limit: number) {
@@ -17,7 +17,7 @@ export default {
     })
   },
   // 条件讲师列表
-  conditionList(page: number, limit: number, searchObj: TeacherQuery) {
+  conditionList(page: number, limit: number, searchObj: TeacherQuery = {}) {
     return service({
       url: `${api_prefix}/conditionList/${page}/${limit}`,
       method: 'post',

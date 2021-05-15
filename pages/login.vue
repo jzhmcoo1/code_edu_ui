@@ -161,13 +161,9 @@ export default {
         key: this.randomId,
       }).then((response) => {
         const data = response;
-        console.log("data", data);
         this.saveLoginData(data);
-        console.log("保存信息成功");
         this.getUserDetailInfo();
-        console.log("获取用户信息成功");
         this.loginSuccessCallback();
-        console.log("登录成功");
       });
     },
     // 保存登录信息
@@ -180,6 +176,7 @@ export default {
       );
       this.$store.commit("account/setExpireTime", expireTime);
     },
+    // 获取用户信息详情
     getUserDetailInfo() {
       this.$get("auth/user").then((response) => {
         this.$store.commit("account/setUser", response.principal);
@@ -190,9 +187,14 @@ export default {
       });
     },
     loginSuccessCallback() {
-      this.$get(`system/user/success/${this.username}`).catch((e) => {
-        console.log(e);
-      });
+      this.$get(`system/user/success`)
+        .then((response) => {
+          // 回到首页
+          this.$router.replace("/");
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
   },
 };

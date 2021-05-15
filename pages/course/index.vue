@@ -50,7 +50,7 @@
       <!-- 课程列表 -->
       <v-container grid-list-xs>
         <!-- <h1 class="heading--text font-weight-bold mb-2">课程列表</h1> -->
-        <v-layout row wrap>
+        <v-layout row wrap v-if="data.items.length !== 0">
           <v-flex
             align-self-center
             class="pa-2"
@@ -79,12 +79,13 @@
             </v-hover>
           </v-flex>
         </v-layout>
+        <a-empty v-else description="暂时没有该类的课程"></a-empty>
       </v-container>
       <!-- 分页器 -->
       <div class="text-center">
         <v-pagination
           v-model="page"
-          :length="data.total"
+          :length="parseInt(data.pages)"
           @previous="getCourseList"
           @next="getCourseList"
           @input="getCourseList"
@@ -95,6 +96,7 @@
 </template>
 <script lang="ts">
 import courseApi from "@/api/course";
+import subjectApi from "@/api/subject";
 import Vue from "vue";
 export default Vue.extend({
   data() {
@@ -102,8 +104,11 @@ export default Vue.extend({
       tab: null,
       subTab: null,
       page: 1, //当前页数
-      per_page: 12, //每页展示数
-      data: {}, //保存返回的数据
+      per_page: 8, //每页展示数
+      data: {
+        pages: "1",
+        items: [],
+      }, //保存返回的数据
       subjectNestedList: [], // 一级分类列表
       subSubjectList: [], // 二级分类列表
       searchObj: {
@@ -118,46 +123,24 @@ export default Vue.extend({
   },
   created() {
     // 首先查询出所有的一级分类
-    this.initSubject();
+    this.getSubjectTree();
     // 查出第一页的数据
     this.getCourseList();
   },
   methods: {
-    //1 查询第一页数据
-    initCourseFirst() {
-      courseApi
-        .getCourseList(this.page, this.per_page, this.searchObj)
-        .then((response) => {
-          this.data = response.data;
-        });
-    },
-    //2 查询所有一级分类
-    initSubject() {
-      courseApi.getAllSubject().then((response) => {
-        this.subjectNestedList = response.data.list;
-        console.log("一级分类:", this.subjectNestedList);
-      });
-    },
-    //3 分页切换的方法
-    // gotoPage(page) {
-    //   if (page > this.data.pages) return;
-    //   courseApi.getCourseList(page, 8, this.searchObj).then((response) => {
-    //     this.data = response.data.data;
-    //   });
-    // },
-    //4 点击某个一级分类，查询对应二级分类
     /**
+     * 点击某个一级分类，查询一级分类,显示对应二级分类
      * @param subjectParentId 待查询其二级分类的父类id
      */
     searchSub(subjectParentId: string) {
       // 先清空二级列表清空数据
       this.searchObj.subjectId = "";
       this.subSubjectList = [];
+      this.subTab = null;
       if (subjectParentId === "0") {
         // 选择的是"全部课程",返回
-        console.log("选择的全部课程,返回");
+        this.searchObj.subjectParentId = "";
         this.getCourseList();
-        return;
       } else {
         this.searchObj.subjectParentId = subjectParentId;
         this.getCourseList();
@@ -165,7 +148,6 @@ export default Vue.extend({
           return subjectParentId === item.id;
         });
         this.subSubjectList = parentItem.children;
-        console.log("当前二级列表:", this.subSubjectList);
       }
     },
     //5 点击某个二级分类实现查询
@@ -177,33 +159,6 @@ export default Vue.extend({
       this.getCourseList();
     },
 
-    // searchOne(subjectParentId: string, index = -1) {
-    //   //把传递index值赋值给oneIndex,为了active样式生效
-    //   this.oneIndex = index;
-    //   this.twoIndex = -1;
-
-    //   this.searchObj.subjectId = "";
-    //   this.subSubjectList = [];
-    //   // 如果点击全部清空,传过来一个-1,使得active的样式清空,然后返回不查
-    //   if (index === -1) return;
-    //   //把一级分类点击id值，赋值给searchObj
-    //   this.searchObj.subjectParentId = subjectParentId;
-    //   //点击某个一级分类进行条件查询
-    //   this.getCourseList();
-
-    //   //拿着点击一级分类id 和 所有一级分类id进行比较，
-    //   //如果id相同，从一级分类里面获取对应的二级分类
-    //   for (let i = 0; i < this.subjectNestedList.length; i++) {
-    //     //获取每个一级分类
-    //     let oneSubject = this.subjectNestedList[i];
-    //     //比较id是否相同
-    //     if (subjectParentId === oneSubject.id) {
-    //       //从一级分类里面获取对应的二级分类
-    //       this.subSubjectList = oneSubject.children;
-    //     }
-    //   }
-    // },
-
     // value得知用户当前点的是哪个一级标题
     log(value: string) {
       console.log(value);
@@ -212,12 +167,22 @@ export default Vue.extend({
     // 获取课程列表
     getCourseList() {
       console.log("当前页面为:", this.page);
+      console.log("查询对象:", this.searchObj);
       courseApi
-        .getCourseList(this.page, this.per_page, this.searchObj)
+        .conditionList(this.page, this.per_page, this.searchObj)
         .then((response) => {
           console.log("获取课程列表:", response.data);
           this.data = response.data;
         });
+    },
+    // 获取课程分类树
+    getSubjectTree() {
+      subjectApi.getSubjectTree().then((response) => {
+        console.log(response.data);
+        const { list } = response.data;
+        this.subjectNestedList = list;
+        console.log(this.subjectNestedList);
+      });
     },
   },
 });

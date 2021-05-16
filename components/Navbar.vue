@@ -112,7 +112,6 @@ export default Vue.extend({
     // 如果用户登录,则展示用户信息
     showInfo() {
       const userInfo = this.$store.state.account.user;
-      console.log("userInfo=", userInfo.userId);
       if (userInfo.userId !== undefined) {
         this.loginInfo = userInfo;
       } else {

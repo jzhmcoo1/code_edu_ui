@@ -2,6 +2,17 @@
   <v-container grid-list-xs>
     <v-container grid-list-xs>
       <h1 class="headline heading--text">讲师列表</h1>
+      <v-row justify="center">
+        <v-col>
+          <v-text-field
+            name="search"
+            label="输入教师姓名进行模糊检索"
+            id="searchTeacher"
+            v-model="teacherQuery.name"
+            @keyup="getTeacherList"
+          ></v-text-field>
+        </v-col>
+      </v-row>
       <!-- 讲师列表 -->
       <v-row>
         <v-col
@@ -33,7 +44,7 @@
 
                 <v-card-text class="text-center text--secondary">
                   <p class="text-h6">{{ teacher.name }}</p>
-                  <p class="text-h5">{{ teacher.intro }}</p>
+                  <p v-html="teacher.intro" class="subtitle"></p>
                 </v-card-text>
               </v-sheet>
             </v-card>
@@ -42,7 +53,13 @@
       </v-row>
       <!-- 分页 -->
       <v-container class="text-center mt-2">
-        <v-pagination v-model="page" :length="pages"></v-pagination>
+        <v-pagination
+          v-model="page"
+          :length="pages"
+          @input="getTeacherList"
+          @next="getTeacherList"
+          @previous="getTeacherList"
+        ></v-pagination>
       </v-container>
     </v-container>
   </v-container>
@@ -51,30 +68,27 @@
 <script lang="ts">
 import Vue from "vue";
 import teacherApi from "@/api/teacher";
+import { TeacherQuery } from "@/api/schema/teacher";
 export default Vue.extend({
   data() {
     return {
       tabs: null,
       page: 1, //传递参数
       pages: 1, //总页数
-      limit: 10, //传递参数
+      limit: 12, //传递参数
       current: 1, //当前页数
       total: 8, //总记录数
-      hasPrevious: false,
-      hasNext: false,
       teacherList: [
         {
-          id: "1189390295668469762",
-          name: "小王",
-          intro: "今天是晴天",
-          avatar:
-            "https://edu-guli-0313.oss-cn-beijing.aliyuncs.com/2021/03/25/ce95ee18bb354c4ebfbff8c12370294bfile.png",
-          sort: 0,
-          isDeleted: 0,
-          createTime: "2019-10-30 11:55:19",
-          modifiedTime: "2021-03-25 19:55:48",
+          id: "",
+          name: "",
+          intro: "",
+          avatar: "",
         },
       ],
+      teacherQuery: {
+        name: "",
+      },
     };
   },
   created() {
@@ -82,11 +96,13 @@ export default Vue.extend({
   },
   methods: {
     getTeacherList() {
-      teacherApi.getTeacherList(this.page, this.limit).then((response) => {
-        console.log(response.data);
-        this.teacherList = response.data.items;
-        this.pages = response.data.pages;
-      });
+      teacherApi
+        .conditionList(this.page, this.limit, this.teacherQuery)
+        .then((response) => {
+          console.log(response.data);
+          this.teacherList = response.data.records;
+          this.pages = parseInt(response.data.pages);
+        });
     },
   },
 });

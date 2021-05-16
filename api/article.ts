@@ -1,6 +1,6 @@
 import { service } from '@/utils/request'
-import { Article, SearchArticle } from './schema/article'
-const api_prefix = '/article'
+import { Article, ArticleQuery } from './schema/article'
+const api_prefix = '/service/article'
 export default {
   //添加文章
   addArticle(articleObj: Article) {
@@ -33,7 +33,7 @@ export default {
     })
   },
   // 获取文章分页列表
-  conditionList(page: number, limit: number, searchObj: SearchArticle) {
+  conditionList(page: number, limit: number, searchObj: ArticleQuery) {
     return service({
       url: `${api_prefix}/conditionList/${page}/${limit}`,
       method: 'post',

@@ -15,7 +15,7 @@
         <v-divider></v-divider>
         <v-list shaped :dense="dense" class="mx-1">
           <v-list-group
-            no-action
+            :no-action="noAction"
             v-for="chapter in chapterVideoList"
             :key="chapter.id"
             :value="true"
@@ -25,6 +25,8 @@
               <v-list-item-title>{{ chapter.title }}</v-list-item-title>
             </template>
             <v-list-item
+              exact
+              :disabled="child.videoSourceId === ''"
               v-for="child in chapter.children"
               :key="child.id"
               link
@@ -60,6 +62,7 @@ export default {
     chapterVideoList: Array, //课程的视频列表
     courseId: String,
     dense: Boolean, //列表展示是否紧凑
+    noAction: Boolean, //是否缩进
   },
   data() {
     return {

@@ -61,7 +61,12 @@ export default {
       // 获取用户ID
       const { userId } = this.$store.state.account.user;
       if (userId) {
-        return this.$store.state.account.user.avatar;
+        const avatar = this.$store.state.account.user.avatar;
+        if (/^http/.test(avatar)) {
+          return avatar;
+        } else {
+          return "/default.jpg";
+        }
       } else {
         return "/default.jpg"; //默认头像
       }

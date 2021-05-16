@@ -79,7 +79,7 @@
               <div class="text-center">
                 <v-pagination
                   v-model="page"
-                  :length="responseData.pages"
+                  :length="parseInt(responseData.pages)"
                   :total-visible="7"
                   @input="getArticleList"
                   @next="getArticleList"
@@ -164,6 +164,7 @@
 <script>
 import FloatBtn from "@/components/FloatBtn.vue";
 import articleApi from "@/api/article";
+import subjectApi from "@/api/subject";
 import monent from "moment";
 monent.locale("zh-CN");
 export default {
@@ -215,7 +216,7 @@ export default {
         case "md":
         case "lg":
         case "xl":
-          return 365;
+          return 300;
       }
     },
   },
@@ -227,14 +228,13 @@ export default {
     // 点击某个一级分类,查询二级分类
     // firstLevelIndex为传来的数组下标
     searchOne(firstLevelIndex) {
-      console.log("选择的firstLevelIndex为", firstLevelIndex);
       // 点击一个一级标签,将选中的二级标签清空
       this.secondLevelIndex = undefined;
+      this.searchObj.typeId = "";
       // 如果一级分类不为空
       if (firstLevelIndex !== undefined) {
-        console.log("一级分类不为空");
         const firstId = this.subjectNestedList[firstLevelIndex].id; //取得选中的一级标签的标签Id
-        this.searchObj.type = firstId; //将要查询的标签id赋值个searchObj
+        this.searchObj.typeParentId = firstId; //将要查询的标签id赋值个searchObj
         this.subSubjectList = this.subjectNestedList[firstLevelIndex].children; //将选中的一级标签的子标签赋给二级数组
       } else {
         console.log("一级分类为空");
@@ -245,34 +245,35 @@ export default {
       this.getArticleList(); //重新查询
     },
     searchTwo(secondLevelIndex) {
-      console.log("选择的secondLevelIndex为", secondLevelIndex);
       // 如果二级分类不为空
       if (secondLevelIndex !== undefined) {
         const secondId = this.subSubjectList[secondLevelIndex].id;
-        this.searchObj.type = secondId;
+        this.searchObj.typeId = secondId;
       } else {
-        this.searchObj.type = this.subjectNestedList[this.firstLevelIndex].id; //取消选择二级标签后重新赋值一级标签
+        this.searchObj.typeParentId = this.subjectNestedList[
+          this.firstLevelIndex
+        ].id; //取消选择二级标签后重新赋值一级标签
         this.subSubjectList = this.subjectNestedList[
           this.firstLevelIndex
         ].children;
+        this.searchObj.typeId = "";
       }
       this.page = 1; //把页数重新写回1
       this.getArticleList(); //重新查询
     },
     // 查询文章一级分类
     initSubject() {
-      articleApi.getAllSubject().then((response) => {
+      subjectApi.getSubjectTree().then((response) => {
+        console.log(response.data);
         this.subjectNestedList = response.data.list;
-        console.log(this.subjectNestedList);
       });
     },
     // 查询文章列表(分页和条件)
     getArticleList() {
       articleApi
-        .getArticleList(this.page, this.limit, this.searchObj)
+        .conditionList(this.page, this.limit, this.searchObj)
         .then((response) => {
           this.responseData = response.data;
-          console.log(this.responseData);
         });
     },
     // moment格式化时间

@@ -55,6 +55,14 @@
                 {{ articleInfo.title }}
               </h1>
               <v-card flat>
+                <v-card-text class="caption">
+                  <v-chip dark color="primary">{{
+                    articleInfo.typeParentName
+                  }}</v-chip>
+                  <v-chip dark color="secondary">{{
+                    articleInfo.typeName
+                  }}</v-chip>
+                </v-card-text>
                 <v-btn @click="handlePraise" text>
                   <v-icon :color="likeState ? 'red ligten-1' : ''" left
                     >mdi-heart</v-icon
@@ -171,7 +179,7 @@ export default {
     };
   },
   created() {
-    this.lookArticle();
+    // this.lookArticle();
     this.getLikeState();
     this.initArticle();
   },
@@ -183,7 +191,18 @@ export default {
       drawer: true, //目录收纳
       renderer: new marked.Renderer(),
       articleInfo: {
-        content: "",
+        authorName: "MrBird",
+        commentCount: "0",
+        content: "鉴定为炒",
+        cover: "",
+        createTime: "",
+        id: "",
+        likeCount: "",
+        modifiedTime: "",
+        title: "",
+        typeName: "",
+        typeParentName: "",
+        viewCount: "0",
       },
       html: "",
       showComment: true,
@@ -214,8 +233,8 @@ export default {
     },
     // 初始化文章信息
     initArticle() {
-      articleApi.getArticleInfo(this.articleId).then((response) => {
-        this.articleInfo = response.data.article;
+      articleApi.getArticle(this.articleId).then((response) => {
+        this.articleInfo = response.data;
         console.log(this.articleInfo);
         // 配置marked
         const renderer = {
@@ -267,8 +286,8 @@ export default {
     },
     // 文章点赞
     praise() {
-      articleApi.chooseLike(this.articleId).then((response) => {
-        if (response.success) {
+      articleApi.praiseArticle(this.articleId).then((response) => {
+        if (response.code === 200) {
           this.$message.success("👍点赞成功");
           this.likeState = true;
           this.articleInfo.likeCount++;
@@ -277,8 +296,8 @@ export default {
     },
     //取消点赞
     cancelPraise() {
-      article.cancelLike(this.articleId).then((response) => {
-        if (response.success) {
+      article.cancelPraise(this.articleId).then((response) => {
+        if (response.code === 200) {
           this.$message.success("👌取消成功");
           this.likeState = false;
           this.articleInfo.likeCount--;
@@ -287,9 +306,11 @@ export default {
     },
     // 获取点赞状态
     getLikeState() {
-      articleApi.getLikeState(this.articleId).then((response) => {
-        if (response.success) {
-          this.likeState = response.data.state;
+      articleApi.getPraise(this.articleId).then((response) => {
+        if (response.code === 200) {
+          this.likeState = true;
+        } else {
+          this.likeState = false;
         }
       });
     },

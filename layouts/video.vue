@@ -44,7 +44,7 @@
                     <v-expand-transition>
                       <div v-show="showComment">
                         <v-divider></v-divider>
-                        <Comment type="course" :id="courseId" />
+                        <Comment type="video" :id="videoId" />
                       </div>
                     </v-expand-transition>
                   </v-card>
@@ -62,6 +62,7 @@
                     :chapterVideoList="chapterVideoList"
                     :courseId="courseId"
                     :dense="true"
+                    :noAction="false"
                   />
                 </v-sheet>
               </v-col>
@@ -98,6 +99,8 @@ export default {
     return {
       showComment: true,
       courseId: this.$route.query.courseId,
+      vid: this.$route.params.vid,
+      videoId: this.$route.query.videoId,
       chapterVideoList: [], //课程的视频列表
       courseWebVo: {
         title: "", //课程标题
@@ -123,9 +126,10 @@ export default {
   methods: {
     // 获取当前id的课程信息
     initCourseInfo() {
-      courseApi.getCourseInfo(this.courseId).then((response) => {
+      courseApi.courseDetail(this.courseId).then((response) => {
         // FIXME: 登录token过期导致无法请求无数据
-        this.chapterVideoList = response.data.chapterVideoList;
+        console.log(response.data);
+        this.chapterVideoList = response.data.allChapterVideo;
         this.courseWebVo = response.data.courseWebVo;
       });
     },

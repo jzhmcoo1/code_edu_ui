@@ -87,7 +87,6 @@ export default {
       totalPage: 1, // 统共页数，默认为1
       comment: {
         content: "",
-        courseId: "",
         parentId: "0",
         relatedId: "",
       },

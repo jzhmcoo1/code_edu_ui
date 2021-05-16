@@ -92,6 +92,7 @@
               :chapterVideoList="chapterVideoList"
               :courseId="courseId"
               :dense="false"
+              :noAction="true"
             />
           </v-layout>
         </v-card>

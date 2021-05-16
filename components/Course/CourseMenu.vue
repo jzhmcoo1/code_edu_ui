@@ -37,6 +37,7 @@
                 },
                 query: {
                   courseId,
+                  videoId: child.id,
                 },
               }"
             >

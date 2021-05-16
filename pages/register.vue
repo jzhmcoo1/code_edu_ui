@@ -2,7 +2,7 @@
   <v-form ref="form" v-model="valid" lazy-validation>
     <v-text-field
       prepend-icon="person"
-      v-model="nickname"
+      v-model="username"
       :counter="10"
       :rules="nickRules"
       label="用户名"
@@ -32,6 +32,7 @@
     ></v-text-field>
 
     <v-text-field
+      :type="show ? 'text' : 'password'"
       v-model="ensurePassword"
       :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
       name="ensure"
@@ -45,8 +46,7 @@
       required
       @click:append="show = !show"
     ></v-text-field>
-
-    <v-text-field
+    <!-- <v-text-field
       v-model="code"
       name="code"
       label="验证码"
@@ -59,7 +59,7 @@
       :suffix="codeText"
       @click:disabled="sending"
       @click:append="sendCode"
-    ></v-text-field>
+    ></v-text-field> -->
     <v-layout column wrap justify-center align-center>
       <v-divider></v-divider>
       <v-row>
@@ -77,13 +77,12 @@
 </template>
 
 <script>
-import registerApi from "@/api/register";
 export default {
   layout: "sign",
   data: () => ({
     mobile: "", //手机号
     code: "", //验证码
-    nickname: "", //用户名
+    username: "", //用户名
     password: "", //密码
     ensurePassword: "", // 确认密码
     valid: true, //表单是否有效
@@ -101,70 +100,71 @@ export default {
       (v) => !!v || "必须填写用户名",
       (v) => (v && v.length <= 10) || "用户名最大长度不能超过10",
     ],
-    codeRules: [
-      (v) => !!v || "必须填写验证码",
-      (v) => /^\d{4}$/.test(v) || "验证码必须是4位数字",
-    ],
+    // codeRules: [
+    //   (v) => !!v || "必须填写验证码",
+    //   (v) => /^\d{4}$/.test(v) || "验证码必须是4位数字",
+    // ],
   }),
 
   methods: {
     // 点击发送验证码图标的回调
-    sendCode() {
-      if (!/^1[3-9]\d{9}$/.test(this.mobile)) {
-        this.$message.error({
-          content: "请填写正确的手机号再发送验证码",
-        });
-        return;
-      }
-      if (this.sending === true) {
-        this.$message.error({
-          content: `验证码正在发送,请${this.second}秒后再试`,
-        });
-        return;
-      }
-      registerApi.sendCode(this.mobile).then((response) => {
-        this.sending = true;
-        //调用倒计时的方法
-        this.timeDown();
-        this.$message.success({
-          content: "发送验证码成功,请注意查收",
-        });
-      });
-      // 测试代码
-      // this.sending = true;
-      //调用倒计时的方法
-      // this.timeDown();
-      // this.$message.success({
-      //   content: "发送验证码成功,请注意查收",
-      // });
-    },
+    // sendCode() {
+    //   if (!/^1[3-9]\d{9}$/.test(this.mobile)) {
+    //     this.$message.error({
+    //       content: "请填写正确的手机号再发送验证码",
+    //     });
+    //     return;
+    //   }
+    //   if (this.sending === true) {
+    //     this.$message.error({
+    //       content: `验证码正在发送,请${this.second}秒后再试`,
+    //     });
+    //     return;
+    //   }
+    //   registerApi.sendCode(this.mobile).then((response) => {
+    //     this.sending = true;
+    //     //调用倒计时的方法
+    //     this.timeDown();
+    //     this.$message.success({
+    //       content: "发送验证码成功,请注意查收",
+    //     });
+    //   });
+    // },
     // 倒计时发送
-    timeDown() {
-      let result = setInterval(() => {
-        --this.second;
-        this.codeText = this.second;
-        if (this.second < 1) {
-          clearInterval(result);
-          this.sending = false;
-          this.disabled = false;
-          this.second = 60;
-          this.codeText = "点击图标获取验证码";
-        }
-      }, 1000);
-    },
+    // timeDown() {
+    //   let result = setInterval(() => {
+    //     --this.second;
+    //     this.codeText = this.second;
+    //     if (this.second < 1) {
+    //       clearInterval(result);
+    //       this.sending = false;
+    //       this.disabled = false;
+    //       this.second = 60;
+    //       this.codeText = "点击图标获取验证码";
+    //     }
+    //   }, 1000);
+    // },
+
     //注册提交的方法
     submitRegister() {
-      registerApi.registerMember(this.params).then((response) => {
-        if (response.success) {
-          //提示注册成功
-          this.$message.success("注册成功");
-          //跳转登录页面
-          this.$router.push({ path: "/login" });
+      const memberInfo = {
+        mobile: this.mobile,
+        username: this.username,
+        password: this.password,
+      };
+      this.$post("/system/user/register", memberInfo).then((response) => {
+        if (response.code === 200) {
+          this.$message.success("🤗注册成功");
+          this.$router.replace("/login");
+        } else {
+          this.$message.error("😫注册失败");
         }
       });
     },
     validate() {
-      this.$refs.form.validate();
+      if (this.$refs.form.validate()) {
+        this.submitRegister();
+      }
     },
     reset() {
       this.$refs.form.reset();

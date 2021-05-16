@@ -87,61 +87,61 @@ export interface Article {
 /**
  *文章查询对象
  *
- * @interface SearchArticle
+ * @interface ArticleQuery
  */
-export interface SearchArticle {
+export interface ArticleQuery {
   /**
      * 作者姓名
      * @type {string}
-     * @memberof SearchArticle
+     * @memberof ArticleQuery
      */
   authorName?: string;
   /**
    * 查询开始时间
    * @type {string}
-   * @memberof SearchArticle
+   * @memberof ArticleQuery
    */
   begin?: string;
   /**
    * 最新时间排序
    * @type {boolean}
-   * @memberof SearchArticle
+   * @memberof ArticleQuery
    */
   createTimeSort?: boolean;
   /**
    * 查询结束时间
    * @type {string}
-   * @memberof SearchArticle
+   * @memberof ArticleQuery
    */
   end?: string;
   /**
    * 点赞次数排序
    * @type {boolean}
-   * @memberof SearchArticle
+   * @memberof ArticleQuery
    */
   likeCountSort?: boolean;
   /**
    * 文章名称,模糊查询
    * @type {string}
-   * @memberof SearchArticle
+   * @memberof ArticleQuery
    */
   title?: string;
   /**
    * 文章二级分类ID
    * @type {string}
-   * @memberof SearchArticle
+   * @memberof ArticleQuery
    */
   typeId?: string;
   /**
    * 文章一级分类ID
    * @type {string}
-   * @memberof SearchArticle
+   * @memberof ArticleQuery
    */
   typeParentId?: string;
   /**
    * 浏览量&评论量排序
    * @type {boolean}
-   * @memberof SearchArticle
+   * @memberof ArticleQuery
    */
   viewAndCommentSort?: boolean;
 }

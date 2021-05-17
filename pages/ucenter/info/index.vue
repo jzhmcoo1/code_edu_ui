@@ -11,8 +11,8 @@
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>{{ loginInfo.nickname }}</v-list-item-title>
-              <v-list-item-subtitle>昵称</v-list-item-subtitle>
+              <v-list-item-title>{{ loginInfo.username }}</v-list-item-title>
+              <v-list-item-subtitle>用户名</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
 
@@ -33,16 +33,12 @@
 
           <v-list-item>
             <v-list-item-icon>
-              <v-icon color="indigo">{{
-                loginInfo.sex === 1 ? "mdi-gender-male" : "mdi-gender-female"
-              }}</v-icon>
+              <v-icon color="indigo"> mdi-email </v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>{{
-                loginInfo.sex === 1 ? "男" : "女"
-              }}</v-list-item-title>
-              <v-list-item-subtitle>性别</v-list-item-subtitle>
+              <v-list-item-title>{{ loginInfo.email }}</v-list-item-title>
+              <v-list-item-subtitle>电子邮箱</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
 
@@ -50,12 +46,12 @@
 
           <v-list-item>
             <v-list-item-icon>
-              <v-icon color="indigo"> cake </v-icon>
+              <v-icon color="indigo">{{ genderIcon(loginInfo.sex) }}</v-icon>
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>{{ loginInfo.age }}</v-list-item-title>
-              <v-list-item-subtitle>年龄</v-list-item-subtitle>
+              <v-list-item-title>{{ gender(loginInfo.sex) }}</v-list-item-title>
+              <v-list-item-subtitle>性别</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
 
@@ -67,7 +63,7 @@
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>{{ loginInfo.sign }}</v-list-item-title>
+              <v-list-item-title>{{ loginInfo.description }}</v-list-item-title>
               <v-list-item-subtitle>个性签名</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
@@ -80,23 +76,10 @@
             </v-list-item-icon>
 
             <v-list-item-content>
-              <v-list-item-title>{{ loginInfo.createTime }}</v-list-item-title>
-              <v-list-item-subtitle>注册时间</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
-
-          <v-divider inset></v-divider>
-
-          <v-list-item>
-            <v-list-item-icon>
-              <v-icon color="indigo"> calendar_today </v-icon>
-            </v-list-item-icon>
-
-            <v-list-item-content>
               <v-list-item-title>{{
-                loginInfo.modifiedTime
+                formatDate(loginInfo.lastLoginTime)
               }}</v-list-item-title>
-              <v-list-item-subtitle>修改时间</v-list-item-subtitle>
+              <v-list-item-subtitle>上次登录时间</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -114,7 +97,8 @@
 </template>
 
 <script>
-import cookie from "js-cookie";
+import moment from "moment";
+moment.locale("zh-CN");
 export default {
   layout: "ucenter",
   created() {
@@ -144,8 +128,28 @@ export default {
   },
   methods: {
     getUserInfo() {
-      this.loginInfo = cookie.getJSON("dhu_ucenter");
-      console.log(this.loginInfo);
+      this.loginInfo = this.$store.state.account.user;
+    },
+    gender: (value) => {
+      if (value === 0) {
+        return "男";
+      } else if (value === 1) {
+        return "女";
+      } else {
+        return "保密";
+      }
+    },
+    genderIcon: (value) => {
+      if (value === 0) {
+        return "mdi-gender-male";
+      } else if (value === 1) {
+        return "mdi-gender-female";
+      } else {
+        return "mdi-gender-male-female";
+      }
+    },
+    formatDate(value) {
+      return moment(value).fromNow();
     },
   },
 };

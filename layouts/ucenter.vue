@@ -13,12 +13,14 @@
           </v-list-item>
         </client-only>
 
-        <v-list-item link>
+        <v-list-item>
           <v-list-item-content>
             <v-list-item-title class="title">
-              {{ loginInfo.nickname }}
+              {{ loginInfo.username }}
             </v-list-item-title>
-            <v-list-item-subtitle>{{ loginInfo.mobile }}</v-list-item-subtitle>
+            <v-list-item-subtitle>{{
+              loginInfo.description
+            }}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -82,33 +84,24 @@
 </template>
 
 <script>
-import cookie from "js-cookie";
-import PubSub from "pubsub-js";
 export default {
   components: {},
-
+  middleware: "auth",
   created() {
-    // 如果用户没有登录,重定向至登录界面
-    if (!cookie.get("dhu_token")) {
-      this.$message.warning("请先登录");
-      this.$router.push("/login");
-    } else {
-      this.loginInfo = cookie.getJSON("dhu_ucenter");
-    }
-    PubSub.subscribe("updateLoginInfo", () => {
-      this.loginInfo = cookie.getJSON("dhu_ucenter");
-    });
+    this.loginInfo = this.$store.state.account.user;
   },
   data: () => ({
     drawer: null,
     // 用户信息
     loginInfo: {
-      id: "",
-      age: "",
+      userId: "",
+      username: "",
       avatar: "",
       mobile: "",
-      nickname: "",
+      lastLoginTime: "",
+      description: "",
       sex: "",
+      email: "",
     },
     // 左侧抽屉导航栏
     nav: [

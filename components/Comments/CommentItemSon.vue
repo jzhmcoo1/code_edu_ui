@@ -4,7 +4,7 @@
       <client-only>
         <div>
           <v-avatar size="50">
-            <v-img :src="item.avatar" />
+            <v-img :src="userAvatar(item.avatar)" />
           </v-avatar>
         </div>
       </client-only>
@@ -93,6 +93,14 @@ export default {
     },
     formatDate(date) {
       return moment(date).fromNow();
+    },
+    userAvatar(avatar) {
+      if (/^http/.test(avatar)) {
+        return avatar;
+      } else {
+        // 否则显示默认头像
+        return "/default.jpg";
+      }
     },
   },
 };

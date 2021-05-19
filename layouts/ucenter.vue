@@ -42,7 +42,7 @@
             :key="index"
             router
             :to="child.route"
-            exact
+            :exact="child.exact ? child.exact : false"
             active-class="info--text"
           >
             <v-list-item-title v-text="child.title"></v-list-item-title>
@@ -110,8 +110,18 @@ export default {
         route: "/ucenter/info",
         icon: "person",
         child: [
-          { title: "我的信息", route: "/ucenter/info", icon: "info" },
-          { title: "修改信息", route: "/ucenter/info/edit", icon: "edit" },
+          {
+            title: "我的信息",
+            route: "/ucenter/info",
+            icon: "info",
+            exact: true,
+          },
+          {
+            title: "修改信息",
+            route: "/ucenter/info/edit",
+            icon: "edit",
+            exact: false,
+          },
         ],
       },
       {
@@ -145,8 +155,18 @@ export default {
         route: "/ucenter/article",
         icon: "article",
         child: [
-          { title: "写新文章", route: "/ucenter/article/add", icon: "add" },
-          { title: "管理文章", route: "/ucenter/article", icon: "edit" },
+          {
+            title: "写新文章",
+            route: "/ucenter/article/add",
+            icon: "add",
+            exact: false,
+          },
+          {
+            title: "管理文章",
+            route: "/ucenter/article",
+            icon: "edit",
+            exact: true,
+          },
         ],
       },
     ],

@@ -219,7 +219,8 @@ export default {
     // 删除文章
     deleteItem() {
       articleApi.deleteArticle(this.toDeleteItem.id).then((response) => {
-        if (response.success) {
+        console.log(response);
+        if (response.code === 200) {
           this.$message.success("删除成功");
           this.getArticleMemberList();
           this.toDeleteItem = null;

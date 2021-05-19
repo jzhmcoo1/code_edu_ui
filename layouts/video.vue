@@ -34,7 +34,7 @@
                   <v-card>
                     <v-card-title primary-title>
                       <v-icon left>comment</v-icon>
-                      课程评论
+                      视频评论
                       <v-btn icon @click="showComment = !showComment">
                         <v-icon>{{
                           showComment ? "mdi-chevron-up" : "mdi-chevron-down"

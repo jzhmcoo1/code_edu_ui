@@ -54,6 +54,21 @@
           <v-img class="zoom-img" :aspect-ratio="16 / 9" :src="item.cover" />
         </div>
       </template>
+      <template v-slot:[`item.createTime`]="{ item }">
+        <v-chip>
+          {{ formatDate(item.createTime) }}
+        </v-chip>
+      </template>
+      <template v-slot:[`item.modifiedTime`]="{ item }">
+        <v-chip>
+          {{ formatDate(item.modifiedTime) }}
+        </v-chip>
+      </template>
+      <template v-slot:[`item.typeName`]="{ item }">
+        <v-chip class="text-capitalize">
+          {{ item.typeName }}
+        </v-chip>
+      </template>
       <!-- 操作 -->
       <template v-slot:[`item.actions`]="{ item }">
         <v-tooltip bottom>
@@ -123,7 +138,8 @@
 
 <script>
 import articleApi from "@/api/article";
-import cookie from "js-cookie";
+import moment from "moment";
+moment.locale("zh-CN");
 export default {
   layout: "ucenter",
   data: () => ({
@@ -140,6 +156,8 @@ export default {
       },
       { text: "文章标题", value: "title", align: "center" },
       { text: "创建时间", value: "createTime", align: "center" },
+      { text: "修改时间", value: "modifiedTime", align: "center" },
+      { text: "所属分类", value: "typeName", align: "center" },
       { text: "文章浏览数", value: "viewCount", align: "center" },
       { text: "文章点赞数", value: "likeCount", align: "center" },
       { text: "文章评论数", value: "commentCount", align: "center" },
@@ -153,16 +171,17 @@ export default {
     items: [
       {
         id: "", //文章id
-        authorId: "", //作者id
-        typeId: "", //类别id
-        title: "", //文章标题
+        authorName: "", //作者姓名
+        authorAvatar: "", //作者头像
+        typeParentName: "", //一级标签名
+        typeName: "", //二级标签名
+        title: "", //文章名称
         cover: "", //文章封面
-        viewCount: 0, //浏览数
-        isDeleted: 0, //是否删除
-        createTime: "2021-04-25 23:22:39", //创建时间
-        modifiedTime: "2021-04-25 23:22:39", //修改时间
-        commentCount: 0, //评论数
-        likeCount: 0, //点赞数
+        viewCount: "0", //浏览数
+        commentCount: "0", //评论数
+        likeCount: "0", //点赞数
+        createTime: "", //创建时间
+        modifiedTime: "", //修改时间
       },
     ],
     // 面包屑信息
@@ -182,7 +201,6 @@ export default {
   }),
 
   created() {
-    this.memberId = cookie.getJSON("dhu_ucenter").id;
     this.getArticleMemberList();
   },
 
@@ -194,17 +212,13 @@ export default {
     },
     // 获取登录用户的文章列表
     getArticleMemberList() {
-      articleApi
-        .getArticleMemberList(this.page, this.limit, this.memberId)
-        .then((response) => {
-          console.log(response);
-          this.items = response.data.items;
-          this.pages = response.data.pages;
-        });
+      articleApi.userArticlePage(this.page, this.limit).then((response) => {
+        this.items = response.data.items;
+      });
     },
     // 删除文章
     deleteItem() {
-      articleApi.delArticleInfo(this.toDeleteItem.id).then((response) => {
+      articleApi.deleteArticle(this.toDeleteItem.id).then((response) => {
         if (response.success) {
           this.$message.success("删除成功");
           this.getArticleMemberList();
@@ -223,6 +237,9 @@ export default {
     // 去前台查看文章
     checkItem(item) {
       this.$router.push(`/article/${item.id}`);
+    },
+    formatDate(value) {
+      return moment(value).fromNow();
     },
   },
 };

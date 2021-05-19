@@ -27,27 +27,48 @@
         <!-- 第一步 -->
         <v-stepper-content step="1">
           <v-card flat class="mb-12">
-            <!--//TODO: 文章基本内容表格 -->
             <v-form ref="articleForm" v-model="valid" lazy-validation>
               <v-row justify="center">
                 <v-col cols="12" md="6">
-                  <v-text-field
-                    v-model="articleInfo.title"
-                    :counter="20"
-                    :rules="titleRules"
-                    label="文章标题"
-                    required
-                  ></v-text-field>
-                  <v-select
-                    v-model="articleInfo.typeId"
-                    :items="tagList"
-                    item-text="title"
-                    item-value="id"
-                    :rules="tagRules"
-                    chips
-                    label="文章标签"
-                    required
-                  ></v-select>
+                  <v-row>
+                    <v-col>
+                      <v-text-field
+                        v-model="articleInfo.title"
+                        :counter="20"
+                        :rules="titleRules"
+                        label="文章标题"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-select
+                        v-model="articleInfo.typeParentId"
+                        :items="tagList"
+                        item-text="title"
+                        item-value="id"
+                        :rules="tagRules"
+                        chips
+                        label="文章一级标签"
+                        required
+                        @change="fillSubList"
+                      ></v-select>
+                    </v-col>
+                    <v-col>
+                      <v-select
+                        v-model="articleInfo.typeId"
+                        :items="tagSubList"
+                        item-text="title"
+                        item-value="id"
+                        :rules="tagRules"
+                        chips
+                        no-data-text="请先选择一级标签"
+                        label="文章二级标签"
+                        required
+                      ></v-select>
+                    </v-col>
+                  </v-row>
                 </v-col>
                 <v-col class="d-flex justify-center">
                   <v-tooltip bottom>
@@ -80,7 +101,7 @@
             </v-form>
             <v-card-actions>
               <div>
-                <v-btn text> 取消 </v-btn>
+                <v-btn text router to="/ucenter/article"> 取消 </v-btn>
                 <v-btn color="primary" @click="nextStep">
                   下一步 <v-icon right>chevron_right</v-icon>
                 </v-btn>
@@ -134,27 +155,14 @@
 
 <script>
 import articleApi from "@/api/article";
+import subjectApi from "@/api/subject";
 import Markdown from "vue-meditor";
 import { MarkdownPreview } from "vue-meditor";
-import cookie from "js-cookie";
 export default {
   layout: "ucenter",
   components: { Markdown, MarkdownPreview },
   created() {
-    this.initAllTag();
-    //从router中获取要更新的文章ID
-    if (this.$route.query.articleId) {
-      this.articleId = this.$route.query.articleId;
-    }
-    // 从cookie中获取作者id
-    this.articleInfo.authorId = cookie.getJSON("dhu_ucenter").id;
-    //查询所有标签
-    //初始化封面
-    this.articleInfo.cover =
-      "https://edu-guli-0313.oss-cn-beijing.aliyuncs.com/2021/03/05/d1d36db7eb4045009edaead44224cdf7u=1572376661,3890953672&fm=26&gp=0.jpg";
-    if (this.articleId) {
-      this.initArticle();
-    }
+    this.init();
   },
   data() {
     return {
@@ -165,13 +173,16 @@ export default {
       articleInfo: {
         //封装文章数据
         authorId: "", //作者
-        typeId: "", //标签
+        typeId: "", //二级标签
+        typeParentId: "", //一级标签
+        authorAvatar: "", //作者头像
         title: "", //标题
         cover: "", //封面
         content: "", //文章内容
       },
       articleId: "",
-      tagList: [], // 分类列表
+      tagList: [], // 一级分类列表
+      tagSubList: [], // 二级分类列表
       titleRules: [(v) => !!v || "文章标题不能为空"], //标题验证规则
       tagRules: [(v) => !!v || "必须选择文章标签"],
       // 面包屑信息
@@ -194,21 +205,47 @@ export default {
       ],
     };
   },
+  watch: {
+    //监听
+    $route(to, from) {
+      //路由变化方式，路由发生变化，方法就会执行
+      this.init();
+    },
+  },
   methods: {
+    async init() {
+      await this.initAllTag();
+      //从router中获取要更新的文章ID
+      if (this.$route.query && this.$route.query.articleId) {
+        this.articleId = this.$route.query.articleId;
+      } else {
+        this.articleId = "";
+      }
+      if (this.articleId !== "") {
+        this.initArticle();
+      } else {
+        this.articleInfo = {};
+        this.$refs.articleForm.resetValidation();
+      }
+      // 从cookie中获取作者id
+      this.articleInfo.authorId = this.$store.state.account.user.userId;
+      this.articleInfo.authorAvatar = this.$store.state.account.user.avatar;
+      //初始化封面
+      this.articleInfo.cover =
+        "https://edu-guli-0313.oss-cn-beijing.aliyuncs.com/2021/03/05/d1d36db7eb4045009edaead44224cdf7u=1572376661,3890953672&fm=26&gp=0.jpg";
+    },
     addOrUpdateArticle() {
       if (this.articleId !== "") {
-        console.log("更新文章");
         this.updateArticle();
       } else {
-        console.log("新增文章");
         this.addArticle();
       }
     },
     //更新文章
     updateArticle() {
-      articleApi.updateArticleInfo(this.articleInfo).then((response) => {
-        if (response.success) {
-          this.$message.success("更新文章成功");
+      articleApi.updateArticle(this.articleInfo).then((response) => {
+        if (response.code === 200) {
+          this.$message.success("更新文章成功😁");
           //跳转我的文章页面
           this.$router.push("/ucenter/article");
         }
@@ -216,8 +253,9 @@ export default {
     },
     //初始化文章(更新)
     initArticle() {
-      articleApi.getArticleInfo(this.articleId).then((response) => {
-        this.articleInfo = response.data.article;
+      articleApi.getBeforeArticleUpdate(this.articleId).then((response) => {
+        this.articleInfo = response.data;
+        this.fillSubList();
       });
     },
     //封面上传中
@@ -243,12 +281,18 @@ export default {
       }
       return isJpgOrPng && isLt2M;
     },
-    //查询所有标签
-    initAllTag() {
-      articleApi.getAllTag().then((response) => {
-        this.tagList = response.data.list;
-        console.log(this.tagList);
-      });
+    //查询所有标签树
+    async initAllTag() {
+      const response = await subjectApi.getSubjectTree();
+      this.tagList = response.data.list;
+    },
+    // 点击一级标签后填写二级分类
+    fillSubList() {
+      console.log(this.tagList);
+      this.tagSubList = this.tagList.find((value) => {
+        return value.id === this.articleInfo.typeParentId;
+      }).children;
+      console.log(this.tagSubList);
     },
     // 点击"下一步"(第1步和第2步)
     nextStep() {
@@ -266,8 +310,8 @@ export default {
     },
     addArticle() {
       articleApi.addArticle(this.articleInfo).then((response) => {
-        if (response.success) {
-          this.$message.success("添加文章成功!");
+        if (response.code === 200) {
+          this.$message.success("添加文章成功😁");
           this.$router.push("/ucenter/article");
         }
       });

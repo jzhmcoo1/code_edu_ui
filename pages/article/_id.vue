@@ -131,7 +131,7 @@
                   class="d-flex justify-center align-center"
                 >
                   <v-avatar size="150" class="avatar-rotate">
-                    <v-img :src="articleInfo.avatar" />
+                    <v-img :src="articleInfo.authorAvatar" />
                   </v-avatar>
                   <v-card-text>
                     {{ articleInfo.authorName }}

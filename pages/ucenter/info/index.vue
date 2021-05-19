@@ -131,18 +131,18 @@ export default {
       this.loginInfo = this.$store.state.account.user;
     },
     gender: (value) => {
-      if (value === 0) {
+      if (value === "0") {
         return "男";
-      } else if (value === 1) {
+      } else if (value === "1") {
         return "女";
       } else {
         return "保密";
       }
     },
     genderIcon: (value) => {
-      if (value === 0) {
+      if (value === "0") {
         return "mdi-gender-male";
-      } else if (value === 1) {
+      } else if (value === "1") {
         return "mdi-gender-female";
       } else {
         return "mdi-gender-male-female";

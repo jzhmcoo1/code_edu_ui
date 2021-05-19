@@ -8,27 +8,32 @@
           <v-col sm="12" md="8">
             <v-form class="mx-2" ref="form" v-model="valid" lazy-validation>
               <v-text-field
-                name="name"
-                label="昵称"
+                name="username"
+                label="用户名"
                 required
+                disabled
                 prepend-icon="perm_identity"
-                :rules="nicknameRules"
-                :counter="10"
-                v-model="loginInfo.nickname"
+                v-model="loginInfo.username"
               ></v-text-field>
               <v-text-field
-                prepend-icon="cake"
-                name="age"
-                label="年龄"
-                required
-                :rules="ageRules"
-                v-model="loginInfo.age"
+                name="mobile"
+                label="手机号"
+                prepend-icon="mdi-cellphone-iphone"
+                v-model="loginInfo.mobile"
+                :rules="mobileRules"
+              ></v-text-field>
+              <v-text-field
+                name="email"
+                label="电子邮箱"
+                prepend-icon="mdi-email"
+                :rules="emailRules"
+                v-model="loginInfo.email"
               ></v-text-field>
               <v-select
                 prepend-icon="mdi-gender-male-female"
                 v-model="loginInfo.sex"
                 :items="items"
-                :rules="[(v) => !!v || 'Item is required']"
+                :rules="[(v) => '012'.indexOf(v) + 1 !== 0 || '性别必须填写']"
                 label="性别"
                 required
               >
@@ -38,7 +43,7 @@
                 label="个性签名"
                 rows="1"
                 clearable
-                v-model="loginInfo.sign"
+                v-model="loginInfo.description"
                 :counter="50"
                 clear-icon="mdi-close-circle"
               ></v-textarea>
@@ -54,11 +59,6 @@
               >
                 保存信息
                 <v-icon right>mdi-checkbox-marked-circle</v-icon>
-              </v-btn>
-
-              <v-btn class="mr-4" @click="reset">
-                重新填写
-                <v-icon right>mdi-reload</v-icon>
               </v-btn>
             </v-form>
           </v-col>
@@ -90,12 +90,8 @@
 </template>
 
 <script>
-import cookie from "js-cookie";
-import ucenterApi from "@/api/ucenter";
-import loginApi from "@/api/login";
 import ImageCropper from "@/components/ImageCropper";
 import PanThumb from "@/components/PanThumb";
-import PubSub from "pubsub-js";
 export default {
   layout: "ucenter",
   components: {
@@ -129,26 +125,35 @@ export default {
         },
       ],
       loginInfo: {
-        id: "",
-        age: "",
         avatar: "",
         mobile: "",
-        nickname: "",
-        sign: "",
+        username: "",
+        description: "",
         sex: "",
       },
-      nicknameRules: [
+      usernameRules: [
         (v) => !!v || "必须填写昵称",
         (v) => (v && v.length <= 10) || "昵称必须小于等于10个字符",
       ],
       ageRules: [
         (v) => /^(?:[1-9]?\d|100)$/.test(v) || "年龄不符合规范", //0-100
       ],
+      emailRules: [
+        (value) => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return pattern.test(value) || "非法电子邮件";
+        },
+      ],
+      mobileRules: [
+        (v) => !!v || "必须填写手机号",
+        (v) => /^1[3-9]\d{9}$/.test(v) || "手机号码格式不正确",
+      ],
       valid: true,
       select: null,
       items: [
-        { text: "男", value: 1, icon: "male" },
-        { text: "女", value: 2, icon: "female" },
+        { text: "男", value: "0" },
+        { text: "女", value: "1" },
+        { text: "保密", value: "2" },
       ],
     };
   },
@@ -171,41 +176,65 @@ export default {
       console.log("debug" + data.url);
       this.imagecropperKey = this.imagecropperKey + 1;
     },
-    // 从cookie中获取用户信息
+    // 从vuex中获取用户信息
     getUserInfo() {
-      this.loginInfo = cookie.getJSON("dhu_ucenter");
-      console.log("执行了getUserInfo", this.loginInfo);
+      const userInfo = this.$store.state.account.user;
+      this.loginInfo = userInfo;
     },
     // 提交更新信息
     updateInfo() {
       if (this.$refs.form.validate()) {
         this.loading = true;
-        ucenterApi
-          .updateUcenter(this.loginInfo)
-          .then((response) => {
-            console.log(response);
-            if (response.success) {
-              this.$message.success("修改成功");
-              this.loading = false;
-              // 修改完毕后重新获取用户信息
-              loginApi.getLoginUserInfo().then((response) => {
-                console.log(response);
-                this.loginInfo = response.data.userInfo;
-                // 将用户的信息存入cookie中
-                cookie.set("dhu_ucenter", this.loginInfo);
-                console.log(this.loginInfo);
-                // 通知组件重新获取cookie信息
-                PubSub.publish("updateLoginInfo");
-              });
-            } else {
-              this.$message.error("修改失败");
-              this.loading = false;
-            }
+        const {
+          userId,
+          avatar,
+          mobile,
+          sex,
+          email,
+          description,
+        } = this.loginInfo;
+        this.$put("/system/user/profile", {
+          userId,
+          avatar,
+          mobile,
+          sex,
+          email,
+          description,
+        })
+          .then(() => {
+            this.loading = false;
+            this.$store.commit("account/setUser", this.loginInfo);
+            this.$message.success("修改信息成功😁");
           })
           .catch((err) => {
-            this.$message.error(err);
             this.loading = false;
           });
+        // ucenterApi
+        //   .updateUcenter(this.loginInfo)
+        //   .then((response) => {
+        //     console.log(response);
+        //     if (response.success) {
+        //       this.$message.success("修改成功");
+        //       this.loading = false;
+        //       // 修改完毕后重新获取用户信息
+        //       loginApi.getLoginUserInfo().then((response) => {
+        //         console.log(response);
+        //         this.loginInfo = response.data.userInfo;
+        //         // 将用户的信息存入cookie中
+        //         cookie.set("dhu_ucenter", this.loginInfo);
+        //         console.log(this.loginInfo);
+        //         // 通知组件重新获取cookie信息
+        //         PubSub.publish("updateLoginInfo");
+        //       });
+        //     } else {
+        //       this.$message.error("修改失败");
+        //       this.loading = false;
+        //     }
+        //   })
+        //   .catch((err) => {
+        //     this.$message.error(err);
+        //     this.loading = false;
+        //   });
       }
     },
     validate() {

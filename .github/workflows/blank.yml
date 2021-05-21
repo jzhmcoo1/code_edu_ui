@@ -34,3 +34,42 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+
+      # 打包构建
+      - name: Build
+        uses: actions/setup-node@master
+      - run: yarn install
+      - run: yarn build
+      - run: tar -zcvf release.tgz .nuxt static nuxt.config.js package.json pm2.config.json
+
+      # 发布 Release
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          # 开始创建写入到项目secrets的TOKEN
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+          # 部署到服务器
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+          with:
+          host: ${{ secrets.HOST }}
+          # 远程服务器的地址
+          username: ${{ secrets.USERNAME }}
+          # 用户名
+          password: ${{ secrets.PASSWORD }}
+          # 密码
+          port: ${{ secrets.PORT }}
+          # 端口号
+          script: |
+            cd /home/code_edu_ui
+            wget https://github.com/jzhmcoo1/code_edu_ui/releases/latest/download/release.tgz -O release.tgz
+            tar zxvf release.tgz
+            yarn install --production
+            pm2 reload pm2.config.json

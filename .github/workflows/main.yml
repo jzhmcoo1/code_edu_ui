@@ -63,7 +63,7 @@ jobs:
         uses: actions/upload-release-asset@master
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
-          DEPLOY_KEY: ${{ secrets.SSH_KEY }} # 引用配置，SSH私钥
+          DEPLOY_KEY: ${{ secrets.KEY }} # 引用配置，SSH私钥
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./release.tgz
@@ -76,7 +76,7 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }} # 引用配置，SSH私钥
+          key: ${{ secrets.KEY }} # 引用配置，SSH私钥
           port: ${{ secrets.PORT }}
           script: |
             cd /home/code_edu_ui

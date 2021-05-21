@@ -1,0 +1,7 @@
+{
+  "apps": [{
+    "name": "code_edu_ui-ts",
+    "script": "yarn",
+    "args": "start"
+  }]
+}

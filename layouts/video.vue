@@ -88,6 +88,7 @@ import DrawerEditor from "@/components/DrawerEditor";
 import CourseMenu from "@/components/Course/CourseMenu";
 import courseApi from "@/api/course";
 export default {
+  middleware: "auth",
   components: {
     Navbar,
     Comment,

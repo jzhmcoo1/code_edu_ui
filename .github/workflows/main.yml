@@ -53,14 +53,9 @@ jobs:
       # 发布 Release
       - name: Create Release
         id: create_release
-        uses: actions/create-release@master
+        uses: elgohr/Github-Release-Action@master
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }} ${{GITHUB_RUN_ID}}
-          draft: false
-          prerelease: false
 
       # 上传构建结果到 Release
       - name: Upload Release Asset

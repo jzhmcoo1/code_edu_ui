@@ -128,7 +128,6 @@ export default {
     getCommentList() {
       commentApi.commentList(this.id, this.type).then((response) => {
         this.items = response.data.items;
-        console.log(this.items);
       });
     },
   },

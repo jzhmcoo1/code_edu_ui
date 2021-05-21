@@ -56,6 +56,8 @@ jobs:
         uses: elgohr/Github-Release-Action@master
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        with:
+          args: MyReleaseMessage
 
       # 上传构建结果到 Release
       - name: Upload Release Asset

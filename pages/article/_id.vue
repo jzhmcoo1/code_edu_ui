@@ -159,6 +159,7 @@ import cookie from "js-cookie";
 moment.locale("zh-cn");
 export default {
   components: { Comment, SideCatalog },
+  middleware: "auth",
   //params.id获取路径id值
   head() {
     return {

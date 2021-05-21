@@ -1,4 +1,4 @@
-name: Publish And Deploy Demo
+ame: Publish And Deploy Demo
 on:
   push:
     tags:
@@ -52,7 +52,7 @@ jobs:
           key: ${{ secrets.KEY }}
           port: ${{ secrets.PORT }}
           script: |
-            cd /home/realworld
+            cd /home/code_edu_ui
             wget https://github.com/jzhmcoo1/code_edu_ui/releases/latest/download/release.tgz -O release.tgz
             tar zxvf release.tgz
             yarn install --production

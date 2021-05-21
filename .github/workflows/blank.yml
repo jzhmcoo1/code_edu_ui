@@ -58,18 +58,18 @@ jobs:
           # 部署到服务器
       - name: Deploy
         uses: appleboy/ssh-action@master
-          with:
-            host: ${{ secrets.HOST }}
-            # 远程服务器的地址
-            username: ${{ secrets.USERNAME }}
-            # 用户名
-            password: ${{ secrets.PASSWORD }}
-            # 密码
-            port: ${{ secrets.PORT }}
-            # 端口号
-            script: |
-              cd /home/code_edu_ui
-              wget https://github.com/jzhmcoo1/code_edu_ui/releases/latest/download/release.tgz -O release.tgz
-              tar zxvf release.tgz
-              yarn install --production
-              pm2 reload pm2.config.json
+        with:
+          host: ${{ secrets.HOST }}
+          # 远程服务器的地址
+          username: ${{ secrets.USERNAME }}
+          # 用户名
+          password: ${{ secrets.PASSWORD }}
+          # 密码
+          port: ${{ secrets.PORT }}
+          # 端口号
+          script: |
+            cd /home/code_edu_ui
+            wget https://github.com/jzhmcoo1/code_edu_ui/releases/latest/download/release.tgz -O release.tgz
+            tar zxvf release.tgz
+            yarn install --production
+            pm2 reload pm2.config.json

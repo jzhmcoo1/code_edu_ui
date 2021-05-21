@@ -6,9 +6,11 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  #   branches: [ master ]
+    tags:
+        - 'v*'
+  # pull_request:
+  #   branches: [ master ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -25,12 +27,69 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      # # Runs a single command using the runners shell
+      # - name: Run a one-line script
+      #   run: echo Hello, world!
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+      # # Runs a set of commands using the runners shell
+      # - name: Run a multi-line script
+      #   run: |
+      #     echo Add other actions to build,
+      #     echo test, and deploy your project.
+      # 打包构建
+    - name: Build
+      uses: actions/setup-node@master
+    - run: yarn install
+    - run: yarn build
+    - run: tar -zcvf release.tgz .nuxt static nuxt.config.js package.json pm2.config.json
+    # 发布 Release
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+        # 开始创建写入到项目secrets的TOKEN
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: false
+        prerelease: false
+      
+      # 上传构建结果到 Release
+    - name: Upload Release Asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./release.tgz
+        asset_name: release.tgz
+        asset_content_type: application/x-tgz
+
+      # 部署到服务器
+    - name: Deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        # 远程服务器的地址
+        username: ${{ secrets.USERNAME }}
+        # 用户名
+        password: ${{ secrets.PASSWORD }}
+        # 密码
+        port: ${{ secrets.PORT }}
+        # 端口号
+
+        # 然后
+        # 进入对应目录
+        # 下载压缩的tgz到服务器
+        # 解压
+        # 下载项目生成依赖
+        # 然后通过 pm2 进行管理启动
+        script: |
+          cd /home/code_edu_ui
+          wget https://github.com/jzhmcoo1/code_edu_ui/releases/latest/download/release.tgz -O release.tgz
+          tar zxvf release.tgz
+          yarn install --production
+          pm2 reload pm2.config.json
+      

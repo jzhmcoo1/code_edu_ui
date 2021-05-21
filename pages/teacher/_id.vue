@@ -149,9 +149,7 @@ export default Vue.extend({
       courseApi
         .conditionList(1, 8, { teacherId: this.$route.params.id })
         .then((response) => {
-          console.log(response.data);
           this.courseList = response.data[`${this.teacher.name}courseList`];
-          console.log(this.courseList);
         });
     },
   },

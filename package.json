@@ -28,12 +28,12 @@
     "pubsub-js": "^1.9.3",
     "vue-image-crop-upload": "^3.0.3",
     "vue-meditor": "^2.1.1",
-    "vue-side-catalog": "^2.0.0"
+    "vue-side-catalog": "^2.0.0",
+    "@nuxtjs/vuetify": "^1.11.3"
   },
   "devDependencies": {
     "@nuxt/types": "^2.15.3",
     "@nuxt/typescript-build": "^2.1.0",
-    "@nuxtjs/vuetify": "^1.11.3",
     "@types/js-cookie": "^2.2.6",
     "@types/pubsub-js": "^1.8.2",
     "babel-plugin-component": "^1.1.1",

@@ -5,8 +5,6 @@ name: CI
 # Controls when the action will run.
 on:
   push:
-    tags:
-      - "v*"
     branches: [master]
   # Triggers the workflow on push or pull request events but only for the master branch
   pull_request:
@@ -70,6 +68,7 @@ jobs:
         uses: actions/upload-release-asset@master
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          DEPLOY_KEY: ${{ secrets.SSH_KEY }} # 引用配置，SSH私钥
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./release.tgz
@@ -82,7 +81,7 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.DEPLOY_KEY }} # 引用配置，SSH私钥
           port: ${{ secrets.PORT }}
           script: |
             cd /home/code_edu_ui

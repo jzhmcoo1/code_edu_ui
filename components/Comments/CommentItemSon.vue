@@ -24,7 +24,12 @@
           </span>
         </p>
         <div>
-          <v-btn rounded text>
+          <v-btn
+            rounded
+            text
+            @click="praise"
+            :color="item.liked ? 'red ligten-1' : ''"
+          >
             <v-icon>thumb_up_off_alt</v-icon>
             {{ item.likeCount }}
           </v-btn>
@@ -56,6 +61,7 @@
 <script>
 import ReplayComment from "@/components/Comments/ReplayComment";
 import moment from "moment";
+import commentApi from "@/api/comment";
 moment.locale("zh-CN");
 export default {
   components: {
@@ -81,6 +87,7 @@ export default {
       nickname: "", //评论者昵称
       parentId: "", //父评论id
       replyTo: "", //被回复者昵称
+      liked: false,
     },
     //回复该评论的子评论
   },
@@ -100,6 +107,29 @@ export default {
       } else {
         // 否则显示默认头像
         return "/default.jpg";
+      }
+    },
+    praise() {
+      if (this.item.liked === false) {
+        commentApi.praiseComment(this.item.id).then((response) => {
+          if (response.code === 200) {
+            this.$message.success("评论点赞成功👍");
+            this.item.liked = true;
+            this.item.likeCount += 1;
+          } else {
+            this.$message.error("评论点赞失败😢");
+          }
+        });
+      } else {
+        commentApi.cancelPraise(this.item.id).then((response) => {
+          if (response.code === 200) {
+            this.$message.success("取消点赞成功👌");
+            this.item.liked = false;
+            this.item.likeCount -= 1;
+          } else {
+            this.$message.error("取消点赞失败😢");
+          }
+        });
       }
     },
   },

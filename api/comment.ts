@@ -29,5 +29,17 @@ export default {
       method: 'get',
       params: { id, type }
     })
+  },
+  praiseComment(id: string) {
+    return service({
+      url: `${api_prefix}/like/${id}`,
+      method: 'post',
+    })
+  },
+  cancelPraise(id: string) {
+    return service({
+      url: `${api_prefix}/dislike/${id}`,
+      method: 'delete'
+    })
   }
 }

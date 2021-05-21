@@ -81,6 +81,7 @@ export default {
           parentId: "", //父评论id
           replyTo: "", //被回复者昵称
           likeCount: 0, //评论点赞数
+          liked: false, //是否点赞
         },
       ],
       currentPageData: [], //当前页显示内容
@@ -127,6 +128,7 @@ export default {
     getCommentList() {
       commentApi.commentList(this.id, this.type).then((response) => {
         this.items = response.data.items;
+        console.log(this.items);
       });
     },
   },

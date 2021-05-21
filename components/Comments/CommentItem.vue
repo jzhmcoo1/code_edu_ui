@@ -19,7 +19,12 @@
           {{ item.content }}
         </p>
         <div>
-          <v-btn rounded text>
+          <v-btn
+            rounded
+            text
+            @click="praise"
+            :color="item.liked ? 'red ligten-1' : ''"
+          >
             <v-icon>thumb_up_off_alt</v-icon>
             {{ item.likeCount }}
           </v-btn>
@@ -85,6 +90,7 @@
 <script>
 import ReplayComment from "@/components/Comments/ReplayComment";
 import CommentItemSon from "@/components/Comments/CommentItemSon";
+import commentApi from "@/api/comment";
 import moment from "moment";
 moment.locale("zh-CN");
 export default {
@@ -121,6 +127,7 @@ export default {
       parentId: "", //父评论id
       replyTo: "", //被回复者昵称
       likeCount: 0, //点赞数量
+      liked: false, //是否点赞
     }, //接收的信息评论
   },
   data() {
@@ -159,6 +166,29 @@ export default {
       } else {
         // 否则显示默认头像
         return "/default.jpg";
+      }
+    },
+    praise() {
+      if (this.item.liked === false) {
+        commentApi.praiseComment(this.item.id).then((response) => {
+          if (response.code === 200) {
+            this.$message.success("评论点赞成功👍");
+            this.item.liked = true;
+            this.item.likeCount += 1;
+          } else {
+            this.$message.error("评论点赞失败😢");
+          }
+        });
+      } else {
+        commentApi.cancelPraise(this.item.id).then((response) => {
+          if (response.code === 200) {
+            this.$message.success("取消点赞成功👌");
+            this.item.liked = false;
+            this.item.likeCount -= 1;
+          } else {
+            this.$message.error("取消点赞失败😢");
+          }
+        });
       }
     },
   },

@@ -105,7 +105,7 @@ export default {
     BackendGiteeURL: "https://gitee.com/api/v5/repos/paradox_hyw/febs-codebar-cloud",//后端项目
   },
   server: {
-    port: 4000,
+    port: 8500,
     host: "0.0.0.0"
   }
 }

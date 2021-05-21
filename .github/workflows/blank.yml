@@ -83,5 +83,6 @@ jobs:
             cd /home/code_edu_ui
             wget https://github.com/jzhmcoo1/code_edu_ui/releases/latest/download/release.tgz -O release.tgz
             tar zxvf release.tgz
-            yarn install --production
+            rm -rf release.tgz
+            npm install --production
             pm2 reload pm2.config.json

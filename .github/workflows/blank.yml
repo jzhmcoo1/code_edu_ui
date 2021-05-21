@@ -63,7 +63,7 @@ jobs:
           # 远程服务器的地址
           username: ${{ secrets.USERNAME }}
           # 用户名
-          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.KEY }}
           # 密码
           port: ${{ secrets.PORT }}
           # 端口号

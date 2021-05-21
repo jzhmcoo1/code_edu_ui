@@ -80,6 +80,7 @@ jobs:
           port: ${{ secrets.PORT }}
           # 端口号
           script: |
+            export PATH=/usr/local/node/node-v12.18.1-linux-x64/bin:$PATH
             cd /home/code_edu_ui
             wget https://github.com/jzhmcoo1/code_edu_ui/releases/latest/download/release.tgz -O release.tgz
             tar zxvf release.tgz

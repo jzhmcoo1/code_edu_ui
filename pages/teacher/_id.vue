@@ -36,7 +36,7 @@
                       </v-card-text>
                       <v-card-text>
                         <span class="title mr-2">讲师简介</span>
-                        <span class="body-1">{{ teacher.intro }}</span>
+                        <span v-html="teacher.intro" class="body-1"></span>
                       </v-card-text>
                       <v-card-text>
                         <span class="title">讲师评分</span>

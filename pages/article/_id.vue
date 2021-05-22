@@ -155,7 +155,6 @@ import moment from "moment";
 import SideCatalog from "vue-side-catalog";
 import "vue-side-catalog/lib/vue-side-catalog.css";
 import article from "@/api/article";
-import cookie from "js-cookie";
 moment.locale("zh-cn");
 export default {
   components: { Comment, SideCatalog },
@@ -180,7 +179,6 @@ export default {
     };
   },
   created() {
-    // this.lookArticle();
     this.getLikeState();
     this.initArticle();
   },
@@ -217,17 +215,17 @@ export default {
     };
   },
   methods: {
-    // 统计浏览量
-    lookArticle() {
-      let id = "";
-      if (cookie.getJSON("dhu_ucenter")) {
-        id = cookie.getJSON("dhu_ucenter").id;
-      }
-      const uid = id ? id : "visitor";
-      articleApi.calViewCount(this.articleId, uid).then(() => {
-        console.log("增加浏览量");
-      });
-    },
+    // // 统计浏览量
+    // lookArticle() {
+    //   let id = "";
+    //   if (cookie.getJSON("dhu_ucenter")) {
+    //     id = cookie.getJSON("dhu_ucenter").id;
+    //   }
+    //   const uid = id ? id : "visitor";
+    //   articleApi.calViewCount(this.articleId, uid).then(() => {
+    //     console.log("增加浏览量");
+    //   });
+    // },
     // 格式化时间
     formateTime(time) {
       return moment(time).fromNow();

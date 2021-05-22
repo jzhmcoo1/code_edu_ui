@@ -11,6 +11,7 @@
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title class="font-weight-bold">笔记管理</v-toolbar-title>
+          <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
@@ -22,6 +23,19 @@
             <span>发现新课程</span>
           </v-tooltip>
         </v-toolbar>
+        <v-dialog v-model="dialogDelete" max-width="500px">
+          <v-card>
+            <v-card-title>确认要删除吗?此操作不可恢复</v-card-title>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="success" text @click="dialogDelete = false"
+                >取消</v-btn
+              >
+              <v-btn color="error" text @click="deleteItem">确认</v-btn>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </template>
       <template v-slot:[`item.createTime`]="{ item }">
         <v-chip>
@@ -32,6 +46,52 @@
         <v-chip>
           {{ formatDate(item.modifiedTime) }}
         </v-chip>
+      </template>
+      <!-- 操作 -->
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              v-bind="attrs"
+              v-on="on"
+              small
+              class="mr-2"
+              color="info"
+              @click="checkItem(item)"
+              >mdi-eye</v-icon
+            >
+          </template>
+          <span>查看笔记</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              color="primary"
+              v-on="on"
+              v-bind="attrs"
+              small
+              class="mr-2"
+              @click="editItem(item)"
+            >
+              mdi-pencil
+            </v-icon>
+          </template>
+          <span>编辑笔记</span>
+        </v-tooltip>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-icon
+              color="error"
+              v-bind="attrs"
+              v-on="on"
+              small
+              @click="openDeleteDialog(item)"
+            >
+              mdi-delete
+            </v-icon>
+          </template>
+          <span>删除笔记</span>
+        </v-tooltip>
       </template>
       <!-- 无数据提示 -->
       <template v-slot:no-data>
@@ -67,6 +127,9 @@ export default {
   },
   data() {
     return {
+      toDeleteItem: null, //保存待删除的item
+      dialogDelete: false, //确认删除的对话框
+      loading: false, //控制表格是否正在加载
       page: 1,
       limit: 8,
       // 面包屑信息
@@ -95,17 +158,7 @@ export default {
   },
   computed: {},
   methods: {
-    // 点击新建笔记
-    noteAdd() {
-      this.$router.push("/ucenter/note/add");
-    },
-    noteDetail(item) {
-      this.$router.push(`/ucenter/note/add/${item.id}`);
-    },
-    noteModify(item) {
-      this.$router.push(`/ucenter/note/add/${item.id}`);
-    },
-    noteDelete(item) {},
+    // 获取笔记列表
     getNoteList() {
       noteApi.pageAuthorNoteList(this.page, this.limit).then((response) => {
         console.log(response);
@@ -113,8 +166,41 @@ export default {
         this.pages = parseInt(response.data.pages);
       });
     },
+    // 格式化时间
     formatDate(value) {
       return moment(value).fromNow();
+    },
+    // 打开对话框,确认是否删除
+    openDeleteDialog(item) {
+      this.toDeleteItem = item;
+      this.dialogDelete = true;
+    },
+    // 删除笔记
+    deleteItem() {
+      noteApi.deleteNote(this.toDeleteItem.id).then((response) => {
+        console.log(response);
+        if (response.code === 200) {
+          this.$message.success("删除笔记成功😁");
+        } else {
+          this.$message.error("删除笔记失败😢");
+        }
+        this.getNoteList();
+        this.dialogDelete = false;
+      });
+    },
+    // 查看笔记
+    checkItem(item) {
+      this.$router.push({
+        name: "ucenter-note-edit-id",
+        params: { id: item.id, edit: false },
+      });
+    },
+    // 编辑笔记
+    editItem(item) {
+      this.$router.push({
+        name: "ucenter-note-edit-id",
+        params: { id: item.id, edit: true },
+      });
     },
   },
 };

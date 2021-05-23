@@ -1,5 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
-const hour = new Date().getHours()
+const hour = parseInt(new Date().getHours().toLocaleString())
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head

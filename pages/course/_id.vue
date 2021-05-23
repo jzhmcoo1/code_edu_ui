@@ -306,6 +306,9 @@ export default Vue.extend({
             this.disabled = true;
             this.loading = false;
           }
+        })
+        .catch((err) => {
+          this.loading = false;
         });
     },
     // 控制是否显示"回到顶部"按钮

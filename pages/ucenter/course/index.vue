@@ -120,15 +120,7 @@ export default {
       pages: 1, //总页数
       total: 1, //总记录数
       courseData: {
-        items: [
-          {
-            courseId: "", //课程id
-            title: "", //课程名称
-            cover: "", //课程封面
-            choiceCount: 0, //选课人数
-            createTime: "", //课程选课时间
-          },
-        ],
+        items: [],
       }, //返回的数据
       // 面包屑信息
       breadList: [
@@ -163,8 +155,8 @@ export default {
     };
   },
   created() {
-    this.ucenterId = cookie.getJSON("dhu_ucenter").id; //获取已登录用户的id
-    this.initMyCourse();
+    // this.ucenterId = cookie.getJSON("dhu_ucenter").id; //获取已登录用户的id
+    // this.initMyCourse();
   },
   methods: {
     // 初始化我的选课列表

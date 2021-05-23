@@ -77,7 +77,7 @@
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeUpload"
-                        :action="BASE_API + '/eduoss/fileoss'"
+                        :action="BASE_API + 'tools/fileoss'"
                         class="avatar-uploader"
                         :on-progress="handleProgress"
                       >

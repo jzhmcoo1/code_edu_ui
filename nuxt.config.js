@@ -100,7 +100,7 @@ export default {
     }
   },
   env: {
-    baseURL: 'http://106.15.109.151:8301', //后端服务器
+    baseURL: 'http://1.15.24.22:8301/', //后端服务器
     giteeURL: 'https://gitee.com/api/v5/repos/jzhmcoo1/code_edu_ui_new',//gitee的openAPI
     BackendGiteeURL: "https://gitee.com/api/v5/repos/paradox_hyw/febs-codebar-cloud",//后端项目
   },

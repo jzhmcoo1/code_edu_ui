@@ -1,19 +1,37 @@
 <template>
   <v-card>
     <v-footer v-bind="localAttrs" :padless="padless">
-      <v-card flat tile width="100%" class="primary lighten-1 text-center">
+      <v-card
+        flat
+        tile
+        width="100%"
+        :class="`
+          ${
+            $vuetify.theme.dark ? 'background' : 'primary lighten-1'
+          } text-center
+        `"
+      >
         <v-divider></v-divider>
 
-        <v-card-text class="white--text">
+        <v-card-text class="text-uppercase text-center">
           {{ new Date().getFullYear() }} —
-          <strong>
-            <a
-              class="white--text"
-              href="https://github.com/jzhmcoo1/code_edu_ui"
-            >
-              CodeEdu
-            </a>
-          </strong>
+          <a
+            :class="`font-weight-bold ${
+              $vuetify.theme.dark ? 'primary' : 'white'
+            }--text`"
+            href="https://github.com/jzhmcoo1/code_edu_ui"
+          >
+            CodeBar
+          </a>
+          <span class="px-2">by</span>
+          <a
+            :class="`font-weight-bold ${
+              $vuetify.theme.dark ? 'primary' : 'white'
+            }--text`"
+            href="https://github.com/jzhmcoo1/"
+          >
+            jzhmcoo1
+          </a>
         </v-card-text>
       </v-card>
     </v-footer>

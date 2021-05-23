@@ -32,7 +32,7 @@
                     ]"
                     class="font-weight-black"
                   >
-                    Code Edu
+                    Code Bar
                   </span>
                 </v-col>
 

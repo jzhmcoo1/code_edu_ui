@@ -3,7 +3,13 @@
     <v-layout row wrap>
       <v-container class="py-0 fill-height">
         <!-- 网站标题 -->
-        <h1 class="heading--text mr-10 d-none d-lg-flex">Code Edu</h1>
+        <h1 class="heading--text mr-10 d-none d-lg-flex pt-4">
+          <v-img
+            width="200"
+            :src="$vuetify.theme.dark ? `logo-light.png` : `logo-dark.png`"
+          >
+          </v-img>
+        </h1>
         <!-- 网站导航 -->
         <div class="d-span">
           <v-tabs background-color="transparent" slider-color="primary">

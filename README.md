@@ -58,7 +58,12 @@ $ yarn generate
 
 For detailed explanation on how things work, check out [Nuxt.js docs](https://nuxtjs.org).
 
-建议配合后端一起食用[CodeEdu后端](https://gitee.com/paradox_hyw/code_edu)
+## 相关项目
+
+- [CodeEduUI前端](https://github.com/jzhmcoo1/code_edu_ui)
+- [febs-Codebar-cloud微服务后端](https://gitee.com/paradox_hyw/febs-codebar-cloud)
+- [FEBS-CodeBar-Admin后台管理前端](https://gitee.com/paradox_hyw/FEBS-CodeBar-Admin)
+
 
 ## 👁 项目预览
 

@@ -94,7 +94,7 @@
                         </v-card>
                       </el-upload>
                     </template>
-                    <span>点击上传课程封面</span>
+                    <span>点击上传文章封面</span>
                   </v-tooltip>
                 </v-col>
               </v-row>

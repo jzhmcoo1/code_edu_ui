@@ -24,7 +24,7 @@ export default {
    */
   result(page: number, limit: number, keyword: string) {
     return service({
-      url: `${api_prefix}/result`,
+      url: `${api_prefix}/results`,
       method: 'get',
       params: { page, limit, keyword }
     })

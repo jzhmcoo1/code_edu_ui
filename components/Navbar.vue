@@ -34,30 +34,7 @@
           v-model="$vuetify.theme.dark"
         ></v-switch>
         <v-responsive max-width="260" class="mr-1">
-          <v-autocomplete
-            v-model="keyword"
-            hide-no-data
-            dense
-            clearable
-            flat
-            placeholder="搜索课程或文章"
-            rounded
-            append-icon=""
-            prepend-icon="search"
-            hide-details
-            solo-inverted
-            :search-input.sync="search"
-            :loading="loading"
-            :items="items"
-            item-text="name"
-            item-value="name"
-            no-filter
-            @click:prepend="gotoSearch"
-          >
-            <template v-slot:item="{ item }">
-              <span v-html="item.raw"></span>
-            </template>
-          </v-autocomplete>
+          <SearchBar :dense="true" />
         </v-responsive>
         <client-only>
           <!-- 未登录操作 -->
@@ -107,8 +84,11 @@
 
 <script lang="ts">
 import Vue from "vue";
-import searchApi from "@/api/search";
+import SearchBar from "./SearchBar.vue";
 export default Vue.extend({
+  components: {
+    SearchBar,
+  },
   data: () => ({
     links: [
       { title: "首页", route: "/", icon: "home" },
@@ -127,20 +107,9 @@ export default Vue.extend({
       sex: "",
     },
     menus: [{ title: "个人中心", icon: "home", route: "/ucenter/info" }],
-    keyword: null,
-    search: null,
-    loading: false,
-    items: [] as any,
-    word: "",
   }),
   created() {
     this.showInfo();
-  },
-  watch: {
-    search(val) {
-      this.word = val;
-      val && this.searchSuggest(val);
-    },
   },
   methods: {
     // 如果用户登录,则展示用户信息
@@ -162,47 +131,6 @@ export default Vue.extend({
       if (this.$router.currentRoute.path !== "/") {
         this.$router.replace("/");
       }
-    },
-    searchSuggest(keyword: string) {
-      if (this.loading === true) {
-        return;
-      }
-      this.loading = true;
-      searchApi
-        .suggest(keyword)
-        .then((response) => {
-          let courseArray = [...response.data.course];
-          let articleArray = [...response.data.article];
-          this.items = [];
-          if (courseArray.length !== 0) {
-            this.items = [{ header: "课程" }];
-            courseArray.map((course) => {
-              this.items.push({
-                raw: course,
-                name: course.replace(/<[^>]+>/g, ""),
-              });
-            });
-          }
-          if (articleArray.length !== 0) {
-            this.items.push({ header: "文章" });
-            articleArray.map((article) => {
-              this.items.push({
-                raw: article,
-                name: article.replace(/<[^>]+>/g, ""),
-              });
-            });
-          }
-          this.loading = false;
-        })
-        .catch((e) => {
-          this.loading = false;
-        });
-    },
-    gotoSearch() {
-      if (this.word === "") {
-        return;
-      }
-      console.log("点击搜索", this.word);
     },
   },
 });

@@ -1,10 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import cookie from 'js-cookie'
 import { message, notification } from 'ant-design-vue'
 import { getToken, getRefreshToken, getExpireTime } from '@/utils/auth'
 import store from '@/store/index'
-// import NProgress from 'nprogress'
-// import 'nprogress/nprogress.css'
 import authorizationValue from './settings'
 // 请求超时时间，10s
 const requestTimeOut = 10 * 1000
@@ -66,10 +63,6 @@ service.interceptors.request.use(
     } catch (e) {
       console.error(e)
     }
-    // // 传递已登录的用户信息
-    // if (cookie.get('dhu_token')) {
-    //   config.headers['token'] = cookie.get('dhu_token');
-    // }
     return config
   },
   err => {

@@ -85,6 +85,9 @@
 
 <script>
 export default {
+  head: {
+    titleTemplate: "%s - 个人中心",
+  },
   components: {},
   middleware: "auth",
   created() {

@@ -101,6 +101,11 @@ import moment from "moment";
 moment.locale("zh-CN");
 export default {
   layout: "ucenter",
+  head() {
+    return {
+      title: this.loginInfo.username,
+    };
+  },
   created() {
     this.getUserInfo();
   },
@@ -123,7 +128,9 @@ export default {
           to: "/ucenter/info",
         },
       ],
-      loginInfo: {},
+      loginInfo: {
+        username: "",
+      },
     };
   },
   methods: {

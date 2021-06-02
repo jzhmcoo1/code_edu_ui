@@ -106,6 +106,9 @@ export default Vue.extend({
   components: {
     SearchBar,
   },
+  head: {
+    title: "搜索",
+  },
   created() {
     this.init();
   },

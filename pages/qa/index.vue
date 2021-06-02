@@ -165,6 +165,9 @@ moment.locale("zh-CN");
 import Vue from "vue";
 import repoApi from "@/api/repo";
 export default Vue.extend({
+  head: {
+    title: "项目作者详情",
+  },
   created() {
     this.getRepoRecords();
   },

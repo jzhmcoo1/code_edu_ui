@@ -220,19 +220,24 @@
   </v-container>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
 import courseApi from "@/api/course";
 import myCourseApi from "@/api/ucenter";
 import Comment from "@/components/Comments.vue";
 import CourseMenu from "@/components/Course/CourseMenu.vue";
-export default Vue.extend({
+export default {
   components: {
     Comment,
     CourseMenu,
   },
   asyncData({ params }) {
     return { courseId: params.id };
+  },
+  head() {
+    return {
+      title: this.courseWebVo.title,
+    };
   },
   data() {
     return {
@@ -297,7 +302,7 @@ export default Vue.extend({
       this.loading = true;
       myCourseApi
         .addMyCourse({ courseId: this.courseId })
-        .then((response: any) => {
+        .then((response) => {
           if (response.success) {
             this.$message.success("选课成功");
             this.loading = false;
@@ -342,7 +347,7 @@ export default Vue.extend({
         });
     },
   },
-});
+};
 </script>
 <style lang="scss">
 // 解决description中图片过大问题

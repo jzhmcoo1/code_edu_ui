@@ -109,9 +109,11 @@
 
 <script>
 import myCourseApi from "@/api/ucenter";
-import cookie from "js-cookie";
 export default {
   layout: "ucenter",
+  head: {
+    title: "课程管理",
+  },
   data() {
     return {
       page: 1,

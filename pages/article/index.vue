@@ -170,6 +170,9 @@ monent.locale("zh-CN");
 export default {
   components: { FloatBtn },
   layout: "article",
+  head: {
+    title: "文章列表",
+  },
   data() {
     return {
       page: 1, //当前页

@@ -117,11 +117,10 @@
   </v-container>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
+<script>
 import teacherApi from "@/api/teacher";
 import courseApi from "@/api/course";
-export default Vue.extend({
+export default {
   data() {
     return {
       teacher: {
@@ -134,6 +133,9 @@ export default Vue.extend({
       showTeacher: true,
       showRelated: true,
     };
+  },
+  head: {
+    title: "讲师详情",
   },
   created() {
     this.getTeacherInfo();
@@ -153,7 +155,7 @@ export default Vue.extend({
         });
     },
   },
-});
+};
 </script>
 
 <style>

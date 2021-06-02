@@ -68,8 +68,10 @@
 <script lang="ts">
 import Vue from "vue";
 import teacherApi from "@/api/teacher";
-import { TeacherQuery } from "@/api/schema/teacher";
 export default Vue.extend({
+  head: {
+    title: "讲师列表",
+  },
   data() {
     return {
       tabs: null,

@@ -99,6 +99,9 @@ import courseApi from "@/api/course";
 import subjectApi from "@/api/subject";
 import Vue from "vue";
 export default Vue.extend({
+  head: {
+    title: "课程列表",
+  },
   data() {
     return {
       tab: null,

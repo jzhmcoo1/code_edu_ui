@@ -96,6 +96,11 @@ export default {
     DrawerEditor,
     CourseMenu,
   },
+  head() {
+    return {
+      title: `${this.courseWebVo.title}`,
+    };
+  },
   data() {
     return {
       showComment: true,

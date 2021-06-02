@@ -72,10 +72,12 @@
 
 <script>
 import loginApi from "@/api/login";
-import cookie from "js-cookie";
 import { randomNum } from "@/utils";
 export default {
   layout: "sign",
+  head: {
+    title: "登录",
+  },
   data() {
     return {
       valid: true,

@@ -79,6 +79,9 @@
 <script>
 export default {
   layout: "sign",
+  head: {
+    title: "注册",
+  },
   data: () => ({
     mobile: "", //手机号
     code: "", //验证码

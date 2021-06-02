@@ -111,6 +111,11 @@
 import courseApi from "@/api/course";
 import teacherApi from "@/api/teacher";
 export default {
+  head() {
+    return {
+      title: "首页",
+    };
+  },
   data() {
     return {
       adminList: [],

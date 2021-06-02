@@ -69,6 +69,7 @@ export default {
             : "https://highlightjs.org/static/demo/styles/atom-one-light.css",
         },
       ],
+      title: "更新笔记",
     };
   },
   created() {

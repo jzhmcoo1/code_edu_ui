@@ -171,6 +171,7 @@ export default {
             : "https://highlightjs.org/static/demo/styles/atom-one-light.css",
         },
       ],
+      title: this.articleInfo.title,
     };
   },
   asyncData({ params }) {

@@ -98,6 +98,11 @@ export default {
     ImageCropper,
     PanThumb,
   },
+  head() {
+    return {
+      title: `修改${this.loginInfo.username}的信息`,
+    };
+  },
   mounted() {
     this.getUserInfo(); // 在created执行会报错刷新页面会报错
   },

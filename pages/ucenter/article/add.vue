@@ -164,6 +164,11 @@ export default {
   created() {
     this.init();
   },
+  head() {
+    return {
+      title: this.articleId === "" ? "添加文章" : "更新文章",
+    };
+  },
   data() {
     return {
       loading: false,

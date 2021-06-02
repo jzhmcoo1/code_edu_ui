@@ -125,6 +125,11 @@ export default {
   created() {
     this.getNoteList();
   },
+  head() {
+    return {
+      title: "笔记列表",
+    };
+  },
   data() {
     return {
       toDeleteItem: null, //保存待删除的item

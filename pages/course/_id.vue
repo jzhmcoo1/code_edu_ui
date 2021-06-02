@@ -35,10 +35,23 @@
                 </v-chip>
               </div>
             </v-card-text>
-            <v-divider></v-divider>
-            <v-card-text>
+            <v-card-text class="text-center">
               <v-icon>people</v-icon> 主讲人:{{ courseWebVo.teacherName }}
             </v-card-text>
+            <v-card-actions class="d-flex justify-center flex-wrap">
+              课程评价
+              <v-rating
+                v-model="rating"
+                background-color="grey"
+                color="primary"
+                empty-icon="mdi-star-outline"
+                full-icon="mdi-star"
+                half-icon="mdi-star-half-full"
+                half-increments
+                hover
+                readonly
+              ></v-rating>
+            </v-card-actions>
             <v-card-actions v-if="!isChoice">
               <v-btn
                 :disabled="disabled"
@@ -221,8 +234,8 @@
 </template>
 
 <script>
-import Vue from "vue";
 import courseApi from "@/api/course";
+import evaluation from "@/api/evaluation";
 import myCourseApi from "@/api/ucenter";
 import Comment from "@/components/Comments.vue";
 import CourseMenu from "@/components/Course/CourseMenu.vue";
@@ -288,6 +301,7 @@ export default {
       chapterVideoList: [], //课程的视频列表
       isChoice: false, //是否已经选课
       relatedCourse: [], //保存该讲师的其他课程
+      rating: 0,
     };
   },
   created() {

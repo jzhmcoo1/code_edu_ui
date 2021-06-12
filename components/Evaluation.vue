@@ -128,20 +128,16 @@ export default {
   },
   methods: {
     editOrSave() {
-      if (
-        this.$store.state.user === undefined ||
-        this.$store.state.user.userId === undefined ||
-        this.$store.state.user.userId === ""
-      ) {
+      if (this.$store.state.account.user === undefined) {
         this.$message.warning("请先登录");
-        this.$$router.push("/login");
-        return;
-      }
-      this.readonly = !this.readonly;
-      if (this.evaluationObj.id === "") {
-        this.addEvaluation();
+        this.$router.push("/login");
       } else {
-        this.updateEvaluation();
+        this.readonly = !this.readonly;
+        if (this.evaluationObj.id === "") {
+          this.addEvaluation();
+        } else {
+          this.updateEvaluation();
+        }
       }
     },
     getEvaluationList() {

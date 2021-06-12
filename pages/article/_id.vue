@@ -1,9 +1,9 @@
 <template>
   <v-container grid-list-xs>
     <!-- 文章目录收纳盒 -->
-    <v-navigation-drawer app fixed v-model="drawer" class="px-5">
-      <v-sheet rounded="lg" min-height="100vh" class="transparent">
-        <v-card flat class="transparent">
+    <v-navigation-drawer app fixed v-model="drawer" class="background">
+      <v-sheet rounded="lg" min-height="100vh" class="background">
+        <v-card flat class="transparent mx-2">
           <v-card-title primary-title>
             <v-btn text fab @click="drawer = !drawer">
               <v-icon>toc</v-icon>

@@ -14,7 +14,7 @@
       <v-flex>
         <div>
           <v-text-field
-            placeholder="发表宁的公开评论"
+            placeholder="发表评论"
             v-model="comment.content"
             required
             @click="showAddComment = true"

@@ -1,5 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
 const CompressionPlugin = require('compression-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const hour = parseInt(new Date().getHours().toLocaleString())
 
 export default {
@@ -106,6 +107,16 @@ export default {
         test: /\.js$|\.html$|\.css/, // 匹配文件名
         threshold: 10240, // 对超过10kb的数据进行压缩
         deleteOriginalAssets: false // 是否删除原文件
+      }),
+      new UglifyJsPlugin({
+        uglifyOptions: {
+          compress: {
+            drop_console: true
+          }
+        },
+        sourceMap: true,
+        cache: true,
+        parallel: true
       })
     ],
     optimization: {
@@ -121,7 +132,7 @@ export default {
     BackendGiteeURL: "https://gitee.com/api/v5/repos/paradox_hyw/febs-codebar-cloud",//后端项目
   },
   server: {
-    port: 8500,
+    port: 3000,
     host: "0.0.0.0"
   }
 }

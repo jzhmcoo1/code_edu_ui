@@ -18,7 +18,13 @@
             formatDate(item.createTime)
           }}</span>
           <span class="caption mx-2">给出</span>
-          <v-rating size="20" dense readonly :value="item.score"></v-rating>
+          <v-rating
+            half-increments
+            size="20"
+            dense
+            readonly
+            :value="item.score"
+          ></v-rating>
           <v-spacer></v-spacer>
           <span class="caption mx-2">最近修改时间</span>
           <span class="font-weight-medium caption">{{

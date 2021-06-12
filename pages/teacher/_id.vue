@@ -1,8 +1,8 @@
 <template>
   <v-container grid-list-xs>
     <v-container grid-list-xs>
-      <h1 class="headline heading--text">讲师详情</h1>
-      <v-card>
+      <!-- <h1 class="headline heading--text">讲师详情</h1> -->
+      <v-card flat>
         <v-layout column wrap>
           <v-card-title primary-title>
             <v-icon>person</v-icon>
@@ -66,7 +66,7 @@
         </v-layout>
       </v-card>
       <!-- 讲师课程 -->
-      <v-card class="mt-3">
+      <v-card class="mt-3" flat>
         <v-card-title primary-title>
           <v-icon>school</v-icon>
           讲师课程
@@ -84,7 +84,7 @@
                 class="pa-2"
                 xs12
                 sm6
-                md4
+                md3
                 v-for="course in courseList"
                 :key="course.id"
               >
@@ -113,6 +113,8 @@
           </div>
         </v-expand-transition>
       </v-card>
+      <!-- 讲师评价 -->
+      <evaluation type="teacher" :id="teacherId"></evaluation>
     </v-container>
   </v-container>
 </template>
@@ -120,7 +122,11 @@
 <script>
 import teacherApi from "@/api/teacher";
 import courseApi from "@/api/course";
+import Evaluation from "@/components/Evaluation.vue";
 export default {
+  components: {
+    Evaluation,
+  },
   data() {
     return {
       teacher: {
@@ -132,6 +138,9 @@ export default {
       courseList: [],
       showTeacher: true,
       showRelated: true,
+      page: 1,
+      limit: 8,
+      total: 0,
     };
   },
   head: {

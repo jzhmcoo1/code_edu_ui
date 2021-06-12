@@ -1,8 +1,8 @@
 import { service } from '@/utils/request'
 export default {
-  getPlayAuth(vid: string) {
+  getVideoById(id: string) {
     return service({
-      url: `/eduvod/video/getPlayAuth/${vid}`,
+      url: `/tools/video/${id}`,
       method: 'get'
     })
   }

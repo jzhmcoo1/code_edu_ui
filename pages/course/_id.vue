@@ -2,7 +2,7 @@
   <v-container grid-list-xs>
     <v-breadcrumbs id="bread" divider="/" :items="breadList"> </v-breadcrumbs>
     <!-- 课程信息 -->
-    <v-card rounded="lg" :elevation="2" style="overflow: hidden">
+    <v-card flat rounded="lg" :elevation="2" style="overflow: hidden">
       <v-layout row wrap justify-space-between align-center>
         <v-flex xs12 md7>
           <v-card rounded="lg" flat>
@@ -78,7 +78,7 @@
     <v-layout row class="mt-10" justify-space-between fill-height>
       <v-flex xs12 md8 class="pr-md-3">
         <!-- 课程简介和大纲 -->
-        <v-card>
+        <v-card flat>
           <v-layout column wrap>
             <v-card-title primary-title>
               <v-icon>article</v-icon>
@@ -114,7 +114,7 @@
       <v-flex xs12 md4>
         <!-- 讲师详情和相关课程 -->
         <!-- 讲师详情 -->
-        <v-card>
+        <v-card flat>
           <v-layout column wrap>
             <v-card-title primary-title>
               <v-icon>person</v-icon>
@@ -154,7 +154,7 @@
           </v-layout>
         </v-card>
         <!-- 相关课程 -->
-        <v-card class="mt-3">
+        <v-card flat class="mt-3">
           <v-card-title primary-title>
             <v-icon>school</v-icon>
             相关课程
@@ -200,7 +200,7 @@
       </v-flex>
     </v-layout>
     <!-- 课程评论 -->
-    <v-card class="mt-3">
+    <v-card flat class="mt-3">
       <v-card-title primary-title>
         <v-icon>comment</v-icon>
         课程评论
@@ -216,6 +216,9 @@
           <Comment type="course" :id="courseId" />
         </div>
       </v-expand-transition>
+    </v-card>
+    <v-card flat class="mt-3 mr-2">
+      <evaluation type="course" :id="courseId" />
     </v-card>
     <!-- 回到顶部按钮 -->
     <v-btn
@@ -235,14 +238,15 @@
 
 <script>
 import courseApi from "@/api/course";
-import evaluation from "@/api/evaluation";
 import myCourseApi from "@/api/ucenter";
 import Comment from "@/components/Comments.vue";
 import CourseMenu from "@/components/Course/CourseMenu.vue";
+import Evaluation from "@/components/Evaluation.vue";
 export default {
   components: {
     Comment,
     CourseMenu,
+    Evaluation,
   },
   asyncData({ params }) {
     return { courseId: params.id };

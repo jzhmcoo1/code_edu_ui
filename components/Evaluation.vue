@@ -128,6 +128,15 @@ export default {
   },
   methods: {
     editOrSave() {
+      if (
+        this.$store.state.user === undefined ||
+        this.$store.state.user.userId === undefined ||
+        this.$store.state.user.userId === ""
+      ) {
+        this.$message.warning("请先登录");
+        this.$$router.push("/login");
+        return;
+      }
       this.readonly = !this.readonly;
       if (this.evaluationObj.id === "") {
         this.addEvaluation();

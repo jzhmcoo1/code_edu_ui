@@ -31,13 +31,14 @@
     "vue-side-catalog": "^2.0.0"
   },
   "devDependencies": {
-    "@nuxtjs/vuetify": "^1.11.3",
     "@nuxt/types": "^2.15.3",
     "@nuxt/typescript-build": "^2.1.0",
+    "@nuxtjs/vuetify": "^1.11.3",
     "@types/js-cookie": "^2.2.6",
     "@types/pubsub-js": "^1.8.2",
     "babel-plugin-component": "^1.1.1",
     "babel-plugin-import": "^1.13.3",
+    "compression-webpack-plugin": "^5.0.1",
     "material-design-icons-iconfont": "^6.1.0"
   }
 }

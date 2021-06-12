@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+const CompressionPlugin = require('compression-webpack-plugin');
 const hour = parseInt(new Date().getHours().toLocaleString())
 
 export default {
@@ -99,7 +100,20 @@ export default {
           }
         ]
       ]
-    }
+    },
+    plugins: [
+      new CompressionPlugin({
+        test: /\.js$|\.html$|\.css/, // 匹配文件名
+        threshold: 10240, // 对超过10kb的数据进行压缩
+        deleteOriginalAssets: false // 是否删除原文件
+      })
+    ],
+    optimization: {
+      splitChunks: {
+        minSize: 10000,
+        maxSize: 250000
+      }
+    },
   },
   env: {
     baseURL: 'http://1.15.24.22:8301/', //后端服务器

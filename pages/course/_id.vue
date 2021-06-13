@@ -7,7 +7,12 @@
         <v-flex xs12 md7>
           <v-card rounded="lg" flat>
             <v-responsive :aspect-ratio="16 / 9" class="d-flex align-center">
-              <v-img class="zoom-img" contain :src="courseWebVo.cover"></v-img>
+              <v-img
+                max-height="300"
+                class="zoom-img"
+                contain
+                :src="courseWebVo.cover"
+              ></v-img>
             </v-responsive>
           </v-card>
         </v-flex>
@@ -41,7 +46,7 @@
             <v-card-actions class="d-flex justify-center flex-wrap">
               课程评价
               <v-rating
-                v-model="rating"
+                v-model="courseWebVo.score"
                 background-color="grey"
                 color="primary"
                 empty-icon="mdi-star-outline"
@@ -218,7 +223,11 @@
       </v-expand-transition>
     </v-card>
     <v-card flat class="mt-3 mr-2">
-      <evaluation type="course" :id="courseId" />
+      <evaluation
+        @updateEvaluation="initCourseInfo"
+        type="course"
+        :id="courseId"
+      />
     </v-card>
     <!-- 回到顶部按钮 -->
     <v-btn
@@ -305,11 +314,12 @@ export default {
       chapterVideoList: [], //课程的视频列表
       isChoice: false, //是否已经选课
       relatedCourse: [], //保存该讲师的其他课程
-      rating: 0,
     };
   },
   created() {
     this.initCourseInfo();
+    // 增加浏览量
+    courseApi.addView(this.courseId);
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
@@ -319,11 +329,13 @@ export default {
     addMyCourse() {
       this.loading = true;
       myCourseApi
-        .addMyCourse({ courseId: this.courseId })
+        .addMyCourse(this.courseId)
         .then((response) => {
-          if (response.success) {
+          console.log(response);
+          if (response.code === 200) {
             this.$message.success("选课成功");
             this.loading = false;
+            this.disabled = true;
             this.initCourseInfo();
           } else {
             this.disabled = true;
@@ -349,6 +361,7 @@ export default {
         console.log(response.data);
         this.courseWebVo = response.data.courseWebVo;
         this.chapterVideoList = response.data.allChapterVideo;
+        this.isChoice = response.data.isChoice;
         // this.isChoice = response.data.isChoice;
         // 填写面包屑
         this.breadList[1].text = this.courseWebVo.subjectLevelOne;

@@ -114,7 +114,11 @@
         </v-expand-transition>
       </v-card>
       <!-- 讲师评价 -->
-      <evaluation type="teacher" :id="teacherId"></evaluation>
+      <evaluation
+        @updateEvaluation="getTeacherInfo"
+        type="teacher"
+        :id="teacherId"
+      ></evaluation>
     </v-container>
   </v-container>
 </template>

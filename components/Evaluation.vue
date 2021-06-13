@@ -164,6 +164,7 @@ export default {
           this.$message.success("添加评价成功👌");
           this.getEvaluationList();
           this.getEvaluationStatus();
+          this.$emit("updateEvaluation");
         } else {
           this.$message.error("添加评价失败😨");
         }
@@ -175,6 +176,7 @@ export default {
           this.$message.success("更新评价成功👌");
           this.getEvaluationList();
           this.getEvaluationStatus();
+          this.$emit("updateEvaluation");
         } else {
           this.$message.error("更新评价失败😨");
         }

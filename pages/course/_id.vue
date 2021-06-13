@@ -252,6 +252,7 @@ import Comment from "@/components/Comments.vue";
 import CourseMenu from "@/components/Course/CourseMenu.vue";
 import Evaluation from "@/components/Evaluation.vue";
 export default {
+  middleware: "auth",
   components: {
     Comment,
     CourseMenu,

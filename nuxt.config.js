@@ -1,7 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
 const CompressionPlugin = require('compression-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const hour = parseInt(new Date().getHours().toLocaleString())
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -60,7 +59,7 @@ export default {
       iconfont: ['md', 'mdi']
     },
     theme: {
-      dark: hour >= 7 && hour <= 17 ? false : true,
+      dark: false,
       themes: {
         light: {
           background: colors.grey.lighten3,

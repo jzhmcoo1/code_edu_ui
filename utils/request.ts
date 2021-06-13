@@ -13,7 +13,7 @@ const checkRegion = 5 * 60 * 1000
 // 系统全局请求对象
 const service = axios.create({
   baseURL: process.env.baseURL,
-  timeout: 3000,
+  timeout: requestTimeOut,
   responseType: 'json',
   method: 'GET',
   validateStatus(status) {

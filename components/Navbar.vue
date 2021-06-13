@@ -5,7 +5,7 @@
         <!-- 网站标题 -->
         <h1 class="heading--text mr-10 d-none d-lg-flex pt-4">
           <v-img
-            width="150"
+            width="120"
             :src="$vuetify.theme.dark ? `/logo-light.png` : `/logo-dark.png`"
           >
           </v-img>

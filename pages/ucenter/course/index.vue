@@ -3,7 +3,7 @@
     <v-breadcrumbs divider="/" :items="breadList"> </v-breadcrumbs>
     <v-data-table
       :headers="headers"
-      :items="courseData.items"
+      :items="items"
       :sort-desc="['createTime']"
       class="elevation-0"
       :page.sync="page"
@@ -52,6 +52,12 @@
         <div style="overflow: hidden">
           <v-img class="zoom-img" :aspect-ratio="16 / 9" :src="item.cover" />
         </div>
+      </template>
+      <template v-slot:[`item.createTime`]="{ item }">
+        {{ formatDate(item.createTime) }}
+      </template>
+      <template v-slot:[`item.lessonNum`]="{ item }">
+        {{ item.lessonNum }}
       </template>
       <!-- 操作 -->
       <template v-slot:[`item.actions`]="{ item }">
@@ -109,6 +115,8 @@
 
 <script>
 import myCourseApi from "@/api/ucenter";
+import moment from "moment";
+moment.locale("zh-CN");
 export default {
   layout: "ucenter",
   head: {
@@ -121,9 +129,7 @@ export default {
       ucenterId: "",
       pages: 1, //总页数
       total: 1, //总记录数
-      courseData: {
-        items: [],
-      }, //返回的数据
+      items: [], //返回的数据
       // 面包屑信息
       breadList: [
         {
@@ -147,6 +153,7 @@ export default {
         },
         { text: "课程标题", value: "title", align: "center" },
         { text: "选课时间", value: "createTime", align: "center" },
+        { text: "课时数", value: "lessonNum", align: "center" },
         { text: "选课人数", value: "choiceCount", align: "center" },
         { text: "操作", value: "actions", sortable: false, align: "center" },
       ], //表格标题行
@@ -158,32 +165,29 @@ export default {
   },
   created() {
     // this.ucenterId = cookie.getJSON("dhu_ucenter").id; //获取已登录用户的id
-    // this.initMyCourse();
+    this.initMyCourse();
   },
   methods: {
     // 初始化我的选课列表
     initMyCourse() {
-      myCourseApi
-        .getMyCourseList(this.page, this.limit, this.ucenterId)
-        .then((response) => {
-          this.courseData = response.data;
-          this.pages = response.data.pages;
-          this.total = response.data.total;
-          console.log(this.courseData);
-        });
+      myCourseApi.getMyCourseList(this.page, this.limit).then((response) => {
+        console.log(response);
+        this.items = response.data.items;
+        this.pages = parseInt(response.data.pages);
+        this.total = parseInt(response.data.total);
+        console.log(this.items);
+      });
     },
     // 删除课程
     deleteItem() {
-      myCourseApi
-        .deletdMyCourese(this.toDeleteItem.courseId)
-        .then((response) => {
-          if (response.success) {
-            this.$message.success("退选成功");
-            this.initMyCourse();
-            this.toDeleteItem = null;
-            this.dialogDelete = false;
-          }
-        });
+      myCourseApi.deletdMyCourese(this.toDeleteItem.id).then((response) => {
+        if (response.code === 200) {
+          this.$message.success("退选成功");
+          this.initMyCourse();
+          this.toDeleteItem = null;
+          this.dialogDelete = false;
+        }
+      });
     },
     // 去前台查看课程
     checkItem(item) {
@@ -191,8 +195,12 @@ export default {
     },
     // 打开对话框,确认是否阐述
     openDeleteDialog(item) {
+      console.log(item);
       this.toDeleteItem = item;
       this.dialogDelete = true;
+    },
+    formatDate(value) {
+      return moment(value).fromNow();
     },
   },
 };

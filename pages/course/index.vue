@@ -48,8 +48,16 @@
     <v-container grid-list-xs>
       <h1 class="headline heading--text">课程列表展示</h1>
       <!-- 课程列表 -->
-      <v-container grid-list-xs>
-        <!-- <h1 class="heading--text font-weight-bold mb-2">课程列表</h1> -->
+      <v-layout row wrap v-if="loadingCourse">
+        <v-flex class="pa-2" xs12 sm6 md3 v-for="index in 8" :key="index">
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="300"
+            type="card"
+          ></v-skeleton-loader>
+        </v-flex>
+      </v-layout>
+      <v-container grid-list-xs v-else>
         <v-layout row wrap v-if="data.items.length !== 0">
           <v-flex
             align-self-center
@@ -80,17 +88,17 @@
           </v-flex>
         </v-layout>
         <a-empty v-else description="暂时没有该类的课程"></a-empty>
+        <!-- 分页器 -->
+        <div class="text-center">
+          <v-pagination
+            v-model="page"
+            :length="parseInt(data.pages)"
+            @previous="getCourseList"
+            @next="getCourseList"
+            @input="getCourseList"
+          ></v-pagination>
+        </div>
       </v-container>
-      <!-- 分页器 -->
-      <div class="text-center">
-        <v-pagination
-          v-model="page"
-          :length="parseInt(data.pages)"
-          @previous="getCourseList"
-          @next="getCourseList"
-          @input="getCourseList"
-        ></v-pagination>
-      </div>
     </v-container>
   </v-container>
 </template>
@@ -122,6 +130,7 @@ export default Vue.extend({
       twoIndex: -1,
       choiceCountSort: "",
       gmtCreateSort: "",
+      loadingCourse: false,
     };
   },
   created() {
@@ -169,6 +178,7 @@ export default Vue.extend({
 
     // 获取课程列表
     getCourseList() {
+      this.loadingCourse = true;
       console.log("当前页面为:", this.page);
       console.log("查询对象:", this.searchObj);
       courseApi
@@ -176,6 +186,7 @@ export default Vue.extend({
         .then((response) => {
           console.log("获取课程列表:", response.data);
           this.data = response.data;
+          this.loadingCourse = false;
         });
     },
     // 获取课程分类树

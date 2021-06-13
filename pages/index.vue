@@ -31,7 +31,16 @@
           <span>查看全部课程</span>
         </v-tooltip>
       </h1>
-      <v-layout row wrap>
+      <v-layout row wrap v-if="loadingCourse">
+        <v-flex class="pa-2" xs12 sm6 md3 v-for="index in 8" :key="index">
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="300"
+            type="card"
+          ></v-skeleton-loader>
+        </v-flex>
+      </v-layout>
+      <v-layout v-else row wrap>
         <v-flex
           class="pa-2"
           xs12
@@ -74,7 +83,16 @@
           <span>查看全部讲师</span>
         </v-tooltip>
       </h1>
-      <v-layout row wrap justify-space-between>
+      <v-layout row wrap v-if="loadingTeacher">
+        <v-flex class="pa-2" xs12 sm6 md3 v-for="index in 8" :key="index">
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="300"
+            type="image,card-heading"
+          ></v-skeleton-loader>
+        </v-flex>
+      </v-layout>
+      <v-layout v-else row wrap justify-space-between>
         <v-flex xs12 sm6 md3 v-for="teacher in adminList" :key="teacher.id">
           <v-card
             router
@@ -129,6 +147,8 @@ export default {
       ],
       slides: ["First", "Second", "Third", "Fourth", "Fifth"],
       backTopShow: false,
+      loadingCourse: false,
+      loadingTeacher: false,
     };
   },
   created() {
@@ -140,12 +160,16 @@ export default {
   methods: {
     // 获取首页数据
     getIndexData() {
+      this.loadingCourse = true;
+      this.loadingTeacher = true;
       // 获取前8门课程
       courseApi.conditionList(1, 8).then((response) => {
         this.eduList = response.data.items;
+        this.loadingCourse = false;
       });
       teacherApi.getTeacherList(1, 8).then((response) => {
         this.adminList = response.data.records;
+        this.loadingTeacher = false;
       });
     },
     // 控制是否显示"回到顶部"按钮

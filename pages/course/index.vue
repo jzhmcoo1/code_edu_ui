@@ -146,6 +146,7 @@ export default Vue.extend({
      */
     searchSub(subjectParentId: string) {
       // 先清空二级列表清空数据
+      this.page = 1;
       this.searchObj.subjectId = "";
       this.subSubjectList = [];
       this.subTab = null;
@@ -164,6 +165,7 @@ export default Vue.extend({
     },
     //5 点击某个二级分类实现查询
     searchTwo(subjectId: string) {
+      this.page = 1;
       //把index赋值,为了样式生效
       //把二级分类点击id值，赋值给searchObj
       this.searchObj.subjectId = subjectId;

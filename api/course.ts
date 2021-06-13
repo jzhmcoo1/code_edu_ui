@@ -24,4 +24,15 @@ export default {
       method: 'get',
     })
   },
+  /**
+   * 新增课程浏览量
+   * @param courseId 
+   * @returns 
+   */
+  addView(courseId: Course["courseId"]) {
+    return service({
+      url: `${api_prefix}/view/${courseId}`,
+      method: 'put'
+    })
+  }
 }

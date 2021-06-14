@@ -3,7 +3,7 @@
     <v-sheet min-height="80vh">
       <!-- 搜索框 -->
       <v-container grid-list-xs>
-        <SearchBar :dense="false" @search="pageSearch" />
+        <SearchBar :dense="false" />
       </v-container>
       <!-- 课程列表 -->
       <v-container grid-list-xs>
@@ -102,6 +102,7 @@
 import Vue from "vue";
 import searchApi from "@/api/search";
 import SearchBar from "@/components/SearchBar.vue";
+import PubSub from "pubsub-js";
 export default Vue.extend({
   components: {
     SearchBar,
@@ -110,7 +111,9 @@ export default Vue.extend({
     title: "搜索",
   },
   created() {
-    this.init();
+    PubSub.subscribe("search", () => {
+      this.init();
+    });
   },
   data() {
     return {
@@ -124,10 +127,13 @@ export default Vue.extend({
   },
   methods: {
     init() {
+      console.log("触发init");
       this.keyword = this.$route.query.keyword;
       this.pageSearch(this.keyword);
     },
-    pageSearch(keyword: string = "") {
+    pageSearch(keyword: string) {
+      console.log("触发搜索事件");
+      console.log("关键字:", keyword);
       searchApi.result(this.page, this.limit, keyword).then((response) => {
         console.log(response.data);
         this.eduList = response.data.courses;

@@ -27,6 +27,7 @@
 <script lang="ts">
 import Vue from "vue";
 import searchApi from "@/api/search";
+import PubSub from "pubsub-js";
 export default Vue.extend({
   props: {
     dense: Boolean,
@@ -86,11 +87,8 @@ export default Vue.extend({
       if (this.word === "") {
         return;
       }
-      if (this.$route.path !== "/search") {
-        this.$router.push({ name: "search", query: { keyword: this.word } });
-      } else {
-        this.$emit("search", this.word);
-      }
+      this.$router.push({ name: "search", query: { keyword: this.word } });
+      PubSub.publish("search");
     },
   },
 });

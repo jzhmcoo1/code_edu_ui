@@ -377,7 +377,10 @@ export default {
         });
     },
     checkIfChoice() {
-      if (this.$store.state.account.user.userId !== undefined) {
+      if (
+        this.$store.state.account.user.userId !== undefined &&
+        this.$store.state.account.user.userId !== ""
+      ) {
         myCourseApi.getMyCourseState(this.courseId).then((response) => {
           console.log(response.data);
           this.isChoice = response.data.isSelected;
@@ -387,7 +390,10 @@ export default {
       }
     },
     addView() {
-      if (this.$store.state.account.user.userId !== undefined) {
+      if (
+        this.$store.state.account.user.userId !== undefined &&
+        this.$store.state.account.user.userId !== ""
+      ) {
         courseApi.addView(this.courseId);
       }
     },

@@ -281,7 +281,10 @@ export default {
     },
     // 文章点赞
     praise() {
-      if (this.$store.state.account.user.userId !== undefined) {
+      if (
+        this.$store.state.account.user.userIdthis.$store.state.account.user
+          .userId !== ""
+      ) {
         articleApi.praiseArticle(this.articleId).then((response) => {
           if (response.code === 200) {
             pubsub.publish("articleLike", {
@@ -309,7 +312,10 @@ export default {
     },
     // 获取点赞状态
     getLikeState() {
-      if (this.$store.state.account.user.userId !== undefined) {
+      if (
+        this.$store.state.account.user.userId !== undefined &&
+        this.$store.state.account.user.userId !== ""
+      ) {
         articleApi.getPraise(this.articleId).then((response) => {
           if (response.code === 200) {
             this.likeState = true;
@@ -320,7 +326,10 @@ export default {
       }
     },
     addView() {
-      if (this.$store.state.account.user.userId !== undefined) {
+      if (
+        this.$store.state.account.user.userId !== undefined &&
+        this.$store.state.account.user.userId !== ""
+      ) {
         articleApi.addView(this.articleId);
       }
     },

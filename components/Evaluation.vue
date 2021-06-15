@@ -134,7 +134,10 @@ export default {
   },
   methods: {
     editOrSave() {
-      if (this.$store.state.account.user === undefined) {
+      if (
+        this.$store.state.account.user === undefined ||
+        this.$store.state.account.user.userId === ""
+      ) {
         this.$message.warning("请先登录");
         this.$router.push("/login");
       } else {
@@ -156,7 +159,10 @@ export default {
         });
     },
     getEvaluationStatus() {
-      if (this.$store.state.account.user.userId !== undefined) {
+      if (
+        this.$store.state.account.user.userId !== undefined &&
+        this.$store.state.account.user.userId !== ""
+      ) {
         evaluation
           .getEvaluation(this.id, this.limit, this.page, this.type)
           .then((response) => {

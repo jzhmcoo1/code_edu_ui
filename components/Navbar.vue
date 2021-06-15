@@ -135,7 +135,8 @@ export default {
     connectWebSocket() {
       if (
         "WebSocket" in window &&
-        this.$store.state.account.user !== undefined
+        this.$store.state.account.user !== undefined &&
+        this.$store.state.account.user.userId !== ""
       ) {
         this.websocket = new WebSocket(
           `ws://1.15.24.22:8301/service/websocket/${this.$store.state.account.user.userId}`

@@ -27,7 +27,13 @@
               <v-btn @click="showAddComment = false" depressed class="mr-2"
                 >取消</v-btn
               >
-              <v-btn @click="addComment" depressed class="primary">评论</v-btn>
+              <v-btn
+                @click="addComment"
+                :disabled="disabled"
+                depressed
+                class="primary"
+                >评论</v-btn
+              >
             </div>
           </div>
         </v-expand-transition>
@@ -47,6 +53,7 @@ export default {
   },
   data() {
     return {
+      disabled: false,
       showAddComment: false,
       comment: {
         content: "",
@@ -57,6 +64,8 @@ export default {
   },
   created() {
     this.comment.relatedId = this.id;
+    this.disabled =
+      this.$store.state.account.user.userId !== undefined ? false : true;
   },
   computed: {
     userAvatar() {

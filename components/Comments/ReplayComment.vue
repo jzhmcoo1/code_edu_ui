@@ -24,7 +24,11 @@
           <div>
             <div flat class="d-flex justify-end">
               <v-btn @click="hideReplayBox" depressed class="mr-2">取消</v-btn>
-              <v-btn @click="replyComment" depressed class="primary"
+              <v-btn
+                @click="replyComment"
+                :disabled="disabled"
+                depressed
+                class="primary"
                 >评论</v-btn
               >
             </div>
@@ -37,7 +41,6 @@
 
 <script>
 import commentApi from "@/api/comment";
-import messageApi from "@/api/message";
 import pubsub from "pubsub-js";
 export default {
   props: {
@@ -48,6 +51,7 @@ export default {
   },
   data() {
     return {
+      disabled: false,
       comment: {
         content: "",
         courseId: "",
@@ -56,6 +60,8 @@ export default {
     };
   },
   created() {
+    this.disabled =
+      this.$store.state.account.user.userId !== undefined ? false : true;
     this.comment.relatedId = this.id;
     this.comment.parentId = this.parentId;
   },

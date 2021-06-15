@@ -171,7 +171,9 @@ export default {
       }
     },
     praise() {
-      if (this.item.liked === false) {
+      if (this.$store.state.account.user.userId === undefined) {
+        this.$message.warning("请先登录再进行点赞😨");
+      } else if (this.item.liked === false) {
         commentApi.praiseComment(this.item.id).then((response) => {
           if (response.code === 200) {
             this.$message.success("评论点赞成功👍");
@@ -197,7 +199,6 @@ export default {
         });
       }
     },
-    sendOne() {},
   },
 };
 </script>

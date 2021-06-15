@@ -8,12 +8,17 @@
       hide-delimiter-background
       show-arrows-on-hover
     >
-      <v-carousel-item v-for="(slide, i) in slides" :key="i">
-        <v-sheet :color="colors[i]" height="100%">
+      <v-carousel-item
+        v-for="(item, i) in slides"
+        :key="i"
+        :src="item.cover"
+        :href="item.src"
+      >
+        <!-- <v-sheet :color="colors[i]" height="100%">
           <v-row class="fill-height" align="center" justify="center">
-            <div class="display-3">{{ slide }} Slide</div>
+            <div class="display-3">{{ item.title }}</div>
           </v-row>
-        </v-sheet>
+        </v-sheet> -->
       </v-carousel-item>
     </v-carousel>
     <v-divider></v-divider>
@@ -145,7 +150,25 @@ export default {
         "red lighten-1",
         "deep-purple accent-4",
       ],
-      slides: ["First", "Second", "Third", "Fourth", "Fifth"],
+      slides: [
+        { title: "CodePen", src: "https://codepen.io/", cover: "/CodePen.jpg" },
+        {
+          title: "Leetcode",
+          src: "https://leetcode-cn.com/",
+          cover: "/Leetcode.jpg",
+        },
+        { title: "Github", src: "https://github.com/", cover: "/github.jpeg" },
+        {
+          title: "菜鸟教程",
+          src: "https://www.runoob.com/",
+          cover: "/runoob.png",
+        },
+        {
+          title: "visualgo",
+          src: "https://visualgo.net/zh",
+          cover: "visualgo.png",
+        },
+      ],
       backTopShow: false,
       loadingCourse: false,
       loadingTeacher: false,

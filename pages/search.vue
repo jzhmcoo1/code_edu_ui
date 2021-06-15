@@ -97,7 +97,11 @@
             </v-flex>
           </v-layout>
         </v-card>
-        <a-empty v-else description="暂时没有对应的课程"> </a-empty>
+        <a-empty v-else-if="loading === false" description="暂时没有对应的课程">
+        </a-empty>
+        <v-card flat v-else>
+          <v-skeleton-loader type="card"></v-skeleton-loader>
+        </v-card>
       </v-container>
       <!-- 文章列表 -->
       <v-container grid-list-xs>
@@ -192,7 +196,11 @@
             </v-flex>
           </v-layout>
         </v-card>
-        <a-empty v-else description="暂时没有对应的文章"> </a-empty>
+        <a-empty v-else-if="loading === false" description="暂时没有对应的文章">
+        </a-empty>
+        <v-card flat v-else>
+          <v-skeleton-loader type="card"></v-skeleton-loader>
+        </v-card>
       </v-container>
       <div class="text-center">
         <v-pagination v-model="page" :length="length()" circle></v-pagination>
@@ -202,39 +210,6 @@
 </template>
 
 <script lang="ts">
-interface CourseItem {
-  id: "";
-  title: "";
-  lessonNum: 0;
-  cover: "";
-  choiceCount: "0";
-  commentCount: "0";
-  viewCount: "0";
-  description: "";
-  teacherId: "";
-  teacherName: "";
-  intro: "";
-  avatar: "";
-  subjectLevelOne: "";
-  subjectLevelTwo: "";
-  score: 0;
-}
-interface AritcleItem {
-  id: "";
-  authorId: "";
-  authorName: "";
-  authorAvatar: "";
-  typeParentName: "";
-  typeName: "";
-  title: "";
-  cover: "";
-  viewCount: "0";
-  commentCount: "0";
-  likeCount: "0";
-  content: "";
-  createTime: "";
-  modifiedTime: "";
-}
 import Vue from "vue";
 import searchApi from "@/api/search";
 import SearchBar from "@/components/SearchBar.vue";
@@ -247,6 +222,7 @@ export default Vue.extend({
     title: "搜索",
   },
   created() {
+    this.init();
     PubSub.subscribe("search", () => {
       this.init();
     });
@@ -259,25 +235,38 @@ export default Vue.extend({
       articleList: [],
       eduList: [],
       total: "0",
+      loading: false,
     };
+  },
+  beforeDestroy() {
+    PubSub.unsubscribe("search");
   },
   methods: {
     init() {
-      console.log("触发init");
+      this.loading = true;
       this.keyword = this.$route.query.keyword;
       this.pageSearch(this.keyword);
     },
     pageSearch(keyword: string) {
-      if (keyword === "") return;
-      console.log("触发搜索事件");
-      console.log("关键字:", keyword);
-      searchApi.result(this.page, this.limit, keyword).then((response) => {
-        console.log(response.data);
-        this.eduList = response.data.courses;
-        this.articleList = response.data.articles;
-        console.log(this.eduList);
-        console.log(this.articleList);
-      });
+      this.eduList = [];
+      this.articleList = [];
+      if (keyword === "") {
+        this.loading = false;
+        return;
+      }
+      searchApi
+        .result(this.page, this.limit, keyword)
+        .then((response) => {
+          console.log(response.data);
+          this.eduList = response.data.courses;
+          this.articleList = response.data.articles;
+          console.log(this.eduList);
+          console.log(this.articleList);
+          this.loading = false;
+        })
+        .catch((e) => {
+          this.loading = false;
+        });
     },
     length() {
       return Math.floor(parseInt(this.total) / this.limit) + 1;

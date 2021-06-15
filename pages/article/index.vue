@@ -92,8 +92,23 @@
               </v-row>
             </v-container>
             <!-- 无数据提示 -->
-            <v-container grid-list-xs v-else>
+            <v-container grid-list-xs v-else-if="loading === false">
               <a-empty description="这里空空如也" />
+            </v-container>
+            <v-container grid-list-xs v-else>
+              <v-row class="mx-auto">
+                <v-col
+                  v-for="index in 6"
+                  :key="index"
+                  :cols="12"
+                  :lg="(index - 1) % 3 === 0 ? 12 : 6"
+                >
+                  <v-skeleton-loader
+                    class="mx-auto"
+                    type="card"
+                  ></v-skeleton-loader>
+                </v-col>
+              </v-row>
             </v-container>
             <!-- 分页 -->
             <v-container grid-list-xs>
@@ -199,24 +214,7 @@ export default {
         size: 8, //每页大小
         hasPrevious: false, //是否有前页
         hasNext: true, //是否有后页
-        items: [
-          {
-            id: "",
-            authorId: "",
-            authorName: "",
-            authorAvatar: "",
-            typeParentName: "",
-            typeName: "",
-            title: "",
-            cover: "",
-            viewCount: "0",
-            commentCount: "0",
-            likeCount: "0",
-            content: null,
-            createTime: "",
-            modifiedTime: "",
-          },
-        ],
+        items: [],
       },
       subjectNestedList: [], // 一级分类列表
       subSubjectList: [], // 二级分类列表
@@ -227,6 +225,7 @@ export default {
       }, // 查询表单对象
       firstLevelIndex: undefined, //实际选中的一级标签
       secondLevelIndex: undefined, //实际选中的二级标签
+      loading: false,
     };
   },
   computed: {
@@ -292,11 +291,16 @@ export default {
     },
     // 查询文章列表(分页和条件)
     getArticleList() {
+      this.loading = true;
       articleApi
         .conditionList(this.page, this.limit, this.searchObj)
         .then((response) => {
           this.responseData = response.data;
           console.log(this.responseData);
+          this.loading = false;
+        })
+        .catch((e) => {
+          this.loading = false;
         });
     },
     // moment格式化时间

@@ -185,6 +185,7 @@ export default {
   },
   created() {
     this.getLikeState();
+    this.addView();
     this.initArticle();
   },
   mounted() {},
@@ -221,17 +222,6 @@ export default {
     };
   },
   methods: {
-    // // 统计浏览量
-    // lookArticle() {
-    //   let id = "";
-    //   if (cookie.getJSON("dhu_ucenter")) {
-    //     id = cookie.getJSON("dhu_ucenter").id;
-    //   }
-    //   const uid = id ? id : "visitor";
-    //   articleApi.calViewCount(this.articleId, uid).then(() => {
-    //     console.log("增加浏览量");
-    //   });
-    // },
     // 格式化时间
     formateTime(time) {
       return moment(time).fromNow();
@@ -291,17 +281,21 @@ export default {
     },
     // 文章点赞
     praise() {
-      articleApi.praiseArticle(this.articleId).then((response) => {
-        if (response.code === 200) {
-          pubsub.publish("articleLike", {
-            memberId: this.articleInfo.authorId,
-            link: this.$route.fullPath,
-          });
-          this.$message.success("👍点赞成功");
-          this.likeState = true;
-          this.articleInfo.likeCount++;
-        }
-      });
+      if (this.$store.state.account.user.userId !== undefined) {
+        articleApi.praiseArticle(this.articleId).then((response) => {
+          if (response.code === 200) {
+            pubsub.publish("articleLike", {
+              memberId: this.articleInfo.authorId,
+              link: this.$route.fullPath,
+            });
+            this.$message.success("👍点赞成功");
+            this.likeState = true;
+            this.articleInfo.likeCount++;
+          }
+        });
+      } else {
+        this.$message.warn("请先登录再进行点赞😨");
+      }
     },
     //取消点赞
     cancelPraise() {
@@ -315,13 +309,20 @@ export default {
     },
     // 获取点赞状态
     getLikeState() {
-      articleApi.getPraise(this.articleId).then((response) => {
-        if (response.code === 200) {
-          this.likeState = true;
-        } else {
-          this.likeState = false;
-        }
-      });
+      if (this.$store.state.account.user.userId !== undefined) {
+        articleApi.getPraise(this.articleId).then((response) => {
+          if (response.code === 200) {
+            this.likeState = true;
+          } else {
+            this.likeState = false;
+          }
+        });
+      }
+    },
+    addView() {
+      if (this.$store.state.account.user.userId !== undefined) {
+        articleApi.addView(this.articleId);
+      }
     },
   },
 };

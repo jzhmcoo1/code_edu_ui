@@ -37,11 +37,14 @@
 
 <script>
 import commentApi from "@/api/comment";
+import messageApi from "@/api/message";
+import pubsub from "pubsub-js";
 export default {
   props: {
     id: String, //保存courseId或者articleId
     type: String, //course或article
     parentId: String, //父评论id
+    replyMember: String, //父评论成员id
   },
   data() {
     return {
@@ -87,6 +90,11 @@ export default {
       commentApi.addComment(this.comment, this.type).then((response) => {
         if (response.code === 200) {
           this.$message.success("回复成功");
+          pubsub.publish("commentReply", {
+            memeberId: this.replyMember,
+            link: this.$route.path,
+            content: this.comment.content,
+          });
           this.$emit("replyNew");
           this.hideReplayBox();
         }

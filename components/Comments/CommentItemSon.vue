@@ -50,6 +50,7 @@
               :parentId="item.id"
               :type="type"
               :id="id"
+              :replyMember="item.memberId"
             />
           </div>
         </v-expand-transition>
@@ -62,6 +63,7 @@
 import ReplayComment from "@/components/Comments/ReplayComment";
 import moment from "moment";
 import commentApi from "@/api/comment";
+import pubsub from "pubsub-js";
 moment.locale("zh-CN");
 export default {
   components: {
@@ -114,6 +116,10 @@ export default {
         commentApi.praiseComment(this.item.id).then((response) => {
           if (response.code === 200) {
             this.$message.success("评论点赞成功👍");
+            pubsub.publish("commentLike", {
+              memberId: this.item.memberId,
+              link: this.$route.fullPath,
+            });
             this.item.liked = true;
             this.item.likeCount += 1;
           } else {

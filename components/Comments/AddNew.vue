@@ -38,10 +38,12 @@
 
 <script>
 import commentApi from "@/api/comment";
+import pubsub from "pubsub-js";
 export default {
   props: {
     id: String,
     type: String,
+    authorId: String,
   },
   data() {
     return {
@@ -86,6 +88,13 @@ export default {
       commentApi.addComment(this.comment, this.type).then((response) => {
         if (response.code === 200) {
           this.$message.success("评论成功");
+          if (this.type === "article") {
+            pubsub.publish("comment", {
+              link: this.$route.path,
+              memberId: this.authorId,
+              content: this.comment.content,
+            });
+          }
           this.comment.content = ""; //清空评论内容
           this.$emit("addNew"); //通知父组件刷新
           this.showAddComment = false; //收起评论组件

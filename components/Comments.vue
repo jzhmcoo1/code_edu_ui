@@ -24,7 +24,12 @@
       </v-flex>
       <v-divider></v-divider>
       <!-- 自己的评论 -->
-      <AddNew @addNew="getCommentList" :type="type" :id="id" />
+      <AddNew
+        @addNew="getCommentList"
+        :type="type"
+        :id="id"
+        :authorId="authorId"
+      />
       <!-- 评论列表 -->
       <v-flex xs12 v-for="comment in items" :key="comment.id">
         <CommentItem
@@ -51,6 +56,7 @@ export default {
   props: {
     id: String, //保存courseId或者articleId
     type: String, //course或article
+    authorId: String,
   },
   data() {
     return {
@@ -128,6 +134,7 @@ export default {
     getCommentList() {
       commentApi.commentList(this.id, this.type).then((response) => {
         this.items = response.data.items;
+        console.log(this.items);
       });
     },
   },

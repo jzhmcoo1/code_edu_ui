@@ -8,6 +8,27 @@
             <!-- 标题区 -->
             <v-container grid-list-xs>
               <h1 class="headline heading--text">全部文章</h1>
+              <div class="d-flex justify-space-between">
+                <v-switch
+                  label="最新发布排序"
+                  v-model="searchObj.createTimeSort"
+                  append-icon="update"
+                  @change="handleSwitchCreateTimeSort"
+                >
+                </v-switch>
+                <v-switch
+                  label="点赞量排序"
+                  append-icon="thumb_up_off_alt"
+                  v-model="searchObj.likeCountSort"
+                  @change="handleLikeCountSort"
+                ></v-switch>
+                <v-switch
+                  label="评论&浏览量排序"
+                  append-icon="mdi-eye"
+                  v-model="searchObj.viewAndCommentSort"
+                  @change="handleViewAndCommentSort"
+                ></v-switch>
+              </div>
             </v-container>
             <!-- 列表展示区 -->
             <v-container grid-list-xs v-if="responseData.items.length !== 0">
@@ -93,12 +114,6 @@
       </v-col>
       <!-- 右边栏 -->
       <v-col cols="12" sm="3">
-        <!-- <v-row>
-          <v-col>
-            <v-sheet rounded="lg" min-height="268"> 热门文章 </v-sheet>
-          </v-col>
-        </v-row> -->
-        <!-- TODO 文章分类 -->
         <v-row style="position: sticky; top: 80px">
           <v-col>
             <v-sheet rounded="lg" min-height="268">
@@ -186,24 +201,30 @@ export default {
         hasNext: true, //是否有后页
         items: [
           {
-            id: "", //文章id
-            authorId: "", //作者id
-            typeId: "", //分类id
-            title: "", //文章名
-            cover: "", //封面
-            viewCount: 0, //浏览数
-            isDeleted: 0,
-            createTime: "", //创建时间
-            modifiedTime: "", //修改时间
-            commentCount: 0, //评论数量
-            likeCount: 0, //点赞数量
+            id: "",
+            authorId: "",
+            authorName: "",
+            authorAvatar: "",
+            typeParentName: "",
+            typeName: "",
+            title: "",
+            cover: "",
+            viewCount: "0",
+            commentCount: "0",
+            likeCount: "0",
             content: null,
+            createTime: "",
+            modifiedTime: "",
           },
         ],
       },
       subjectNestedList: [], // 一级分类列表
       subSubjectList: [], // 二级分类列表
-      searchObj: {}, // 查询表单对象
+      searchObj: {
+        createTimeSort: false,
+        likeCountSort: false,
+        viewAndCommentSort: false,
+      }, // 查询表单对象
       firstLevelIndex: undefined, //实际选中的一级标签
       secondLevelIndex: undefined, //实际选中的二级标签
     };
@@ -253,12 +274,10 @@ export default {
         const secondId = this.subSubjectList[secondLevelIndex].id;
         this.searchObj.typeId = secondId;
       } else {
-        this.searchObj.typeParentId = this.subjectNestedList[
-          this.firstLevelIndex
-        ].id; //取消选择二级标签后重新赋值一级标签
-        this.subSubjectList = this.subjectNestedList[
-          this.firstLevelIndex
-        ].children;
+        this.searchObj.typeParentId =
+          this.subjectNestedList[this.firstLevelIndex].id; //取消选择二级标签后重新赋值一级标签
+        this.subSubjectList =
+          this.subjectNestedList[this.firstLevelIndex].children;
         this.searchObj.typeId = "";
       }
       this.page = 1; //把页数重新写回1
@@ -277,11 +296,27 @@ export default {
         .conditionList(this.page, this.limit, this.searchObj)
         .then((response) => {
           this.responseData = response.data;
+          console.log(this.responseData);
         });
     },
     // moment格式化时间
     getTime(value) {
       return monent(value).fromNow();
+    },
+    handleSwitchCreateTimeSort() {
+      this.searchObj.viewAndCommentSort = false;
+      this.searchObj.likeCountSort = false;
+      this.getArticleList();
+    },
+    handleViewAndCommentSort() {
+      this.searchObj.createTimeSort = false;
+      this.searchObj.likeCountSort = false;
+      this.getArticleList();
+    },
+    handleLikeCountSort() {
+      this.searchObj.createTimeSort = false;
+      this.searchObj.viewAndCommentSort = false;
+      this.getArticleList();
     },
   },
 };

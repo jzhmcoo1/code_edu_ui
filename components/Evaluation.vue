@@ -41,7 +41,12 @@
                   >
                   </v-rating>
                   <v-spacer></v-spacer>
-                  <v-btn depressed @click="readonly = !readonly" class="mx-2">
+                  <v-btn
+                    :disabled="disabled"
+                    depressed
+                    @click="readonly = !readonly"
+                    class="mx-2"
+                  >
                     <v-icon
                       left
                       v-text="readonly ? 'mdi-pencil' : 'mdi-redo'"
@@ -120,6 +125,7 @@ export default {
         id: "",
       },
       readonly: true,
+      disabled: false,
     };
   },
   created() {
@@ -150,13 +156,17 @@ export default {
         });
     },
     getEvaluationStatus() {
-      evaluation
-        .getEvaluation(this.id, this.limit, this.page, this.type)
-        .then((response) => {
-          if (response.data) {
-            this.evaluationObj = response.data;
-          }
-        });
+      if (this.$store.state.account.user.userId !== undefined) {
+        evaluation
+          .getEvaluation(this.id, this.limit, this.page, this.type)
+          .then((response) => {
+            if (response.data) {
+              this.evaluationObj = response.data;
+            }
+          });
+      } else {
+        this.disabled = true;
+      }
     },
     addEvaluation() {
       evaluation.addEvaluation(this.evaluationObj).then((response) => {

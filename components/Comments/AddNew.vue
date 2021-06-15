@@ -99,7 +99,7 @@ export default {
           this.$message.success("评论成功");
           if (this.type === "article") {
             pubsub.publish("comment", {
-              link: this.$route.path,
+              link: this.$route.fullPath,
               memberId: this.authorId,
               content: this.comment.content,
             });

@@ -179,7 +179,7 @@ export default {
             this.$message.success("评论点赞成功👍");
             pubsub.publish("commentLike", {
               memberId: this.item.memberId,
-              link: this.$route.path,
+              link: this.$route.fullPath,
             });
             this.item.liked = true;
             this.item.likeCount += 1;

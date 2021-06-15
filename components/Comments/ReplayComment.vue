@@ -98,7 +98,7 @@ export default {
           this.$message.success("回复成功");
           pubsub.publish("commentReply", {
             memeberId: this.replyMember,
-            link: this.$route.path,
+            link: this.$route.fullPath,
             content: this.comment.content,
           });
           this.$emit("replyNew");

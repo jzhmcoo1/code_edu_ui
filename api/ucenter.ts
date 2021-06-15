@@ -20,5 +20,12 @@ export default {
       url: `/service/selection/${courseId}`,
       method: 'delete'
     })
+  },
+  // 获取选课状态
+  getMyCourseState(courseId: string) {
+    return service({
+      url: `/service/selection/state/${courseId}`,
+      method: 'get'
+    })
   }
 }

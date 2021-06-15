@@ -128,7 +128,6 @@ import teacherApi from "@/api/teacher";
 import courseApi from "@/api/course";
 import Evaluation from "@/components/Evaluation.vue";
 export default {
-  middleware: "auth",
   components: {
     Evaluation,
   },

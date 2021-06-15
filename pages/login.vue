@@ -25,9 +25,6 @@
     </v-text-field>
 
     <v-text-field
-      type="password"
-      name="code"
-      id="code"
       label="验证码"
       required
       v-model="code"
@@ -58,12 +55,32 @@
           <v-divider></v-divider>
         </v-col>
         <v-col cols="12" class="d-flex justify-center">
-          <v-btn icon text color="green">
-            <v-icon>mdi-wechat</v-icon>
-          </v-btn>
-          <v-btn icon text color="info">
-            <v-icon>mdi-qqchat</v-icon>
-          </v-btn>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon text color="green" v-bind="attrs" v-on="on">
+                <v-icon>mdi-wechat</v-icon>
+              </v-btn>
+            </template>
+            <span>微信登录</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon text color="info" link v-bind="attrs" v-on="on">
+                <v-icon>mdi-qqchat</v-icon>
+              </v-btn>
+            </template>
+            <span>QQ登录</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn icon text color="info" link v-bind="attrs" v-on="on">
+                <a href="http://1.15.24.22:9000/#/login"
+                  ><v-icon>account_circle</v-icon></a
+                >
+              </v-btn>
+            </template>
+            <span>管理员登录</span>
+          </v-tooltip>
         </v-col>
       </v-row>
     </v-layout>

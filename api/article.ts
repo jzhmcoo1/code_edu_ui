@@ -81,5 +81,11 @@ export default {
       url: `${api_prefix}/${articleId}`,
       method: 'get'
     })
+  },
+  addView(articleId: Article["id"]) {
+    return service({
+      url: `/service/article/view/${articleId}`,
+      method: 'put'
+    })
   }
 }

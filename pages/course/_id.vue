@@ -252,7 +252,6 @@ import Comment from "@/components/Comments.vue";
 import CourseMenu from "@/components/Course/CourseMenu.vue";
 import Evaluation from "@/components/Evaluation.vue";
 export default {
-  middleware: "auth",
   components: {
     Comment,
     CourseMenu,
@@ -319,6 +318,7 @@ export default {
   },
   created() {
     this.initCourseInfo();
+    this.checkIfChoice();
     // 增加浏览量
     courseApi.addView(this.courseId);
   },
@@ -362,8 +362,6 @@ export default {
         console.log(response.data);
         this.courseWebVo = response.data.courseWebVo;
         this.chapterVideoList = response.data.allChapterVideo;
-        this.isChoice = response.data.isChoice;
-        // this.isChoice = response.data.isChoice;
         // 填写面包屑
         this.breadList[1].text = this.courseWebVo.subjectLevelOne;
         this.breadList[2].text = this.courseWebVo.subjectLevelTwo;
@@ -377,6 +375,14 @@ export default {
         .then((response) => {
           this.relatedCourse = response.data.items;
         });
+    },
+    checkIfChoice() {
+      if (this.$store.state.account.user.userId !== undefined) {
+        myCourseApi.getMyCourseState(this.courseId).then((response) => {
+          console.log(response.data);
+          this.isChoice = response.data.isSelected;
+        });
+      }
     },
   },
 };

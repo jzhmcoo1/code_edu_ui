@@ -318,9 +318,8 @@ export default {
   },
   created() {
     this.initCourseInfo();
+    this.addView();
     this.checkIfChoice();
-    // 增加浏览量
-    courseApi.addView(this.courseId);
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
@@ -337,6 +336,7 @@ export default {
             this.$message.success("选课成功");
             this.loading = false;
             this.disabled = true;
+            this.isChoice = true;
             this.initCourseInfo();
           } else {
             this.disabled = true;
@@ -382,6 +382,13 @@ export default {
           console.log(response.data);
           this.isChoice = response.data.isSelected;
         });
+      } else {
+        this.disabled = true;
+      }
+    },
+    addView() {
+      if (this.$store.state.account.user.userId !== undefined) {
+        courseApi.addView(this.courseId);
       }
     },
   },

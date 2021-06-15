@@ -97,7 +97,7 @@ export default {
         if (response.code === 200) {
           this.$message.success("回复成功");
           pubsub.publish("commentReply", {
-            memeberId: this.replyMember,
+            memberId: this.replyMember,
             link: this.$route.fullPath,
             content: this.comment.content,
           });

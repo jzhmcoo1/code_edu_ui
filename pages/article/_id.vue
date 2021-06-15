@@ -111,7 +111,11 @@
           <v-expand-transition>
             <div id="comment" v-show="showComment">
               <v-divider></v-divider>
-              <Comments type="article" :id="articleId" />
+              <Comments
+                type="article"
+                :id="articleId"
+                :authorId="articleInfo.authorId"
+              />
             </div>
           </v-expand-transition>
         </v-card>
@@ -155,10 +159,10 @@ import moment from "moment";
 import SideCatalog from "vue-side-catalog";
 import "vue-side-catalog/lib/vue-side-catalog.css";
 import article from "@/api/article";
+import pubsub from "pubsub-js";
 moment.locale("zh-cn");
 export default {
   components: { Comment, SideCatalog },
-  middleware: "auth",
   //params.id获取路径id值
   head() {
     return {
@@ -192,8 +196,9 @@ export default {
       renderer: new marked.Renderer(),
       articleInfo: {
         authorName: "MrBird",
+        authorId: "",
         commentCount: "0",
-        content: "鉴定为炒",
+        content: "",
         cover: "",
         createTime: "",
         id: "",
@@ -288,6 +293,10 @@ export default {
     praise() {
       articleApi.praiseArticle(this.articleId).then((response) => {
         if (response.code === 200) {
+          pubsub.publish("articleLike", {
+            memberId: this.articleInfo.authorId,
+            link: this.$route.fullPath,
+          });
           this.$message.success("👍点赞成功");
           this.likeState = true;
           this.articleInfo.likeCount++;

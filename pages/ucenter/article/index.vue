@@ -5,6 +5,7 @@
       :headers="headers"
       :items="items"
       sort-by="createTime"
+      :sort-desc="true"
       class="elevation-0"
       :page.sync="page"
       hide-default-footer

@@ -4,6 +4,8 @@
     <v-data-table
       :headers="headers"
       :items="items"
+      sort-by="createTime"
+      :sort-desc="true"
       hide-default-footer
       class="elevation-0"
     >

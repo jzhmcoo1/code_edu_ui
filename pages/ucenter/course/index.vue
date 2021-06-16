@@ -4,7 +4,8 @@
     <v-data-table
       :headers="headers"
       :items="items"
-      :sort-desc="['createTime']"
+      sort-by="createTime"
+      :sort-desc="true"
       class="elevation-0"
       :page.sync="page"
       hide-default-footer
@@ -191,7 +192,7 @@ export default {
     },
     // 去前台查看课程
     checkItem(item) {
-      this.$router.push(`/course/${item.courseId}`);
+      this.$router.push(`/course/${item.id}`);
     },
     // 打开对话框,确认是否阐述
     openDeleteDialog(item) {

@@ -149,8 +149,7 @@
                     <v-card-text class="subtitle-2">
                       {{ courseWebVo.teacherName }}
                     </v-card-text>
-                    <v-card-text class="caption">
-                      {{ courseWebVo.intro }}
+                    <v-card-text v-html="courseWebVo.intro" class="caption">
                     </v-card-text>
                   </v-flex>
                 </v-layout>

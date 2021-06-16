@@ -282,8 +282,8 @@ export default {
     // 文章点赞
     praise() {
       if (
-        this.$store.state.account.user.userIdthis.$store.state.account.user
-          .userId !== ""
+        this.$store.state.account.user.userId &&
+        this.$store.state.account.user.userId !== ""
       ) {
         articleApi.praiseArticle(this.articleId).then((response) => {
           if (response.code === 200) {

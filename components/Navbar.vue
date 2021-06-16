@@ -175,7 +175,7 @@ export default {
     // 如果用户登录,则展示用户信息
     showInfo() {
       const userInfo = this.$store.state.account.user;
-      if (userInfo.userId !== undefined) {
+      if (userInfo.userId !== undefined && userInfo.userId !== "") {
         this.loginInfo = userInfo;
         this.checkUnreadMessages();
       } else {

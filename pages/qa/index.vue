@@ -53,7 +53,7 @@
                 small
                 color="pink"
                 v-for="commit in commitArray"
-                :key="commit.stats.id"
+                :key="commit.sha"
                 icon="edit"
               >
                 <template v-slot:icon>
@@ -78,7 +78,7 @@
                         getFormattedDate(commit.commit.committer.date)
                       }}
                     </p>
-                    <p class="subtitle-2 subtitle-2 success--text">
+                    <!-- <p class="subtitle-2 subtitle-2 success--text">
                       <v-icon>add</v-icon>
                       增加行数:{{ commit.stats.additions }}
                     </p>
@@ -89,7 +89,7 @@
                     <p class="subtitle-2 info--text">
                       <v-icon>functions</v-icon>
                       变化行数:{{ commit.stats.total }}
-                    </p>
+                    </p> -->
                     <v-btn :href="commit.html_url" class="mx-0" outlined>
                       查看详情
                     </v-btn>
@@ -108,7 +108,7 @@
                 small
                 color="pink"
                 v-for="commit in commitBackArray"
-                :key="commit.stats.id"
+                :key="commit.sha"
                 icon="edit"
               >
                 <template v-slot:icon>
@@ -133,7 +133,7 @@
                         getFormattedDate(commit.commit.committer.date)
                       }}
                     </p>
-                    <p class="subtitle-2 subtitle-2 success--text">
+                    <!-- <p class="subtitle-2 subtitle-2 success--text">
                       <v-icon>add</v-icon>
                       增加行数:{{ commit.stats.additions }}
                     </p>
@@ -144,7 +144,7 @@
                     <p class="subtitle-2 info--text">
                       <v-icon>functions</v-icon>
                       变化行数:{{ commit.stats.total }}
-                    </p>
+                    </p> -->
                     <v-btn :href="commit.html_url" class="mx-0" outlined>
                       查看详情
                     </v-btn>

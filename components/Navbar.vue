@@ -4,11 +4,13 @@
       <v-container class="py-0 fill-height">
         <!-- 网站标题 -->
         <h1 class="heading--text mr-10 d-none d-lg-flex pt-4">
-          <v-img
-            width="120"
-            :src="$vuetify.theme.dark ? `/logo-light.png` : `/logo-dark.png`"
-          >
-          </v-img>
+          <nuxt-link to="/welcome">
+            <v-img
+              width="120"
+              :src="$vuetify.theme.dark ? `/logo-light.png` : `/logo-dark.png`"
+            >
+            </v-img>
+          </nuxt-link>
         </h1>
         <!-- 网站导航 -->
         <div class="d-span">
@@ -106,7 +108,7 @@ export default {
       { title: "课程", route: "/course", icon: "school" },
       { title: "名师", route: "/teacher", icon: "group" },
       { title: "文章", route: "/article", icon: "library_books" },
-      { title: "作者", route: "/qa", icon: "person" },
+      { title: "考试", route: "/exam", icon: "mdi-square-edit-outline" },
     ],
     // 用户登录信息
     loginInfo: {

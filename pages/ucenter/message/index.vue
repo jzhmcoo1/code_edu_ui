@@ -25,7 +25,7 @@
         </v-chip>
       </template>
       <template v-slot:[`item.type`]="{ item }">
-        <v-chip>
+        <v-chip :color="computeColor(item.type)">
           {{ computeType(item.type) }}
         </v-chip>
       </template>
@@ -139,13 +139,35 @@ export default {
     computeType(value) {
       switch (value) {
         case 0:
-          return "新增评论";
+          return "新增评论🆕";
         case 1:
-          return "回复评论";
+          return "回复评论🤩";
         case 2:
-          return "文章点赞";
+          return "文章点赞👍";
         case 3:
-          return "评论点赞";
+          return "评论点赞👍";
+        case 4:
+          return "课程更新🙋";
+        case 5:
+          return "新的考试👀";
+        default:
+          return "";
+      }
+    },
+    computeColor(value) {
+      switch (value) {
+        case 0:
+          return "blue lighten-2";
+        case 1:
+          return "teal lighten-2";
+        case 2:
+          return "cyan lighten-1";
+        case 3:
+          return "yellow darken-4";
+        case 4:
+          return "grey";
+        case 5:
+          return "deep-purple lighten-3";
         default:
           return "";
       }

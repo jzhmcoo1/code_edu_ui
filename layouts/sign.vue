@@ -3,16 +3,22 @@
     <Navbar />
     <v-main>
       <v-container class="fill-height justify-center">
-        <v-row class="justify-center">
-          <v-col class="col-sm-8 col-lg-11 col-xl-7">
+        <v-row class="justify-center pa-0">
+          <v-col class="col-sm-8 col-lg-11 col-xl-7 pa-0">
             <v-card elevation="4">
               <v-sheet>
                 <v-row>
                   <!-- 左边 -->
                   <v-col
-                    class="info d-none d-md-flex align-center justify-center col-lg-7"
+                    class="
+                      d-none d-md-flex
+                      align-center
+                      justify-center
+                      col-lg-7
+                      py-0
+                    "
                   >
-                    <v-icon size="500">laptop</v-icon>
+                    <v-img height="525px" src="/helloworld.webp"></v-img>
                   </v-col>
                   <!-- 右边 -->
                   <v-col class="d-flex flex-column col-lg-5 px-10 pb-5">

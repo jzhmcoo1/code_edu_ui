@@ -1,21 +1,15 @@
 export default {
-  state: () => ({
-    loginInfo: {
-      id: "",
-      age: "",
-      avatar: "",
-      mobile: "",
-      nickname: "",
-      sex: "",
-    },
-  }),
+  namespaced: true,
+  state: {
+    peference: { theme: "system" }
+  },
   mutations: {
-    update(state: any, loginInfo: object) {
-      state.loginInfo = loginInfo
-      console.log('状态更新', state.loginInfo)
+    setPeference(state: any, peference: object) {
+      state.peference = peference
+      console.log('状态更新', state.peference)
     },
     remove(state: any) {
-      state.loginInfo = {}
+      state.peference = {}
       console.log('状态清空')
     },
   }

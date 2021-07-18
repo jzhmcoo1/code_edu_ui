@@ -3,7 +3,7 @@
     <Navbar />
     <!-- 笔记组件 -->
     <DrawerEditor />
-    <v-main class="background">
+    <v-main>
       <v-container grid-list-xs>
         <v-row>
           <v-col>

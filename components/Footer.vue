@@ -5,31 +5,22 @@
         flat
         tile
         width="100%"
-        :class="`
-          ${
-            $vuetify.theme.dark ? 'background' : 'primary lighten-1'
-          } text-center
-        `"
+        dark
+        min-height="100px"
+        class="text-center"
       >
-        <v-divider></v-divider>
+        <!-- <v-divider></v-divider> -->
 
         <v-card-text class="text-uppercase text-center">
-          {{ new Date().getFullYear() }} —
+          <p>2020 - {{ new Date().getFullYear() }}</p>
           <a
-            :class="`font-weight-bold ${
-              $vuetify.theme.dark ? 'primary' : 'white'
-            }--text`"
+            class="font-weight-bold"
             href="https://github.com/jzhmcoo1/code_edu_ui"
           >
             CodeBar
           </a>
           <span class="px-2">by</span>
-          <a
-            :class="`font-weight-bold ${
-              $vuetify.theme.dark ? 'primary' : 'white'
-            }--text`"
-            href="https://github.com/jzhmcoo1/"
-          >
+          <a class="font-weight-bold" href="https://github.com/jzhmcoo1/">
             jzhmcoo1
           </a>
         </v-card-text>

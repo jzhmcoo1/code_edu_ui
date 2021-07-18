@@ -50,7 +50,7 @@
         </v-img>
       </v-row>
     </section>
-    <v-main class="background">
+    <v-main>
       <v-container>
         <v-sheet min-height="80vh" rounded="lg">
           <nuxt />

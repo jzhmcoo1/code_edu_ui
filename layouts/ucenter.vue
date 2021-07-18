@@ -60,20 +60,13 @@
       <v-toolbar-title class="font-weight-bold">个人中心</v-toolbar-title>
       <v-spacer></v-spacer>
       <!-- 明暗切换器 -->
-      <v-switch
-        class="center"
-        :prepend-icon="$vuetify.theme.dark ? 'nightlight_round' : 'wb_sunny'"
-        inset
-        hide-details
-        v-model="$vuetify.theme.dark"
-      ></v-switch>
+      <theme-picker />
       <v-btn text router to="/" icon>
         <v-icon>home</v-icon>
       </v-btn>
     </v-app-bar>
 
-    <v-main class="background">
-      <!--  -->
+    <v-main>
       <v-container grid-list-xs>
         <v-sheet min-height="90vh" class="transparent">
           <nuxt />
@@ -84,11 +77,12 @@
 </template>
 
 <script>
+import ThemePicker from "~/components/ThemePicker.vue";
 export default {
   head: {
     titleTemplate: "%s - 个人中心",
   },
-  components: {},
+  components: { ThemePicker },
   middleware: "auth",
   created() {
     this.loginInfo = this.$store.state.account.user;
@@ -168,6 +162,25 @@ export default {
             title: "管理文章",
             route: "/ucenter/article",
             icon: "edit",
+            exact: true,
+          },
+        ],
+      },
+      {
+        title: "我的考试",
+        route: "/ucenter/exam",
+        icon: "mdi-pencil",
+        child: [
+          {
+            title: "考试列表",
+            route: "/ucenter/exam",
+            icon: "mdi-playlist-edit",
+            exact: true,
+          },
+          {
+            title: "考试记录",
+            route: "/ucenter/exam/record",
+            icon: "mdi-playlist-check",
             exact: true,
           },
         ],

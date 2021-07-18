@@ -129,7 +129,7 @@
       </v-col>
       <!-- 右边栏 -->
       <v-col cols="12" sm="3">
-        <v-row style="position: sticky; top: 80px">
+        <v-row style="position: sticky; top: 100px">
           <v-col>
             <v-sheet rounded="lg" min-height="268">
               <v-card flat>
@@ -199,7 +199,6 @@ import monent from "moment";
 monent.locale("zh-CN");
 export default {
   components: { FloatBtn },
-  layout: "article",
   head: {
     title: "文章列表",
   },

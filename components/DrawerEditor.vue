@@ -42,7 +42,7 @@
       </v-row>
       <v-row>
         <v-col>
-          <v-sheet class="white">
+          <v-sheet>
             <v-text-field
               outlined
               dense
@@ -51,6 +51,8 @@
               label="笔记标题"
               v-model="note.title"
             ></v-text-field>
+          </v-sheet>
+          <v-sheet color="white">
             <client-only>
               <editor ref="toastuiEditor" previewStyle="tab" height="500px" />
             </client-only>

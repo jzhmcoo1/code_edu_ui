@@ -1,7 +1,7 @@
 <template>
   <v-app id="article">
     <Navbar />
-    <v-main class="background">
+    <v-main>
       <nuxt />
     </v-main>
   </v-app>

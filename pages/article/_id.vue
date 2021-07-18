@@ -1,8 +1,8 @@
 <template>
   <v-container grid-list-xs>
     <!-- 文章目录收纳盒 -->
-    <v-navigation-drawer app fixed v-model="drawer" class="background">
-      <v-sheet rounded="lg" min-height="100vh" class="background">
+    <v-navigation-drawer app fixed v-model="drawer">
+      <v-sheet rounded="lg" min-height="100vh">
         <v-card flat class="transparent mx-2">
           <v-card-title primary-title>
             <v-btn text fab @click="drawer = !drawer">
@@ -189,7 +189,6 @@ export default {
     this.initArticle();
   },
   mounted() {},
-  layout: "article",
   data() {
     return {
       fab: false, //按钮组

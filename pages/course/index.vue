@@ -4,12 +4,7 @@
       <h1 class="headline heading--text">全部课程</h1>
       <v-card flat>
         <v-card-title primary-title> 一级分类 </v-card-title>
-        <v-tabs
-          v-model="tab"
-          center-active
-          background-color="background"
-          show-arrows
-        >
+        <v-tabs v-model="tab" center-active show-arrows>
           <v-tabs-slider color="primary"></v-tabs-slider>
           <v-tab @click="searchSub('0')"> 全部一级分类 </v-tab>
           <v-tab
@@ -30,7 +25,6 @@
           v-if="subSubjectList.length !== 0"
           v-model="subTab"
           center-active
-          background-color="background"
         >
           <v-tabs-slider color="primary"></v-tabs-slider>
           <v-tab @click="searchTwo('')"> 全部二级分类 </v-tab>

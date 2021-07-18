@@ -13,28 +13,37 @@
           </nuxt-link>
         </h1>
         <!-- 网站导航 -->
-        <div class="d-span">
-          <v-tabs background-color="transparent" slider-color="primary">
+        <div>
+          <v-btn
+            router
+            text
+            :to="link.route"
+            v-for="link in links"
+            :key="link.title"
+          >
+            <v-icon>{{ link.icon }}</v-icon>
+            <span>{{ link.title }}</span>
+          </v-btn>
+          <!-- <v-tabs
+            fixed-tabs
+            background-color="transparent"
+            slider-color="primary"
+          >
             <v-tab
               v-for="link in links"
               :key="link.title"
               router
+              exact
               :to="link.route"
             >
               <v-icon>{{ link.icon }}</v-icon>
-              <span class="d-none d-lg-flex">{{ link.title }}</span>
+              <span>{{ link.title }}</span>
             </v-tab>
-          </v-tabs>
+          </v-tabs> -->
         </div>
         <v-spacer></v-spacer>
         <!-- 明暗切换器 -->
-        <v-switch
-          class="center"
-          :prepend-icon="$vuetify.theme.dark ? 'nightlight_round' : 'wb_sunny'"
-          inset
-          hide-details
-          v-model="$vuetify.theme.dark"
-        ></v-switch>
+        <theme-picker />
         <v-responsive max-width="260" class="mr-1">
           <SearchBar :dense="true" />
         </v-responsive>
@@ -96,10 +105,12 @@
 import SearchBar from "./SearchBar";
 import messageApi from "@/api/message";
 import Message from "./Messge.vue";
+import ThemePicker from "@/components/ThemePicker.vue";
 export default {
   components: {
     SearchBar,
     Message,
+    ThemePicker,
   },
   data: () => ({
     websocket: WebSocket,

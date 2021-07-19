@@ -2,9 +2,12 @@
   <v-card flat class="pa-2 mb-2">
     <v-row>
       <v-col class="pa-1" cols="12" sm="6" md="4">
-        <v-responsive :aspect-ratio="12 / 1">
-          <v-img class="zoom-img" height="236px" :src="detail.avatar"> </v-img>
-        </v-responsive>
+        <v-sheet class="white">
+          <v-responsive :aspect-ratio="12 / 1">
+            <v-img class="zoom-img" height="236px" :src="detail.avatar">
+            </v-img>
+          </v-responsive>
+        </v-sheet>
       </v-col>
       <v-col cols="6" md="3">
         <v-card-title primary-title>
@@ -37,16 +40,27 @@
       <v-col>
         <v-card-title
           height="100%"
-          fill-height
           class="d-flex flex-column justify-space-between align-start"
         >
           <p>考试描述👀</p>
-          <p class="body-2 description" style="min-height: 70px">
+          <v-card-text v-if="detail.desc === null || detail.desc === ''">
+            <a-empty description="该考试暂无描述"></a-empty>
+          </v-card-text>
+          <p v-else class="body-2 description" style="min-height: 120px">
             {{ detail.desc }}
           </p>
-          <v-btn block color="primary" :disabled="!isOpen">{{
-            isOpen ? "立即参加" : "已结束"
-          }}</v-btn>
+          <v-btn
+            @click="confirmExam"
+            block
+            color="primary"
+            :disabled="isOpen"
+            >{{ isOpen ? "立即参加" : "已结束" }}</v-btn
+          >
+          <exam-confirm
+            @closeDialog="confirmExam"
+            :dialog="dialog"
+            :detail="detail"
+          />
         </v-card-title>
       </v-col>
     </v-row>
@@ -55,8 +69,10 @@
 
 <script>
 import moment from "moment";
+import ExamConfirm from "./ExamConfirm.vue";
 moment.locale("zh-CN");
 export default {
+  components: { ExamConfirm },
   name: "exam-item",
   props: {
     detail: {
@@ -69,10 +85,16 @@ export default {
       elapse: 0, //考试时间(分钟)
       endDate: "", //考试结束时间
       id: "", //考试id
+      radioScore: 0,
+      score: 100,
+      judgeScore: 0,
+      checkScore: 0,
     },
   },
   data() {
-    return {};
+    return {
+      dialog: false,
+    };
   },
   created() {
     console.log(this.detail);
@@ -112,7 +134,12 @@ export default {
       return moment(this.detail.startDate).fromNow();
     },
   },
-  methods: {},
+  methods: {
+    confirmExam() {
+      this.dialog = !this.dialog;
+      console.log(this.dialog);
+    },
+  },
 };
 </script>
 

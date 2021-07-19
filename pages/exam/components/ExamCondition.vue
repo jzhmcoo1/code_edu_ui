@@ -16,8 +16,8 @@
             label="排序规则"
           ></v-select>
         </v-col>
-        <v-col class="d-flex align-center justify-end">
-          <v-btn @click="search" color="primary" text>
+        <v-col cols="2" class="d-flex align-center justify-end">
+          <v-btn block @click="search" color="primary">
             <v-icon left>search</v-icon>
             搜索
           </v-btn>

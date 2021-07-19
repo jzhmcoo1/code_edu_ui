@@ -2,7 +2,7 @@
   <div class="text-center">
     <v-dialog persistent v-model="dialog" width="500px" height="100%">
       <v-card>
-        <v-card-title class="text-h5 background">
+        <v-card-title class="text-h5">
           您即将参加 {{ detail.name }} 考试
         </v-card-title>
 

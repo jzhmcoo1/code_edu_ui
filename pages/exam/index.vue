@@ -40,6 +40,9 @@ import examApi from "@/api/exam";
 import ExamItem from "./components/ExamItem.vue";
 import ExamCondition from "./components/ExamCondition.vue";
 export default {
+  head: {
+    title: "考试列表",
+  },
   components: { ExamItem, ExamCondition },
   data() {
     return {

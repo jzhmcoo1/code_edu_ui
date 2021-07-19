@@ -39,7 +39,6 @@
           :item="comment"
         />
       </v-flex>
-      <!--//TODO 分页器 -->
     </v-layout>
   </v-container>
 </template>

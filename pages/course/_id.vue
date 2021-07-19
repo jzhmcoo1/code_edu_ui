@@ -357,7 +357,6 @@ export default {
     // 获取当前id的课程信息
     initCourseInfo() {
       courseApi.courseDetail(this.courseId).then((response) => {
-        // FIXME: 登录token过期导致无法请求无数据
         console.log(response.data);
         this.courseWebVo = response.data.courseWebVo;
         this.chapterVideoList = response.data.allChapterVideo;

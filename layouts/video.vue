@@ -69,7 +69,6 @@
             </v-row>
             <v-row>
               <v-col>
-                <!-- //TODO:课程相关视频 -->
                 <v-sheet rounded="lg"> </v-sheet>
               </v-col>
             </v-row>
@@ -133,7 +132,6 @@ export default {
     // 获取当前id的课程信息
     initCourseInfo() {
       courseApi.courseDetail(this.courseId).then((response) => {
-        // FIXME: 登录token过期导致无法请求无数据
         console.log(response.data);
         this.chapterVideoList = response.data.allChapterVideo;
         this.courseWebVo = response.data.courseWebVo;

@@ -213,12 +213,15 @@ export default {
     },
     // 获取登录用户的文章列表
     getArticleMemberList() {
+      this.loading = true;
       articleApi.userArticlePage(this.page, this.limit).then((response) => {
         this.items = response.data.items;
+        this.loading = false;
       });
     },
     // 删除文章
     deleteItem() {
+      this.loading = true;
       articleApi.deleteArticle(this.toDeleteItem.id).then((response) => {
         if (response.code === 200) {
           this.$message.success("删除成功");
@@ -226,6 +229,7 @@ export default {
           this.toDeleteItem = null;
           this.dialogDelete = false;
         }
+        this.loading = false;
       });
     },
     // 编辑文章

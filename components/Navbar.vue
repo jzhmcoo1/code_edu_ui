@@ -24,22 +24,6 @@
             <v-icon>{{ link.icon }}</v-icon>
             <span>{{ link.title }}</span>
           </v-btn>
-          <!-- <v-tabs
-            fixed-tabs
-            background-color="transparent"
-            slider-color="primary"
-          >
-            <v-tab
-              v-for="link in links"
-              :key="link.title"
-              router
-              exact
-              :to="link.route"
-            >
-              <v-icon>{{ link.icon }}</v-icon>
-              <span>{{ link.title }}</span>
-            </v-tab>
-          </v-tabs> -->
         </div>
         <v-spacer></v-spacer>
         <!-- 明暗切换器 -->
@@ -83,8 +67,16 @@
                   v-for="(item, index) in menus"
                   :key="index"
                 >
-                  <v-list-item-title>
-                    <v-icon left>{{ item.icon }}</v-icon>
+                  <v-list-item-title class="pt-0">
+                    <v-badge
+                      class="ml-1 mt-1"
+                      left
+                      overlap
+                      dot
+                      :color="!item.showBadge ? 'transparent' : 'red'"
+                    >
+                      <v-icon left>{{ item.icon }}</v-icon>
+                    </v-badge>
                     {{ item.title }}
                   </v-list-item-title>
                 </v-list-item>
@@ -131,11 +123,41 @@ export default {
       sex: "",
     },
     menus: [
-      { title: "个人中心", icon: "home", route: "/ucenter/info" },
-      { title: "消息中心", icon: "email", route: "/ucenter/message" },
-      { title: "我的课程", icon: "school", route: "/ucenter/course" },
-      { title: "我的文章", icon: "article", route: "/ucenter/article" },
-      { title: "我的笔记", icon: "edit", route: "/ucenter/note" },
+      {
+        title: "个人中心",
+        icon: "home",
+        route: "/ucenter/info",
+        showBadge: false,
+      },
+      {
+        title: "消息中心",
+        icon: "email",
+        route: "/ucenter/message",
+        showBadge: false,
+      },
+      {
+        title: "我的课程",
+        icon: "school",
+        route: "/ucenter/course",
+        showBadge: false,
+      },
+      {
+        title: "我的文章",
+        icon: "article",
+        route: "/ucenter/article",
+        showBadge: false,
+      },
+      {
+        title: "我的笔记",
+        icon: "edit",
+        route: "/ucenter/note",
+        showBadge: false,
+      },
+      {
+        title: "考试记录",
+        icon: "mdi-square-edit-outline",
+        route: "/ucenter/exam",
+      },
     ],
     messages: 0,
     unreadList: [],
@@ -211,6 +233,11 @@ export default {
     checkUnreadMessages() {
       messageApi.checkUnreadCount().then((response) => {
         this.messages = response.data.count;
+        if (this.messages !== 0) {
+          this.menus[1].showBadge = true;
+        } else {
+          this.menus[1].showBadge = false;
+        }
         this.unreadList = response.data.unReadMessage;
       });
     },

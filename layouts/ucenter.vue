@@ -177,12 +177,6 @@ export default {
             icon: "mdi-playlist-edit",
             exact: true,
           },
-          {
-            title: "考试记录",
-            route: "/ucenter/exam/record",
-            icon: "mdi-playlist-check",
-            exact: true,
-          },
         ],
       },
     ],

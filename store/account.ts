@@ -13,13 +13,7 @@ export default {
   },
   mutations: {
     removeAll(state: any) {
-      db.remove('ACCESS_TOKEN')
-      db.remove('REFRESH_TOKEN')
-      db.remove('ROUTE_TOKEN')
-      db.remove('EXPIRE_TIME')
-      db.remove('USER')
-      db.remove('PERMISSIONS')
-      db.remove('USER_ROUTER')
+      db.clear()
       state = {}
     },
     setAccessToken(state: any, val: any) {

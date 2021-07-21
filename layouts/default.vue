@@ -53,7 +53,7 @@
     <v-main>
       <v-container>
         <v-sheet min-height="80vh" rounded="lg">
-          <nuxt keep-alive />
+          <nuxt />
         </v-sheet>
       </v-container>
     </v-main>

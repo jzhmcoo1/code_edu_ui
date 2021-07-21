@@ -70,5 +70,13 @@ export default {
       method: 'post',
       data: condition
     })
+  },
+
+  userExamList(page: number, limit: number, condition: object) {
+    return service({
+      url: `${api_prefix}/user/${page}/${limit}`,
+      method: 'post',
+      data: condition
+    })
   }
 }

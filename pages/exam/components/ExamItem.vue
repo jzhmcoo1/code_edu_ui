@@ -49,11 +49,12 @@
           <p v-else class="body-2 description" style="min-height: 120px">
             {{ detail.desc }}
           </p>
+          <!-- TODO 写完考试界面后复原 -->
           <v-btn
             @click="confirmExam"
             block
             color="primary"
-            :disabled="isOpen"
+            :disabled="!isOpen"
             >{{ isOpen ? "立即参加" : "已结束" }}</v-btn
           >
           <exam-confirm

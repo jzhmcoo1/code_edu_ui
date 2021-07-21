@@ -86,13 +86,6 @@ export default {
     return {};
   },
   computed: {
-    isOpen() {
-      const now = new Date();
-      if (moment(now).isBetween(this.detail.startDate, this.detail.endDate)) {
-        return true;
-      }
-      return false;
-    },
     status() {
       const now = new Date();
       if (moment(now).isBefore(this.detail.startDate)) {
@@ -108,9 +101,56 @@ export default {
     closeDialog() {
       this.$emit("closeDialog");
     },
+    // 计算从进入考试开始+考试限制时间的结束时间
+    endTime() {
+      if (
+        this.$store.state.userInfo.exam &&
+        this.detail.id === this.$store.state.userInfo.exam.id &&
+        this.$store.state.userInfo.exam.endDate !== ""
+      ) {
+        console.log(
+          "考试日期存在,结果为:",
+          this.$store.state.userInfo.exam.endDate
+        );
+        return this.$store.state.userInfo.exam.endDate;
+      }
+      const now = new Date();
+      const newTime = new Date(
+        Date.parse(now) + this.detail.elapse * 60 * 1000
+      );
+      console.log(this.detail.elapse + "分钟");
+      console.log(
+        "考试日期不存在,结果为:",
+        moment(newTime).format("YYYY-MM-DD HH:mm:SS")
+      );
+      return moment(newTime).format("YYYY-MM-DD HH:mm:SS");
+    },
+    isOpen() {
+      const now = new Date();
+      if (moment(now).isBetween(this.detail.startDate, this.detail.endDate)) {
+        return true;
+      }
+      return false;
+    },
     attendExam() {
-      if (this.isOpen) {
+      if (
+        this.$store.state.userInfo.exam.id !== "" &&
+        this.$store.state.userInfo.exam.id !== this.detail.id
+      ) {
+        this.$message.warning("请先完成上一场考试!😨");
+        this.$router.push("/exam/" + this.$store.state.userInfo.exam.id);
+        this.closeDialog();
+        return;
+      }
+      const end_time = this.endTime();
+      if (this.isOpen()) {
         console.log("参加考试");
+        this.$router.push("/exam/" + this.detail.id);
+        this.$store.commit("userInfo/setExam", {
+          id: this.detail.id,
+          endDate: end_time,
+          answerMap: {},
+        });
       } else {
         this.$message.warning(`🤯对不起,你所参加的考试${this.status}`);
       }

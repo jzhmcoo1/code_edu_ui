@@ -52,7 +52,6 @@ export default {
       return moment(this.endDate).toDate();
     },
     finish() {
-      console.log("考试结束");
       const exam = this.$store.state.userInfo.exam;
       const { id } = exam;
       let answerMap = {};
@@ -64,6 +63,10 @@ export default {
             answerMap[key] = [exam.answerMap[key]];
           }
         }
+      }
+      if (Object.keys(answerMap).length === 0) {
+        this.$message.warning("请不要交白卷😅");
+        return;
       }
       console.log({ id, answerMap });
       console.log(exam);

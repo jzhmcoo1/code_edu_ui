@@ -29,7 +29,7 @@ import ExamAside from "./components/ExamAside.vue";
 import ExamContent from "./components/ExamContent.vue";
 export default {
   components: { ExamHeader, ExamAside, ExamContent },
-  middleware: ["auth", "exam"],
+  middleware: ["auth"],
   data() {
     return {
       examId: this.$route.params.id,

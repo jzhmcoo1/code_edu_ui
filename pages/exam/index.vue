@@ -40,6 +40,7 @@ import examApi from "@/api/exam";
 import ExamItem from "./components/ExamItem.vue";
 import ExamCondition from "./components/ExamCondition.vue";
 export default {
+  middleware: ["auth"],
   head: {
     title: "考试列表",
   },
@@ -63,7 +64,7 @@ export default {
     getExamList(condition = this.condition) {
       if (!Number.isInteger(condition)) this.condition = condition;
       examApi
-        .examList(this.page, this.limit, this.condition)
+        .userExamList(this.page, this.limit, this.condition)
         .then((response) => {
           this.examList = response.data.rows;
           this.total = parseInt(response.data.total);

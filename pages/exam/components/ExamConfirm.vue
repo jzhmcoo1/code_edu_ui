@@ -134,7 +134,9 @@ export default {
     },
     attendExam() {
       if (
+        this.$store.state.userInfo.exam.id &&
         this.$store.state.userInfo.exam.id !== "" &&
+        this.$store.state.userInfo.exam.id !== "undefined" &&
         this.$store.state.userInfo.exam.id !== this.detail.id
       ) {
         this.$message.warning("请先完成上一场考试!😨");

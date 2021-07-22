@@ -9,7 +9,7 @@
     </h1>
     <v-spacer></v-spacer>
     <v-btn class="mr-2 mt-n1" color="info" outlined @click="finish">交卷</v-btn>
-    <h3 class="mt-1 mr-2">倒计时</h3>
+    <h3 class="mt-1 mr-2 heading--text">倒计时</h3>
     <flip-down
       :endDate="endTime()"
       @timeUp="finish"

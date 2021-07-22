@@ -12,19 +12,11 @@
       :loading="loading"
       loading-text="正在加载..."
       locale="zh-CN"
-      :search="search"
     >
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title class="font-weight-bold">文章管理</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
-          <v-text-field
-            v-model="search"
-            append-icon="mdi-magnify"
-            label="搜索文章"
-            single-line
-            hide-details
-          ></v-text-field>
           <v-spacer></v-spacer>
           <v-tooltip bottom>
             <template v-slot:activator="{ on, attrs }">
@@ -144,7 +136,6 @@ moment.locale("zh-CN");
 export default {
   layout: "ucenter",
   data: () => ({
-    search: "", //搜索
     toDeleteItem: null, //保存待删除的item
     dialogDelete: false, //确认删除的对话框
     loading: false, //控制表格是否正在加载

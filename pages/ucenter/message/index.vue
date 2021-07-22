@@ -60,9 +60,10 @@
           @input="pageMessages"
           v-model="page"
           :length="pages"
-          :total-visible="8"
+          :total-visible="6"
           circle
         ></v-pagination>
+        <p class="mt-2">总共 {{ total }} 条记录</p>
       </div>
     </v-container>
   </v-card>

@@ -2,7 +2,7 @@
   <v-container grid-list-xs>
     <!-- 标题 -->
     <v-container grid-list-xs>
-      <exam-header :exam="exam" />
+      <exam-header :exam="exam" :questionSum="questionSum" />
     </v-container>
     <!-- 题目目录 -->
     <v-container grid-list-xs>
@@ -47,6 +47,7 @@ export default {
         examTimeLimit: 60,
         examEndDate: "",
       },
+      questionSum: 0,
       question: {
         id: "",
         index: 0,
@@ -62,6 +63,8 @@ export default {
       this.checkIds = response.data.checkIds.filter((value) => value !== "");
       this.judgeIds = response.data.judgeIds.filter((value) => value !== "");
       this.radioIds = response.data.radioIds.filter((value) => value !== "");
+      this.questionSum =
+        this.checkIds.length + this.judgeIds.length + this.radioIds.length;
       this.exam = response.data.exam;
       this.groups = [
         { text: "单选题", icon: "mdi-radiobox-marked", ids: this.radioIds },
@@ -74,8 +77,9 @@ export default {
       console.log(id, value);
       if (this.answerMap[""]) {
         this.answerMap[""] = null;
+      } else {
+        this.answerMap[`${id}`] = value;
       }
-      this.answerMap[`${id}`] = value;
       this.$store.commit("userInfo/setExam", {
         id: this.examId,
         endDate: this.endDate,

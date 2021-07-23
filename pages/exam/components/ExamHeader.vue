@@ -34,6 +34,7 @@ export default {
     FlipDown,
   },
   props: {
+    questionSum: 0,
     exam: {
       examId: "",
       examName: "",
@@ -55,6 +56,7 @@ export default {
       const exam = this.$store.state.userInfo.exam;
       const { id } = exam;
       let answerMap = {};
+      // 构造answerMap
       for (let key in exam.answerMap) {
         if (key !== "") {
           if (Array.isArray(exam.answerMap[key])) {
@@ -67,6 +69,19 @@ export default {
       if (Object.keys(answerMap).length === 0) {
         this.$message.warning("请不要交白卷😅");
         return;
+      }
+      if (Object.keys(answerMap).length !== this.questionSum) {
+        this.$message.warning("您还有题目没做完,请检查");
+        return;
+      }
+      for (let key in exam.answerMap) {
+        if (
+          Array.isArray(answerMap[key]) &&
+          (answerMap[key].length === 0 || answerMap[key][0] === "")
+        ) {
+          this.$message.warning("您还有题目没做完,请检查");
+          return;
+        }
       }
       console.log({ id, answerMap });
       console.log(exam);

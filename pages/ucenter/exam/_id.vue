@@ -63,10 +63,10 @@
                 <span>
                   <v-icon
                     :color="
-                      resultsMap[question.id] === 'False' ? 'error' : 'success'
+                      resultsMap[question.id] === 'True' ? 'success' : 'error'
                     "
                     v-text="
-                      resultsMap[question.id] === 'False' ? 'close' : 'done'
+                      resultsMap[question.id] === 'True' ? 'done' : 'close'
                     "
                   ></v-icon>
                 </span>
@@ -223,7 +223,10 @@ export default {
           this.selected = this.answersRightMap[this.question.id];
           console.log("标准多选题答案", this.selected);
         } else {
-          this.myRadioGroup = this.answersMap[this.question.id][0];
+          this.myRadioGroup =
+            (this.answersMap[this.question.id] &&
+              this.answersMap[this.question.id][0]) ||
+            "";
           console.log("我的单选/判断题答案", ...this.myRadioGroup);
           this.radioGroup = this.answersRightMap[this.question.id][0];
           console.log("标准单选/判断题答案", ...this.radioGroup);

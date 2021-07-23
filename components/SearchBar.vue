@@ -84,7 +84,7 @@ export default Vue.extend({
         });
     },
     gotoSearch() {
-      if (this.word === "") {
+      if (!this.word || this.word === "") {
         return;
       }
       this.$router.push({ name: "search", query: { keyword: this.word } });

@@ -134,14 +134,13 @@ export default {
     },
     attendExam() {
       if (
-        this.$store.state.userInfo.exam.id &&
         this.$store.state.userInfo.exam.id !== "" &&
-        this.$store.state.userInfo.exam.id !== "undefined" &&
-        this.$store.state.userInfo.exam.id !== this.detail.id
+        this.$store.state.userInfo.exam.id !== undefined &&
+        this.$store.state.userInfo.exam.id !== null &&
+        this.detail.id !== this.$store.state.userInfo.exam.id
       ) {
-        this.$message.warning("请先完成上一场考试!😨");
+        this.$message.warning("请先完成上一场考试");
         this.$router.push("/exam/" + this.$store.state.userInfo.exam.id);
-        this.closeDialog();
         return;
       }
       const end_time = this.endTime();
